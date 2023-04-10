@@ -40,14 +40,10 @@ class LandingPage extends React.Component {
     this.state = {
       entries: [
         {
-          title: 'Make Your Mark.',
-          subtitle: 'Fashion At Your Fingertip',
-          imgSrc: require('../../assets/banner.webp'),
+          imgSrc: require('../../assets/banner1.webp'),
         },
         {
-          title: 'Create Your Closet.',
-          subtitle: 'Shop Your Style',
-          imgSrc: require('../../assets/banner.webp'),
+          imgSrc: require('../../assets/banner2.webp'),
         },
       ],
       activeIndex: 0,
@@ -69,8 +65,8 @@ class LandingPage extends React.Component {
     return (
       <View style={styles.container} key={index}>
         <Image source={item.imgSrc} style={styles.image} resizeMode="contain" />
-        <Text style={styles.header}>{item.title}</Text>
-        <Text style={styles.body}>{item.subtitle}</Text>
+        {/* <Text style={styles.header}>{item.title}</Text>
+        <Text style={styles.body}>{item.subtitle}</Text> */}
       </View>
     );
   };
@@ -328,7 +324,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: ITEM_WIDTH,
-    height: 200,
+    height: 240,
   },
   header: {
     color: '#222',
