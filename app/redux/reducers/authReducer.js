@@ -5,6 +5,8 @@ const initialState = {
   isProfileCreated: false,
   googleLoginResponse: {},
   appleLoginResponse: {},
+  stylistUserId: '',
+  isStylistUser: false,
 };
 
 const AuthReducer = (state = initialState, action) => {
@@ -19,6 +21,18 @@ const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         userId: action.value,
+      };
+    }
+    case 'IS_STYLIST': {
+      return {
+        ...state,
+        isStylistUser: action.value,
+      };
+    }
+    case 'STYLIST_USERID': {
+      return {
+        ...state,
+        stylistUserId: action.value,
       };
     }
     case 'LOGOUT': {

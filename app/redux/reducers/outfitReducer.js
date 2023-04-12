@@ -1,6 +1,6 @@
 const initialState = {
   addOutfitReponse: {},
-  getOutfitData: {},
+  getOutfitData: [],
   getOutfitDetailData: {},
   deleteOutfitRepsponse: {},
   editOutfitRepsponse: {},

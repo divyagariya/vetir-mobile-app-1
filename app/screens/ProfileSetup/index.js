@@ -11,6 +11,7 @@ import {
 import Toast from 'react-native-simple-toast';
 
 const ProfileSetup = props => {
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const [isImageRemove, setImage] = useState(false);
   const userProfileResponse =
     useSelector(state => state.ProfileReducer.userProfileResponse) || {};
@@ -196,7 +197,6 @@ const ProfileSetup = props => {
       emailId: userProfileResponse?.emailId,
       name: state.name,
       gender: state.genderSelected.toLowerCase(),
-      userId: userId,
     };
     if (!state.fromLocal) {
       data.base64ImgString = null;
@@ -214,6 +214,12 @@ const ProfileSetup = props => {
     ) {
       props.navigation.navigate('TabData');
       return;
+    }
+    if (isStylistUser) {
+      data.personalStylistId = userId;
+    }
+    if (!isStylistUser) {
+      data.userId = userId;
     }
     dispatch(updateUserProfile(data));
   };

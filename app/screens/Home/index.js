@@ -24,6 +24,7 @@ import {
 
 const Home = props => {
   const dispatch = useDispatch();
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
   const [searchIcon, showSearchIcon] = useState(false);
@@ -71,6 +72,9 @@ const Home = props => {
   };
 
   const renderItem = item => {
+    if (item.products.length === 0) {
+      return null;
+    }
     return (
       <Categories
         data={item}
@@ -177,7 +181,7 @@ const Home = props => {
           homeResponse.map(item => {
             return renderItem(item);
           })}
-        {!isPreferences && (
+        {!isPreferences && !isStylistUser && (
           <View
             style={{padding: 16, backgroundColor: Colors.grey1, margin: 16}}>
             <Text style={{fontSize: FONTS_SIZES.s1, fontWeight: 'bold'}}>

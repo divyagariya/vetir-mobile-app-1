@@ -8,13 +8,18 @@ const Input = ({
   onChangeText = () => {},
   errorText = '',
   showIcon = false,
+  iconName = '',
 }) => {
   return (
     <View>
       {showIcon && (
         <View style={styles.iconStyle}>
           <Image
-            source={require('../../assets/mail.png')}
+            source={
+              iconName
+                ? require('../../assets/iProfile.png')
+                : require('../../assets/mail.png')
+            }
             style={{
               width: 24,
               height: 24,

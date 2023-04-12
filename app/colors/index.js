@@ -6,4 +6,5 @@ export const Colors = {
   greyBorder: 'rgba(0, 0, 0, 0.16)',
   red: '#CE1A1A',
   grey2: '#DBDBDB',
+  blue: '#217AFF',
 };

@@ -18,9 +18,14 @@ export function editOutfit(data) {
   };
 }
 
-export function getOutfitsList() {
+export function getOutfitsList(id) {
   return async (dispatch, getState) => {
-    const apiPath = `getOutfitDetails?userId=${getState().AuthReducer.userId}`;
+    let apiPath = '';
+    if (id) {
+      apiPath = `getOutfitDetails?userId=${id}`;
+    } else {
+      apiPath = `getOutfitDetails?userId=${getState().AuthReducer.userId}`;
+    }
     const apiResponse = await NoAuthAPI(apiPath, 'GET');
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_OUTFIT', value: apiResponse?.outfitList});

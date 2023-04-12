@@ -553,9 +553,7 @@ export const FilterModal = ({
   const getSizeResponse = useSelector(
     state => state.ClosetReducer.getSizeResponse,
   );
-  const [brandList, setBrandList] = useState(
-    from === 'home' ? brandData2 : brandData,
-  );
+  const [brandList, setBrandList] = useState(brandData);
   const [brandSearchKey, setBrandSearchKey] = useState('');
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);

@@ -46,11 +46,30 @@ const VerifyEmail = propsData => {
       dispatch({type: 'VERIFY_OTP', value: ''});
       if (verifyOtpResponse.statusCode === 200) {
         setErrorText('');
-        dispatch({type: 'USERID', value: verifyOtpResponse.userId});
-        dispatch({
-          type: 'IS_PROFILE_CREATED',
-          value: verifyOtpResponse.isProfileCreated,
-        });
+        if (propsData?.route?.params?.type !== 'stylist') {
+          dispatch({type: 'USERID', value: verifyOtpResponse.userId});
+          dispatch({
+            type: 'IS_PROFILE_CREATED',
+            value: verifyOtpResponse.isProfileCreated,
+          });
+          dispatch({
+            type: 'IS_STYLIST',
+            value: false,
+          });
+        } else {
+          dispatch({
+            type: 'USERID',
+            value: verifyOtpResponse.personalStylistId,
+          });
+          dispatch({
+            type: 'IS_STYLIST',
+            value: true,
+          });
+          dispatch({
+            type: 'IS_PROFILE_CREATED',
+            value: true,
+          });
+        }
       } else if (verifyOtpResponse.statusCode === 401) {
         setValue(null);
         setErrorText(true);
@@ -105,10 +124,13 @@ const VerifyEmail = propsData => {
   }, [count]);
 
   const sendOtpAgain = () => {
+    setValue(null);
+    setErrorText(false);
     dispatch(
       sendOtp({
         emailId: propsData?.route?.params?.email,
         status: 2,
+        type: propsData?.route?.params?.type,
       }),
     );
   };
@@ -119,6 +141,7 @@ const VerifyEmail = propsData => {
         emailId: propsData?.route?.params?.email,
         otp: value,
         status: 1,
+        type: propsData?.route?.params?.type,
       }),
     );
   };

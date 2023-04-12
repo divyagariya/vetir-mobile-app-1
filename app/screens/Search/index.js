@@ -71,6 +71,7 @@ const Search = props => {
   );
   const userId = useSelector(state => state.AuthReducer.userId);
   const [filterParams, setFilterParametrs] = useState({});
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
 
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
@@ -305,6 +306,7 @@ const Search = props => {
                   getProductDetails={() => getProductDetails(item.productId)}
                   addToCloset={() => addToCloset(item)}
                   deletFromClost={() => deletFromClost(item)}
+                  isStylistUser={isStylistUser}
                 />
               )}
               contentContainerStyle={{

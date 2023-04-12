@@ -44,9 +44,14 @@ export function getCategoryData() {
   };
 }
 
-export function getClosetData() {
+export function getClosetData(id) {
   return async (dispatch, getState) => {
-    const apiPath = `getClosetDetails?userId=${getState().AuthReducer.userId}`;
+    let apiPath = '';
+    if (id) {
+      apiPath = `getClosetDetails?userId=${id}`;
+    } else {
+      apiPath = `getClosetDetails?userId=${getState().AuthReducer.userId}`;
+    }
     const apiResponse = await NoAuthAPI(apiPath, 'GET');
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'CLOSET_DATA', value: apiResponse.data});

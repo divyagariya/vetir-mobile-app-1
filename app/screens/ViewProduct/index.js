@@ -178,11 +178,18 @@ const ViewProduct = props => {
       <VView>
         <Header
           showAdd
+          showLike
           // showshare
           onShare={onShare}
           {...props}
+          likeImageSrc={
+            true
+              ? require('../../assets/iLike.png')
+              : require('../../assets/iDisLike.png')
+          }
           showBack
           addToCloset={addToCloset}
+          likeProduct={() => {}}
           imageSrc={
             productData.addedToCloset
               ? require('../../assets/addedCloset.png')

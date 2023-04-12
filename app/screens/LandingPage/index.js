@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {FONTS_SIZES} from '../../fonts';
-import {Buttons, Input} from '../../components';
+import {Buttons, Input, OverlayModal} from '../../components';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
@@ -49,6 +49,8 @@ class LandingPage extends React.Component {
       activeIndex: 0,
       showModal: false,
       modalData: null,
+      type: '',
+      stylistEmail: 'rahulstylist@yopmail.com',
     };
   }
 
@@ -77,6 +79,7 @@ class LandingPage extends React.Component {
       if (this.props.loginResponse.statusCode === 200) {
         this.props.navigation.navigate('VerifyEmail', {
           email: this.props.loginResponse.emailId,
+          type: this.state.type,
         });
       }
     }
@@ -97,7 +100,6 @@ class LandingPage extends React.Component {
   }
 
   openStaticPage = type => {
-    this.setState({showModal: false});
     if (type === 'tt') {
       this.props.navigation.navigate('TermConditions');
     } else {
@@ -190,6 +192,7 @@ class LandingPage extends React.Component {
   };
 
   login = () => {
+    this.setState({type: ''});
     let {email} = this.state;
     let pattern =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -201,10 +204,59 @@ class LandingPage extends React.Component {
       this.setState({errorText: 'Please enter valid email id'});
       return;
     }
+
     this.props.loginAction({
       emailId: email.toLowerCase(),
       status: 1,
     });
+  };
+
+  stylistLogin = () => {
+    let {stylistEmail} = this.state;
+    let pattern =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!stylistEmail) {
+      this.setState({stylistEmailErrorText: 'Please enter email id'});
+      return;
+    }
+    if (stylistEmail && !pattern.test(stylistEmail)) {
+      this.setState({stylistEmailErrorText: 'Please enter valid email id'});
+      return;
+    }
+    this.setState({type: 'stylist', showModal: false});
+    this.props.loginAction({
+      emailId: stylistEmail.toLowerCase(),
+      status: 1,
+      type: 'stylist',
+    });
+  };
+
+  renderStylistLogin = () => {
+    return (
+      <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
+            Login as a Stylist
+          </Text>
+          <TouchableOpacity onPress={() => this.setState({showModal: false})}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        </View>
+        <Input
+          placeholder="Email Id"
+          onChangeText={e =>
+            this.setState({stylistEmail: e, stylistEmailErrorText: ''})
+          }
+          errorText={this.state.stylistEmailErrorText}
+          value={this.state.stylistEmail}
+          showIcon
+        />
+        <Buttons text="login" onPress={this.stylistLogin} />
+      </View>
+    );
   };
 
   render() {
@@ -255,11 +307,11 @@ class LandingPage extends React.Component {
               }}>
               <Buttons text="continue" onPress={this.login} />
             </View>
-            <View style={styles.orContainer}>
+            {/* <View style={styles.orContainer}>
               <View style={styles.line} />
               <Text>or</Text>
               <View style={styles.line} />
-            </View>
+            </View> */}
             <View style={styles.socialIconContainer}>
               <TestInsta />
               <TouchableOpacity onPress={this.googleLogin}>
@@ -275,6 +327,11 @@ class LandingPage extends React.Component {
                 />
               </TouchableOpacity>
             </View>
+            <Buttons
+              text="Login as a stylist"
+              onPress={() => this.setState({showModal: true})}
+              isInverse
+            />
             <View style={styles.tncContainer}>
               <Text>By logging in you agree to our </Text>
               <TouchableOpacity onPress={() => this.openStaticPage('tt')}>
@@ -287,6 +344,13 @@ class LandingPage extends React.Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
+        {this.state.showModal && (
+          <OverlayModal
+            isScrollEnabled={false}
+            showModal={this.state.showModal}
+            component={this.renderStylistLogin()}
+          />
+        )}
       </View>
     );
   }
@@ -364,6 +428,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
+    marginTop: 16,
   },
   line: {
     width: '40%',

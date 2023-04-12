@@ -24,6 +24,9 @@ const Header = ({
   showAdd = false,
   onShare = () => {},
   imageSrc = null,
+  showLike = false,
+  likeImageSrc = null,
+  likeProduct = () => {},
 }) => {
   const [switchIcon, setSwitch] = useState(false);
   const toggleSwitch = () => {
@@ -84,6 +87,17 @@ const Header = ({
               <Image
                 resizeMode="contain"
                 source={imageSrc}
+                style={{width: 24, height: 24}}
+              />
+            </TouchableOpacity>
+          </VView>
+        )}
+        {showLike && (
+          <VView style={{flexDirection: 'row'}}>
+            <TouchableOpacity style={{marginRight: 20}} onPress={likeProduct}>
+              <Image
+                resizeMode="contain"
+                source={likeImageSrc}
                 style={{width: 24, height: 24}}
               />
             </TouchableOpacity>

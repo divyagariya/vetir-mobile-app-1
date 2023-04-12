@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -8,22 +8,38 @@ import {
   Alert,
 } from 'react-native';
 import {Colors} from '../../colors';
-import {Header} from '../../components';
+import {Buttons, Header, Input, OverlayModal} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteAccount} from '../../redux/actions/profileAction';
+import {deleteAccount, getUserProfile} from '../../redux/actions/profileAction';
 import Toast from 'react-native-simple-toast';
 import {FONTS_SIZES} from '../../fonts';
 import {NoAuthAPI} from '../../services';
+import {
+  addStylistAction,
+  deleteStylistAction,
+} from '../../redux/actions/stylistAction';
 
 const Menu = props => {
+  const [stylistEmail, setStylistEmail] = useState('');
+  const [stylistEmailErrorText, setStylistEmailErr] = useState('');
+  const [stylistName, setStylistName] = useState('');
+  const [stylistNameErrorText, setStylistNameErr] = useState('');
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const userProfileResponse = useSelector(
     state => state.ProfileReducer.userProfileResponse,
   );
   const deleteAccountResponse = useSelector(
     state => state.ProfileReducer.deleteAccountResponse,
   );
+  const addStylistResp = useSelector(
+    state => state.StylistReducer.addStylistResp,
+  );
+  const deleteStylistResp = useSelector(
+    state => state.StylistReducer.deleteStylistResp,
+  );
   const userId = useSelector(state => state.AuthReducer.userId);
   const dispatch = useDispatch();
+  const [showModal, setModal] = useState(false);
   const menuData = [
     {
       icon: require('../../assets/myprofile.png'),
@@ -56,6 +72,24 @@ const Menu = props => {
   ];
 
   useEffect(() => {
+    if (Object.keys(addStylistResp).length) {
+      dispatch({type: 'ADD_STYLIST', value: {}});
+      Toast.show('Stylist added successfuly');
+      setStylistEmail('');
+      setStylistName('');
+      dispatch(getUserProfile());
+    }
+  }, [addStylistResp]);
+
+  useEffect(() => {
+    if (Object.keys(deleteStylistResp).length) {
+      dispatch({type: 'DELETE_STYLIST', value: {}});
+      Toast.show('Stylist deleted successfuly');
+      dispatch(getUserProfile());
+    }
+  }, [deleteStylistResp]);
+
+  useEffect(() => {
     if (Object.keys(deleteAccountResponse).length) {
       if (deleteAccountResponse.statusCode === 200) {
         dispatch({type: 'ACOOUNT_DELETE', value: {}});
@@ -63,6 +97,10 @@ const Menu = props => {
         dispatch({type: 'LOGOUT'});
         dispatch({type: 'PROFILE_DATA', value: ''});
         dispatch({type: 'PREFERENCES_ANSWERS', value: []});
+        dispatch({
+          type: 'IS_STYLIST',
+          value: false,
+        });
       }
     }
   }, [deleteAccountResponse, dispatch]);
@@ -71,9 +109,16 @@ const Menu = props => {
     const data = {
       userId: userId,
     };
-    const response = await NoAuthAPI('user/track/lastActive', 'POST', data);
+    if (!isStylistUser) {
+      const response = await NoAuthAPI('user/track/lastActive', 'POST', data);
+    }
+
     dispatch({type: 'LOGOUT'});
     dispatch({type: 'PROFILE_DATA', value: ''});
+    dispatch({
+      type: 'IS_STYLIST',
+      value: false,
+    });
   };
 
   const menuClick = item => {
@@ -115,6 +160,87 @@ const Menu = props => {
       props.navigation.navigate(item.route);
     }
   };
+
+  const addStylist = () => {
+    let pattern =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!stylistEmail) {
+      setStylistEmailErr('Please enter email id');
+      return;
+    }
+    if (stylistEmail && !pattern.test(stylistEmail)) {
+      setStylistEmailErr('Please enter valid email id');
+      return;
+    }
+    if (!stylistName) {
+      setStylistNameErr('Please enter stylist name');
+      return;
+    }
+    let data = {
+      userId,
+      emailId: stylistEmail,
+      name: stylistName,
+    };
+    setModal(false);
+    dispatch(addStylistAction(data));
+  };
+
+  const deleteStylist = () => {
+    const data = {
+      userId,
+    };
+    dispatch(deleteStylistAction(data));
+  };
+
+  const RenderAddStylist = () => {
+    return (
+      <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
+              Add Personal Stylist
+            </Text>
+            <Text style={{color: Colors.black30, marginTop: 4}}>
+              Personal stylist can recommend you products
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => setModal(false)}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={{marginTop: 24}}>
+          <Input
+            placeholder="Enter stylist’s name"
+            onChangeText={e => {
+              setStylistName(e);
+              setStylistNameErr('');
+            }}
+            errorText={stylistNameErrorText}
+            value={stylistName}
+            showIcon
+            iconName
+          />
+        </View>
+        <View style={{}}>
+          <Input
+            placeholder="Enter stylist’s email Id"
+            onChangeText={e => {
+              setStylistEmail(e);
+              setStylistEmailErr('');
+            }}
+            errorText={stylistEmailErrorText}
+            value={stylistEmail}
+            showIcon
+          />
+        </View>
+        <Buttons text="recommend" onPress={addStylist} />
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <Header showBack title="Menu" {...props} />
@@ -140,10 +266,33 @@ const Menu = props => {
               {userProfileResponse?.gender}
             </Text>
             <Text>{userProfileResponse?.emailId}</Text>
+            {isStylistUser ? null : userProfileResponse?.hasPersonalStylist ? (
+              <View style={{marginTop: 8}}>
+                <Text style={{color: Colors.black30}}>Personal Stylist:</Text>
+                <Text>
+                  {userProfileResponse?.personalStylistDetails[0].name}
+                </Text>
+                <Text>
+                  {userProfileResponse?.personalStylistDetails[0].emailId}
+                </Text>
+                <TouchableOpacity onPress={deleteStylist}>
+                  <Text style={{color: Colors.red}}>Remove stylist</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity onPress={() => setModal(true)}>
+                <Text style={{color: Colors.blue, marginTop: 8}}>
+                  Add Personal Stylist
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View>
           {menuData.map(item => {
+            if (isStylistUser && item.manuName === 'YourPreferences') {
+              return null;
+            }
             return (
               <TouchableOpacity
                 onPress={() => menuClick(item)}
@@ -173,6 +322,13 @@ const Menu = props => {
           })}
         </View>
       </View>
+      {showModal && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showModal}
+          component={RenderAddStylist()}
+        />
+      )}
     </View>
   );
 };
@@ -187,7 +343,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   profileDataContainer: {
-    height: 80,
     justifyContent: 'space-between',
     flex: 1,
     paddingRight: 16,

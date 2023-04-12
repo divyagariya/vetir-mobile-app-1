@@ -2,10 +2,15 @@ import {NoAuthAPI} from '../../services';
 
 export function getHomePageData() {
   return async (dispatch, getState) => {
-    const apiResponse = await NoAuthAPI(
-      `get/homePageData?userId=${getState().AuthReducer.userId}`,
-      'GET',
-    );
+    let url = '';
+    if (getState().AuthReducer.isStylistUser) {
+      url = `get/homePageData?personalStylistId=${
+        getState().AuthReducer.userId
+      }`;
+    } else {
+      url = `get/homePageData?userId=${getState().AuthReducer.userId}`;
+    }
+    const apiResponse = await NoAuthAPI(url, 'GET');
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_HOME_DATA', value: apiResponse});
       dispatch({type: 'REFRESH_HOME', value: false});

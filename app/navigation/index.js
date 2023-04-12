@@ -41,6 +41,9 @@ import {getHomePageData} from '../redux/actions/homeActions';
 import {NoAuthAPI} from '../services';
 import YourPreferences from '../screens/YourPreferences';
 import Search from '../screens/Search';
+import Clients from '../screens/Clients';
+import {getAllClients} from '../redux/actions/stylistAction';
+import ClientDetails from '../screens/ClinetDetails';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -105,6 +108,7 @@ const OutfitStack = () => {
 };
 
 function TabData() {
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -124,6 +128,11 @@ function TabData() {
               ? require('../assets/iOutfitSelected.png')
               : require('../assets/outfitIcon.png');
           }
+          if (route.name === 'Clients') {
+            imgSource = focused
+              ? require('../assets/clientIcon.png')
+              : require('../assets/selectedClientIcon.png');
+          }
 
           return renderTab(route, imgSource);
         },
@@ -132,8 +141,14 @@ function TabData() {
       })}
       backBehavior="order">
       <Tab.Screen name="Shop" component={ShopStack} />
-      <Tab.Screen name="Closet" component={ClosetStack} />
-      <Tab.Screen name="Outfits" component={OutfitStack} />
+      {isStylistUser ? (
+        <Tab.Screen name="Clients" component={Clients} />
+      ) : (
+        <>
+          <Tab.Screen name="Closet" component={ClosetStack} />
+          <Tab.Screen name="Outfits" component={OutfitStack} />
+        </>
+      )}
     </Tab.Navigator>
   );
 }
@@ -141,6 +156,8 @@ function TabData() {
 function AppNavigation() {
   const dispatch = useDispatch();
   const userId = useSelector(state => state.AuthReducer.userId);
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const stylistUserId = useSelector(state => state.AuthReducer.stylistUserId);
   const isProfileCreated = useSelector(
     state => state.AuthReducer.isProfileCreated,
   );
@@ -178,13 +195,17 @@ function AppNavigation() {
       dispatch(getBrandData());
       dispatch(getBrandData2());
       dispatch(getCategoryData());
-      dispatch(getClosetData());
-      dispatch(getOutfitsList());
       dispatch(getColorData());
       dispatch(getSizesData());
-      dispatch(getPreferencesAnswers());
-      if (!isPreferences) {
-        dispatch(getPreferencesQs());
+      if (!isStylistUser) {
+        dispatch(getClosetData());
+        dispatch(getOutfitsList());
+        dispatch(getPreferencesAnswers());
+        if (!isPreferences) {
+          dispatch(getPreferencesQs());
+        }
+      } else {
+        dispatch(getAllClients());
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,6 +244,7 @@ function AppNavigation() {
           <Stack.Screen name="OutfitDetail" component={OutfitDetail} />
           <Stack.Screen name="YourPreferences" component={YourPreferences} />
           <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="ClientDetails" component={ClientDetails} />
         </>
       )}
     </Stack.Navigator>

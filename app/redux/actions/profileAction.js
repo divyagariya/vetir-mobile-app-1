@@ -2,8 +2,16 @@ import {NoAuthAPI} from '../../services';
 
 export function getUserProfile() {
   return async (dispatch, getState) => {
-    const apiPath = `getUserDetails?userId=${getState().AuthReducer.userId}`;
+    let apiPath = '';
+    if (getState().AuthReducer.isStylistUser) {
+      apiPath = `getUserDetails?personalStylistId=${
+        getState().AuthReducer.userId
+      }`;
+    } else {
+      apiPath = `getUserDetails?userId=${getState().AuthReducer.userId}`;
+    }
     const apiResponse = await NoAuthAPI(apiPath, 'GET');
+    console.log('profile', apiResponse);
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'PROFILE_DATA', value: apiResponse});
       dispatch({
@@ -17,6 +25,7 @@ export function getUserProfile() {
 export function updateUserProfile(data) {
   return async (dispatch, getState) => {
     const apiResponse = await NoAuthAPI('userProfile', 'POST', data);
+    console.log('update', apiResponse);
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'PROFILE_DATA_UPDATED', value: apiResponse});
       dispatch({

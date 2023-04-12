@@ -9,6 +9,7 @@ import ClosetReducer from '../reducers/closetReducer';
 import OutfitReducer from '../reducers/outfitReducer';
 import CommonLoaderReducer from '../reducers/loaderReducer';
 import HomeReducer from '../reducers/homeReducers';
+import StylistReducer from '../reducers/stylistReducer';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   OutfitReducer,
   CommonLoaderReducer,
   HomeReducer,
+  StylistReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
