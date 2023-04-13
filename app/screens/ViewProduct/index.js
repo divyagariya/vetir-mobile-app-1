@@ -23,6 +23,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
 import {getProductDetailsApi} from '../../redux/actions/homeActions';
+import {dislikeProductAction} from '../../redux/actions/stylistAction';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -39,10 +40,22 @@ const ViewProduct = props => {
   const deleteClosetResponse = useSelector(
     state => state.ClosetReducer.deleteClosetResponse,
   );
+  const dislikeResp =
+    useSelector(state => state.StylistReducer.dislikeResp) || {};
 
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
+
+  useEffect(() => {
+    if (Object.keys(dislikeResp).length) {
+      if (dislikeResp.statusCode === 200) {
+        dispatch({type: 'DISLIKE_PRODUCTS', value: {}});
+        dispatch(getProductDetailsApi(productData.productId));
+        Toast.show('Not liked');
+      }
+    }
+  }, [dislikeResp, dispatch]);
 
   useEffect(() => {
     if (Object.keys(productDetailResponse).length) {
@@ -170,6 +183,15 @@ const ViewProduct = props => {
       });
   };
 
+  const dislikeProducts = () => {
+    const data = {
+      productId: productData.productId,
+      userId: userId,
+      dislike: !productData.isDisliked,
+    };
+    dispatch(dislikeProductAction(data));
+  };
+
   if (Object.keys(productData).length === 0) {
     return null;
   }
@@ -183,13 +205,13 @@ const ViewProduct = props => {
           onShare={onShare}
           {...props}
           likeImageSrc={
-            true
+            productData.isDisliked
               ? require('../../assets/iLike.png')
               : require('../../assets/iDisLike.png')
           }
           showBack
           addToCloset={addToCloset}
-          likeProduct={() => {}}
+          likeProduct={dislikeProducts}
           imageSrc={
             productData.addedToCloset
               ? require('../../assets/addedCloset.png')

@@ -12,6 +12,7 @@ export default ({
   deletFromClost,
   isStylistUser,
   recommentToClient,
+  dislikeProducts,
 }) => {
   return (
     <>
@@ -79,17 +80,10 @@ export default ({
                   />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity style={{marginLeft: 10}}>
-                {item.isLiked ? (
-                  <Image
-                    source={require('../../../assets/iDisLike.png')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                ) : (
+              <TouchableOpacity
+                style={{marginLeft: 10}}
+                onPress={dislikeProducts}>
+                {item.isDisliked ? (
                   <Image
                     source={require('../../../assets/iLike.png')}
                     style={{
@@ -98,7 +92,16 @@ export default ({
                     }}
                     resizeMode="contain"
                   />
-                )}
+                ) : item.isDisliked != undefined ? (
+                  <Image
+                    source={require('../../../assets/iDisLike.png')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
+                    resizeMode="contain"
+                  />
+                ) : null}
               </TouchableOpacity>
             </View>
           )}

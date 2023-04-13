@@ -65,7 +65,9 @@ const Header = ({
         )}
         {title && (
           <VText
-            text={title}
+            text={
+              title.length < 15 ? `${title}` : `${title.substring(0, 15)}...`
+            }
             style={{
               paddingLeft: !showBack || 20,
               fontSize: FONTS_SIZES.s3,

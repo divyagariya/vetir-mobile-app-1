@@ -30,7 +30,10 @@ import {
 } from '../../redux/actions/homeActions';
 import {FilterModal} from '../Closet';
 import CategoryCard from './components/categoryCard';
-import {recommendedAction} from '../../redux/actions/stylistAction';
+import {
+  dislikeProductAction,
+  recommendedAction,
+} from '../../redux/actions/stylistAction';
 
 const CategoryScreen = props => {
   const sortingData = [
@@ -81,11 +84,26 @@ const CategoryScreen = props => {
   const recommendedToClientsRes = useSelector(
     state => state.StylistReducer.recommendedToClientsRes,
   );
+  const dislikeResp = useSelector(state => state.StylistReducer.dislikeResp);
   const [selectedClients, setSelectedClients] = useState([]);
+
+  useEffect(() => {
+    if (Object.keys(dislikeResp).length) {
+      console.log('dislikeResp useEffect', dislikeResp);
+      if (dislikeResp.statusCode === 200) {
+        dispatch({type: 'DISLIKE_PRODUCTS', value: {}});
+        dispatch(getFilteredProducts(filterParams));
+        if (dislikeResp.recommendedProductDetails.dislike) {
+          Toast.show('Not liked');
+        }
+      }
+    }
+  }, [dislikeResp, dispatch]);
 
   useEffect(() => {
     if (Object.keys(recommendedToClientsRes).length) {
       if (recommendedToClientsRes.statusCode === 200) {
+        setSelectedClients([]);
         dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
         Toast.show('Recommended to clients successfuly');
       }
@@ -236,12 +254,6 @@ const CategoryScreen = props => {
   const recommentToClient = item => {
     setShowClientModal(true);
     setRecommendedProductId(item.productId);
-    const data = {
-      personalStylistId: userId,
-      userId: userId,
-      productId: item.productId,
-    };
-    console.log(data);
   };
 
   const selectClient = item => {
@@ -312,6 +324,16 @@ const CategoryScreen = props => {
     dispatch(recommendedAction(data));
   };
 
+  const dislikeProducts = item => {
+    console.log(JSON.stringify(item, undefined, 2));
+    const data = {
+      productId: item.productId,
+      userId: userId,
+      dislike: !item.isDisliked,
+    };
+    dispatch(dislikeProductAction(data));
+  };
+
   const RenderClients = () => {
     return (
       <View>
@@ -370,6 +392,7 @@ const CategoryScreen = props => {
               deletFromClost={() => deletFromClost(item)}
               isStylistUser={isStylistUser}
               recommentToClient={() => recommentToClient(item)}
+              dislikeProducts={() => dislikeProducts(item)}
             />
           )}
           contentContainerStyle={{

@@ -46,15 +46,24 @@ export function recommendedProductsAction(id) {
     const apiResponse = await NoAuthAPI(
       `getRecommendationToClient?personalStylistId=${
         getState().AuthReducer.userId
-      }f&userId=${id}`,
+      }&userId=${id}`,
       'GET',
     );
-    console.log('recommendedAction Products', apiResponse);
     if (Object.keys(apiResponse).length) {
       dispatch({
         type: 'RECOMMENDED_PRODUCTS_CLIENTS',
         value: apiResponse.recommendedProductDetails,
       });
+    }
+  };
+}
+
+export function dislikeProductAction(data) {
+  return async (dispatch, getState) => {
+    const apiResponse = await NoAuthAPI('changeLikeStatus', 'POST', data);
+    console.log('dislike', apiResponse);
+    if (Object.keys(apiResponse).length) {
+      dispatch({type: 'DISLIKE_PRODUCTS', value: apiResponse});
     }
   };
 }

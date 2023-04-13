@@ -124,6 +124,7 @@ const Home = props => {
         </VView>
       </VView>
       <ScrollView
+        contentContainerStyle={{paddingBottom: 50}}
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
         refreshControl={
