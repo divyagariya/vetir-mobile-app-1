@@ -86,6 +86,9 @@ const CategoryScreen = props => {
   );
   const dislikeResp = useSelector(state => state.StylistReducer.dislikeResp);
   const [selectedClients, setSelectedClients] = useState([]);
+  const productDetailResponse = useSelector(
+    state => state.HomeReducer.productDetailResponse,
+  );
 
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
@@ -131,6 +134,15 @@ const CategoryScreen = props => {
       }
     }
   }, [addClosetResponse, dispatch]);
+
+  useEffect(() => {
+    if (Object.keys(productDetailResponse).length) {
+      props.navigation.navigate('ViewProduct', {
+        data: productDetailResponse.productDetails,
+      });
+      dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
+    }
+  }, [dispatch, productDetailResponse, props.navigation]);
 
   useEffect(() => {
     if (props.route.params.data) {
