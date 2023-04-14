@@ -246,7 +246,7 @@ const ViewProduct = props => {
           {item.profilePicUrl ? (
             <Image
               source={{uri: item.profilePicUrl}}
-              style={{width: 40, height: 40}}
+              style={{width: 40, height: 40, borderRadius: 20}}
             />
           ) : (
             <Image

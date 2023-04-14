@@ -81,11 +81,13 @@ const Clients = props => {
               <ClientList
                 item={item}
                 index={index}
-                onPress={item =>
+                onPress={item => {
+                  dispatch({type: 'CLOSET_DATA', value: []});
+                  dispatch({type: 'GET_OUTFIT', value: []});
                   props.navigation.navigate('ClientDetails', {
                     item,
-                  })
-                }
+                  });
+                }}
               />
             );
           })}
