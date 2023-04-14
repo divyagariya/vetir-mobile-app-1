@@ -27,6 +27,8 @@ const Header = ({
   showLike = false,
   likeImageSrc = null,
   likeProduct = () => {},
+  showRecommend = false,
+  recommendClients = () => {},
 }) => {
   const [switchIcon, setSwitch] = useState(false);
   const toggleSwitch = () => {
@@ -100,6 +102,19 @@ const Header = ({
               <Image
                 resizeMode="contain"
                 source={likeImageSrc}
+                style={{width: 24, height: 24}}
+              />
+            </TouchableOpacity>
+          </VView>
+        )}
+        {showRecommend && (
+          <VView style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              style={{marginRight: 20}}
+              onPress={recommendClients}>
+              <Image
+                resizeMode="contain"
+                source={require('../../assets/iRecommend.png')}
                 style={{width: 24, height: 24}}
               />
             </TouchableOpacity>

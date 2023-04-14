@@ -11,9 +11,9 @@ export function getHomePageData() {
       url = `get/homePageData?userId=${getState().AuthReducer.userId}`;
     }
     const apiResponse = await NoAuthAPI(url, 'GET');
+    dispatch({type: 'REFRESH_HOME', value: false});
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_HOME_DATA', value: apiResponse});
-      dispatch({type: 'REFRESH_HOME', value: false});
     }
   };
 }

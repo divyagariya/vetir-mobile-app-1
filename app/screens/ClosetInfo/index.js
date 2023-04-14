@@ -253,10 +253,12 @@ const ClosetInfo = props => {
               </View>
             )}
 
-            <Buttons
-              text="Create Outfit"
-              onPress={() => props.navigation.navigate('AddOutfit')}
-            />
+            {!isStylistUser && (
+              <Buttons
+                text="Create Outfit"
+                onPress={() => props.navigation.navigate('AddOutfit')}
+              />
+            )}
           </View>
         </View>
         {showModal && (

@@ -82,6 +82,7 @@ export const RenderRecommenedProducts = ({
         paddingTop: 30,
         paddingHorizontal: 8,
         marginVertical: 8,
+        // width: Dimensions.get('window').width / 2 - 40,
       }}>
       {item.isDisliked ? (
         <View
@@ -109,7 +110,11 @@ export const RenderRecommenedProducts = ({
           resizeMode="contain"
         />
       </TouchableOpacity>
-      <Text style={{marginTop: 8}}>{item.productName}</Text>
+      <Text
+        numberOfLines={1}
+        style={{marginTop: 8, width: Dimensions.get('window').width / 2 - 40}}>
+        {item.productName}
+      </Text>
       <Text>{`$${item.productPrice}`}</Text>
     </TouchableOpacity>
   );

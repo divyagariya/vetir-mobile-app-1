@@ -8,9 +8,10 @@ import {
   Linking,
   Alert,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import {Colors} from '../../colors';
-import {VText, VView, Buttons, Header} from '../../components';
+import {VText, VView, Buttons, Header, OverlayModal} from '../../components';
 import {FONTS_SIZES} from '../../fonts';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
@@ -23,7 +24,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
 import {getProductDetailsApi} from '../../redux/actions/homeActions';
-import {dislikeProductAction} from '../../redux/actions/stylistAction';
+import {
+  dislikeProductAction,
+  recommendedAction,
+} from '../../redux/actions/stylistAction';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -47,6 +51,26 @@ const ViewProduct = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
+  const [recommendedProductId, setRecommendedProductId] = useState('');
+  const [showModal, setModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
+  const recommendedToClientsRes = useSelector(
+    state => state.StylistReducer.recommendedToClientsRes,
+  );
+  const allClientDataRespo = useSelector(
+    state => state.StylistReducer.allClientDataRespo,
+  );
+  const [selectedClients, setSelectedClients] = useState([]);
+
+  useEffect(() => {
+    if (Object.keys(recommendedToClientsRes).length) {
+      if (recommendedToClientsRes.statusCode === 200) {
+        setSelectedClients([]);
+        dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
+        Toast.show('Recommended to clients successfuly');
+      }
+    }
+  }, [recommendedToClientsRes, dispatch]);
 
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
@@ -193,6 +217,105 @@ const ViewProduct = props => {
     dispatch(dislikeProductAction(data));
   };
 
+  const recommentToClient = () => {
+    setShowClientModal(true);
+    setRecommendedProductId(productData.productId);
+  };
+
+  const selectClient = item => {
+    let selectedClients1 = [...selectedClients];
+    if (!selectedClients1.includes(item.userId)) {
+      selectedClients1.push(item.userId);
+    } else {
+      selectedClients1 = selectedClients1.filter(id => id !== item.userId);
+    }
+    setSelectedClients(selectedClients1);
+  };
+
+  const ClientList = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginVertical: 8,
+        }}
+        onPress={() => selectClient(item)}>
+        <View style={{flexDirection: 'row'}}>
+          {item.profilePicUrl ? (
+            <Image
+              source={{uri: item.profilePicUrl}}
+              style={{width: 40, height: 40}}
+            />
+          ) : (
+            <Image
+              source={require('../../assets/iProfile.png')}
+              style={{width: 40, height: 40}}
+            />
+          )}
+          <View style={{marginLeft: 8}}>
+            <Text>{item.name}</Text>
+            <Text style={{color: Colors.black30}}>{item.emailId}</Text>
+          </View>
+        </View>
+
+        <View>
+          <Image
+            source={
+              selectedClients.includes(item.userId)
+                ? require('../../assets/iSelectedCheck.png')
+                : require('../../assets/iCheck.png')
+            }
+            style={{width: 16, height: 16}}
+            resizeMode="contain"
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const recommendToClients = () => {
+    if (!selectedClients.length) {
+      Toast.show('Please select atleast one client');
+      return;
+    }
+    const data = {
+      personalStylistId: userId,
+      userIds: selectedClients,
+      productId: recommendedProductId,
+    };
+    console.log('data', data);
+    setShowClientModal(false);
+    dispatch(recommendedAction(data));
+  };
+
+  const RenderClients = () => {
+    return (
+      <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
+              Recommend to your clients
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => setShowClientModal(false)}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={{marginVertical: 16}}>
+          {allClientDataRespo.map((item, index) => {
+            return <ClientList item={item} index={index} />;
+          })}
+        </View>
+        <Buttons text="recommend" onPress={recommendToClients} />
+      </View>
+    );
+  };
+
   if (Object.keys(productData).length === 0) {
     return null;
   }
@@ -200,7 +323,9 @@ const ViewProduct = props => {
     <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 80}}>
       <VView>
         <Header
-          showAdd
+          showAdd={!isStylistUser}
+          recommendClients={recommentToClient}
+          showRecommend={isStylistUser}
           showLike={!isStylistUser}
           // showshare
           onShare={onShare}
@@ -328,6 +453,13 @@ const ViewProduct = props => {
         }}>
         <Buttons text="buy from the store" onPress={openLink} />
       </View>
+      {showClientModal && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModal}
+          component={RenderClients()}
+        />
+      )}
     </VView>
   );
 };
