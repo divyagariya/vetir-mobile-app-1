@@ -36,6 +36,7 @@ const ViewProduct = props => {
   const addClosetResponse = useSelector(
     state => state.ClosetReducer.addClosetResponse,
   );
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const userId = useSelector(state => state.AuthReducer.userId);
   const deleteClosetResponse = useSelector(
     state => state.ClosetReducer.deleteClosetResponse,
@@ -200,7 +201,7 @@ const ViewProduct = props => {
       <VView>
         <Header
           showAdd
-          showLike
+          showLike={!isStylistUser}
           // showshare
           onShare={onShare}
           {...props}

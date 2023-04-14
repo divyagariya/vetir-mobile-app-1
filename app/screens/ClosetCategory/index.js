@@ -49,6 +49,7 @@ const ClosetCategory = props => {
       });
     }
   }, [dispatch, props.navigation, singleClosetReponse]);
+
   const openClosetInfo = id => {
     let data = {
       userId: userId,

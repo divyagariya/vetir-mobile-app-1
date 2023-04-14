@@ -13,54 +13,76 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Buttons, OverlayModal} from '../../components';
 import {FONTS_SIZES} from '../../fonts';
-import {getClosetData} from '../../redux/actions/closetAction';
+import {
+  getClosetData,
+  openClosetDetails,
+} from '../../redux/actions/closetAction';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 import {getOutfitsList} from '../../redux/actions/outfitActions';
 import {
   recommendedAction,
   recommendedProductsAction,
 } from '../../redux/actions/stylistAction';
 
-export const RenderItem = ({item, menuSelected, recommendToClients}) => {
+export const RenderItem = ({
+  item,
+  menuSelected,
+  recommendToClients,
+  openCloset,
+  openOutfit,
+  openProduct,
+}) => {
   if (menuSelected === 'Closet') {
-    return <RenderCloset item={item} />;
+    return <RenderCloset item={item} openCloset={openCloset} />;
   }
   if (menuSelected === 'Outfits') {
-    return <RenderOutfits item={item} />;
+    return <RenderOutfits item={item} openOutfit={openOutfit} />;
   }
   return (
     <RenderRecommenedProducts
+      openProduct={openProduct}
       item={item}
       recommendToClients={recommendToClients}
     />
   );
 };
 
-export const RenderCloset = ({item}) => {
+export const RenderCloset = ({item, openCloset}) => {
   return (
-    <View style={{margin: 8}}>
+    <TouchableOpacity style={{margin: 8}} onPress={openCloset}>
       <Image
         source={{uri: item.itemImageUrl}}
         style={{width: 144, height: 164}}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export const RenderOutfits = ({item}) => {
+export const RenderOutfits = ({item, openOutfit}) => {
   return (
-    <View style={{margin: 8}}>
+    <TouchableOpacity style={{margin: 8}} onPress={openOutfit}>
       <Image
         source={{uri: item.outfitImageType}}
         style={{width: Dimensions.get('window').width / 2 - 24, height: 164}}
       />
       <Text style={{marginTop: 8}}>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export const RenderRecommenedProducts = ({item, recommendToClients}) => {
+export const RenderRecommenedProducts = ({
+  item,
+  recommendToClients,
+  openProduct,
+}) => {
   return (
-    <View style={{margin: 8, paddingTop: 30}}>
+    <TouchableOpacity
+      onPress={openProduct}
+      style={{
+        paddingTop: 30,
+        paddingHorizontal: 8,
+        marginVertical: 8,
+      }}>
       {item.isDisliked ? (
         <View
           style={{
@@ -68,14 +90,14 @@ export const RenderRecommenedProducts = ({item, recommendToClients}) => {
             paddingHorizontal: 8,
             paddingVertical: 8,
             position: 'absolute',
-            right: 0,
+            right: 6,
           }}>
           <Text style={{color: '#CE1A1A99'}}>not liked by client</Text>
         </View>
       ) : null}
       <Image
         source={{uri: item.imageUrls[0]}}
-        style={{width: Dimensions.get('window').width / 2 - 24, height: 164}}
+        style={{width: Dimensions.get('window').width / 2 - 40, height: 164}}
       />
       <TouchableOpacity style={{marginTop: 8}} onPress={recommendToClients}>
         <Image
@@ -87,9 +109,9 @@ export const RenderRecommenedProducts = ({item, recommendToClients}) => {
           resizeMode="contain"
         />
       </TouchableOpacity>
-      <Text style={{marginTop: 8}}>Black and White</Text>
-      <Text>$100</Text>
-    </View>
+      <Text style={{marginTop: 8}}>{item.productName}</Text>
+      <Text>{`$${item.productPrice}`}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -113,6 +135,12 @@ const ClientDetails = props => {
   const recommendedToClientsRes = useSelector(
     state => state.StylistReducer.recommendedToClientsRes,
   );
+  const singleClosetReponse = useSelector(
+    state => state.ClosetReducer.singleClosetReponse,
+  );
+  const productDetailResponse = useSelector(
+    state => state.HomeReducer.productDetailResponse,
+  );
 
   useEffect(() => {
     if (Object.keys(recommendedToClientsRes).length) {
@@ -131,6 +159,25 @@ const ClientDetails = props => {
       dispatch(recommendedProductsAction(props?.route?.params?.item?.userId));
     }
   }, [dispatch, props?.route?.params?.item]);
+
+  useEffect(() => {
+    if (Object.keys(productDetailResponse).length) {
+      props.navigation.navigate('ViewProduct', {
+        data: productDetailResponse.productDetails,
+      });
+      dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
+    }
+  }, [productDetailResponse]);
+
+  useEffect(() => {
+    if (Object.keys(singleClosetReponse).length) {
+      dispatch({type: 'SINGLE_CLOSET', value: {}});
+      props.navigation.navigate('ClosetInfo', {
+        apiData: singleClosetReponse,
+        id: props?.route?.params?.item?.userId,
+      });
+    }
+  }, [dispatch, props.navigation, singleClosetReponse]);
 
   const onPress = item => {
     setMenuSelected(item);
@@ -234,6 +281,18 @@ const ClientDetails = props => {
     );
   };
 
+  const openClosetInfo = id => {
+    let data = {
+      userId: props?.route?.params?.item?.userId,
+      closetItemId: id,
+    };
+    dispatch(openClosetDetails(data));
+  };
+
+  const getProductDetails = productId => {
+    dispatch(getProductDetailsApi(productId));
+  };
+
   return (
     <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -264,60 +323,75 @@ const ClientDetails = props => {
           </View>
         </View>
       </View>
-      <View style={{marginTop: 12}}>
-        <ScrollView horizontal bounces={false}>
-          <View style={{flexDirection: 'row'}}>
-            {menu.map(item => {
-              return (
-                <TouchableOpacity
-                  style={{
-                    padding: 8,
-                    borderBottomWidth: 1,
-                    borderBottomColor:
-                      item === menuSelected ? 'black' : 'transparent',
-                  }}
-                  onPress={() => onPress(item)}>
-                  <Text
+      <View style={{marginTop: 12, flex: 1}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            bounces={false}
+            horizontal
+            showsHorizontalScrollIndicator={false}>
+            <View style={{flexDirection: 'row'}}>
+              {menu.map(item => {
+                return (
+                  <TouchableOpacity
                     style={{
-                      color: menuSelected === item ? 'black' : Colors.black60,
-                    }}>
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+                      padding: 8,
+                      borderBottomWidth: 1,
+                      borderBottomColor:
+                        item === menuSelected ? 'black' : 'transparent',
+                    }}
+                    onPress={() => onPress(item)}>
+                    <Text
+                      style={{
+                        color: menuSelected === item ? 'black' : Colors.black60,
+                      }}>
+                      {item}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
+
+          <View style={{flex: 1}}>
+            <FlatList
+              data={
+                menuSelected === 'Closet'
+                  ? getcloset
+                  : menuSelected === 'Outfits'
+                  ? getOutfitData
+                  : recommendedProductsClientsRes
+              }
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    paddingTop: 150,
+                  }}>
+                  <Text style={{color: Colors.black60}}>No Data Found</Text>
+                </View>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => (
+                <RenderItem
+                  item={item}
+                  openCloset={() => openClosetInfo(item.closetItemId)}
+                  menuSelected={menuSelected}
+                  recommendToClients={() => recommentToClient(item)}
+                  openProduct={() => getProductDetails(item.productId)}
+                  openOutfit={() =>
+                    props.navigation.navigate('OutfitDetail', {
+                      outfitId: item.outfitId,
+                      id: props?.route?.params?.item?.userId,
+                    })
+                  }
+                />
+              )}
+            />
           </View>
         </ScrollView>
-
-        <FlatList
-          data={
-            menuSelected === 'Closet'
-              ? getcloset
-              : menuSelected === 'Outfits'
-              ? getOutfitData
-              : recommendedProductsClientsRes
-          }
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          ListEmptyComponent={() => (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                paddingTop: 150,
-              }}>
-              <Text style={{color: Colors.black60}}>No Data Found</Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => (
-            <RenderItem
-              item={item}
-              menuSelected={menuSelected}
-              recommendToClients={() => recommentToClient(item)}
-            />
-          )}
-        />
       </View>
       {showClientModal && (
         <OverlayModal

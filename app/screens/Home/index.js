@@ -130,40 +130,42 @@ const Home = props => {
         refreshControl={
           <RefreshControl refreshing={refreshHome} onRefresh={_onRefresh} />
         }>
-        <Lottie
-          source={require('../../assets/ripple.json')}
-          autoPlay
-          loop
-          style={{
-            height: 100,
-            width: 100,
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: -99,
-          }}>
-          <TouchableOpacity
+        {!isStylistUser && (
+          <Lottie
+            source={require('../../assets/ripple.json')}
+            autoPlay
+            loop
             style={{
-              height: 64,
-              width: 64,
-              borderRadius: 32,
-              backgroundColor: Colors.grey1,
-              margin: 20,
-              zIndex: 99,
-            }}
-            onPress={() => setShowBambuser(true)}>
-            <Image
-              resizeMode="contain"
-              source={require('../../assets/live.png')}
-              style={{width: '100%', height: '100%'}}
-            />
-            <View style={{position: 'absolute', bottom: -10, left: 13}}>
+              height: 100,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: -99,
+            }}>
+            <TouchableOpacity
+              style={{
+                height: 64,
+                width: 64,
+                borderRadius: 32,
+                backgroundColor: Colors.grey1,
+                margin: 20,
+                zIndex: 99,
+              }}
+              onPress={() => setShowBambuser(true)}>
               <Image
-                source={require('../../assets/livetext.png')}
-                style={{width: 40, height: 24}}
+                resizeMode="contain"
+                source={require('../../assets/live.png')}
+                style={{width: '100%', height: '100%'}}
               />
-            </View>
-          </TouchableOpacity>
-        </Lottie>
+              <View style={{position: 'absolute', bottom: -10, left: 13}}>
+                <Image
+                  source={require('../../assets/livetext.png')}
+                  style={{width: 40, height: 24}}
+                />
+              </View>
+            </TouchableOpacity>
+          </Lottie>
+        )}
 
         <TouchableOpacity
           style={styles.inputContainer}

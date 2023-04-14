@@ -137,7 +137,6 @@ const CategoryScreen = props => {
       const data = {
         optionId: props.route.params.data.optionId,
       };
-      console.log('@@ home @@', data);
       setFilterParametrs(data);
       dispatch(getFilteredProducts(data));
     }

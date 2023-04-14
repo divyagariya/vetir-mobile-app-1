@@ -39,6 +39,7 @@ const OutfitDetail = props => {
   const deleteOutfitRepsponse = useSelector(
     state => state.OutfitReducer.deleteOutfitRepsponse,
   );
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
 
   useEffect(() => {
     return () => {
@@ -62,6 +63,7 @@ const OutfitDetail = props => {
       dispatch({type: 'SINGLE_CLOSET', value: {}});
       props.navigation.navigate('ClosetInfo', {
         apiData: singleClosetReponse,
+        id: props?.route?.params?.id,
       });
     }
   }, [dispatch, props.navigation, singleClosetReponse]);
@@ -70,7 +72,7 @@ const OutfitDetail = props => {
     if (props?.route?.params?.outfitId) {
       dispatch(
         getOutfitDetail({
-          userId: userId,
+          userId: isStylistUser ? props?.route?.params?.id : userId,
           outfitId: props?.route?.params?.outfitId,
         }),
       );
@@ -156,7 +158,7 @@ const OutfitDetail = props => {
 
   const openClosetInfo = id => {
     let data = {
-      userId: userId,
+      userId: isStylistUser ? props?.route?.params?.id : userId,
       closetItemId: id,
     };
     dispatch(openClosetDetails(data));
@@ -164,7 +166,12 @@ const OutfitDetail = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header showBack showVerticalMenu {...props} openMenu={openMenu} />
+      <Header
+        showBack
+        showVerticalMenu={!isStylistUser}
+        {...props}
+        openMenu={openMenu}
+      />
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         {Object.keys(getOutfitDetailData).length > 0 ? (
           <>

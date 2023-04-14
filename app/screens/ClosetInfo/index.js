@@ -34,6 +34,7 @@ const ClosetInfo = props => {
   const deleteClosetResponse = useSelector(
     state => state.ClosetReducer.deleteClosetResponse,
   );
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const findOutFitList =
     useSelector(state => state.OutfitReducer.findOutfitListRepsponse) || [];
   const [activeOutfit, setActiveOutfit] = useState(true);
@@ -48,7 +49,7 @@ const ClosetInfo = props => {
   useEffect(() => {
     dispatch(
       findOutfitList({
-        userId: userId,
+        userId: isStylistUser ? props?.route?.params?.id : userId,
         closetItemId: props.route?.params?.apiData?.closetItemId,
       }),
     );
@@ -114,7 +115,12 @@ const ClosetInfo = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header showBack {...props} showVerticalMenu openMenu={openMenu} />
+      <Header
+        showBack
+        {...props}
+        showVerticalMenu={!isStylistUser}
+        openMenu={openMenu}
+      />
       <ScrollView>
         <View>
           <View style={{alignItems: 'center'}}>
@@ -177,6 +183,7 @@ const ClosetInfo = props => {
                             onPress={() =>
                               props.navigation.navigate('OutfitDetail', {
                                 outfitId: item.outfitId,
+                                id: props?.route?.params?.id,
                               })
                             }
                             style={{

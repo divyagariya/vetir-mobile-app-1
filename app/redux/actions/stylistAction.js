@@ -8,6 +8,7 @@ export function getAllClients() {
     );
     console.log('apiResponse', apiResponse);
     if (Object.keys(apiResponse).length) {
+      dispatch({type: 'REFRESH_CLIENTS', value: false});
       dispatch({type: 'ALL_CLIENT_DATA', value: apiResponse.clientDetails});
     }
   };
