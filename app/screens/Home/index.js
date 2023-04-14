@@ -29,6 +29,7 @@ const Home = props => {
   const [showBambuser, setShowBambuser] = useState(false);
   const [searchIcon, showSearchIcon] = useState(false);
   const _scrollY = useRef(new Animated.Value(0)).current;
+  const [showProducts, setShowProducts] = useState(false);
   const homeResponse =
     useSelector(state => state.HomeReducer.homeResponse) || [];
   const productDetailResponse = useSelector(
@@ -42,20 +43,19 @@ const Home = props => {
     ) || false;
 
   useEffect(() => {
-    if (Object.keys(productDetailResponse).length) {
+    if (Object.keys(productDetailResponse).length && showProducts) {
+      setShowProducts(false);
       props.navigation.navigate('ViewProduct', {
         data: productDetailResponse.productDetails,
       });
       dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
     }
-  }, [productDetailResponse]);
+  }, [dispatch, productDetailResponse, props.navigation, showProducts]);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       dispatch(getHomePageData());
     });
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [props.navigation, dispatch]);
 
@@ -92,6 +92,7 @@ const Home = props => {
   };
 
   const getProductDetails = productId => {
+    setShowProducts(true);
     dispatch(getProductDetailsApi(productId));
   };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Image,
   Text,
@@ -59,6 +59,15 @@ const Clients = props => {
   const refreshClients = useSelector(
     state => state.StylistReducer.refreshClients,
   );
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      dispatch(getAllClients());
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [props.navigation, dispatch]);
 
   const _onRefresh = () => {
     dispatch({type: 'REFRESH_CLIENTS', value: true});

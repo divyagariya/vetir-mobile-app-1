@@ -333,7 +333,9 @@ const ViewProduct = props => {
           likeImageSrc={
             productData.isDisliked
               ? require('../../assets/iLike.png')
-              : require('../../assets/iDisLike.png')
+              : productData.isDisliked != undefined
+              ? require('../../assets/iDisLike.png')
+              : null
           }
           showBack
           addToCloset={addToCloset}

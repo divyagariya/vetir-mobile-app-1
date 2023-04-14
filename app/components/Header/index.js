@@ -4,6 +4,7 @@ import {FONTS_SIZES} from '../../fonts';
 import VText from '../Text';
 import VView from '../View';
 import {Images} from '../../assets';
+import {useDispatch} from 'react-redux';
 
 const Header = ({
   showshare = false,
@@ -31,6 +32,7 @@ const Header = ({
   recommendClients = () => {},
 }) => {
   const [switchIcon, setSwitch] = useState(false);
+  const dispatch = useDispatch();
   const toggleSwitch = () => {
     switchValue(!switchIcon);
     setSwitch(!switchIcon);
@@ -44,6 +46,15 @@ const Header = ({
     handleSorting();
   };
 
+  const back = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
+      navigation.goBack();
+    }
+  };
+
   return (
     <VView
       style={{
@@ -55,9 +66,7 @@ const Header = ({
       }}>
       <VView style={{flexDirection: 'row', alignItems: 'center'}}>
         {showBack && (
-          <TouchableOpacity
-            style={{padding: 5}}
-            onPress={() => (onBack ? onBack() : navigation.goBack())}>
+          <TouchableOpacity style={{padding: 5}} onPress={back}>
             <Image
               resizeMode="contain"
               source={require('../../assets/iBack.webp')}
@@ -96,7 +105,7 @@ const Header = ({
             </TouchableOpacity>
           </VView>
         )}
-        {showLike && (
+        {showLike && likeImageSrc !== null && (
           <VView style={{flexDirection: 'row'}}>
             <TouchableOpacity style={{marginRight: 20}} onPress={likeProduct}>
               <Image
