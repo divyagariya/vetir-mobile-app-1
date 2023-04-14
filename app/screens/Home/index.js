@@ -79,6 +79,7 @@ const Home = props => {
       <Categories
         data={item}
         {...props}
+        isStylistUser={isStylistUser}
         getProductDetails={getProductDetails}
         viewAll={() =>
           props.navigation.navigate('CategoryScreen', {

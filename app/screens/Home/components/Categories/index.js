@@ -1,11 +1,22 @@
 import React from 'react';
-import {FlatList, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Colors} from '../../../../colors';
 import {VText, VView} from '../../../../components';
 import {FONTS_SIZES} from '../../../../fonts';
 
 const Categories = props => {
-  const {optionName = '', products = []} = props.data || {};
+  const {
+    optionName = '',
+    products = [],
+    fromStylist = false,
+  } = props.data || {};
 
   const renderCategory = ({item, index}) => {
     return (
@@ -24,7 +35,20 @@ const Categories = props => {
   return (
     <VView>
       <VView style={styles.headingContainer}>
-        <VText text={optionName} style={styles.headingLeftText} />
+        {fromStylist && !props.isStylistUser ? (
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={require('../../../../assets/star.png')}
+              style={{width: 24, height: 24}}
+            />
+            <View style={{marginLeft: 8}}>
+              <Text style={styles.headingLeftText}>{optionName}</Text>
+              <Text>by your stylist</Text>
+            </View>
+          </View>
+        ) : (
+          <VText text={optionName} style={styles.headingLeftText} />
+        )}
         <TouchableOpacity onPress={props.viewAll}>
           <VText text="VIEW ALL" />
         </TouchableOpacity>
