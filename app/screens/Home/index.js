@@ -21,6 +21,7 @@ import {
   getHomePageData,
   getProductDetailsApi,
 } from '../../redux/actions/homeActions';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 
 const Home = props => {
   const dispatch = useDispatch();
@@ -51,6 +52,29 @@ const Home = props => {
       dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
     }
   }, [dispatch, productDetailResponse, props.navigation, showProducts]);
+
+  const handleDynamicLink = link => {
+    // Handle dynamic link inside your own application
+    if (link.url.split('/')[2]) {
+      getProductDetails(link.url.split('/')[2]);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+    // When the component is unmounted, remove the listener
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    dynamicLinks()
+      .getInitialLink()
+      .then(link => {
+        if (link.url.split('/')[2]) {
+          getProductDetails(link.url.split('/')[2]);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {

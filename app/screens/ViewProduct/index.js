@@ -28,6 +28,7 @@ import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -194,11 +195,23 @@ const ViewProduct = props => {
     dispatch(addDataInCloset(data));
   };
 
-  const onShare = () => {
-    const url = 'https://awesome.contents.com/';
+  const onShare = async () => {
+    const link = await dynamicLinks().buildLink({
+      link: `https://${productData.productId}`,
+      // domainUriPrefix is created in your Firebase console
+      domainUriPrefix: 'https://vetirstylist.page.link',
+      // optional setup which updates Firebase analytics campaign
+      // "banner". This also needs setting up before hand
+      analytics: {
+        campaign: 'banner',
+      },
+    });
+
+    console.log('link', link);
+    const url = `https://vetirstylist.page.link/productDetails?${productData.productId}`;
     const message = 'Please check this out.';
     Share.open({
-      message: `${message} ${url}`,
+      message: `${message} ${link}`,
     })
       .then(res => {
         console.log(res);
@@ -327,7 +340,7 @@ const ViewProduct = props => {
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
           showLike={!isStylistUser}
-          // showshare
+          showshare={!isStylistUser}
           onShare={onShare}
           {...props}
           likeImageSrc={
