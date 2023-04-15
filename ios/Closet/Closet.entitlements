@@ -8,7 +8,7 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:vetirstylist.page.link/productDetails</string>
+		<string>applinks:vetirstylist.page.link</string>
 	</array>
 </dict>
 </plist>

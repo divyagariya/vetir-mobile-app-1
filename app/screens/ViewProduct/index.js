@@ -196,8 +196,12 @@ const ViewProduct = props => {
   };
 
   const onShare = async () => {
-    const link = await dynamicLinks().buildLink({
+    const link = await dynamicLinks().buildShortLink({
       link: `https://${productData.productId}`,
+      ios: {
+        bundleId: 'com.app.closet.stylist',
+        appStoreId: '1345656565',
+      },
       // domainUriPrefix is created in your Firebase console
       domainUriPrefix: 'https://vetirstylist.page.link',
       // optional setup which updates Firebase analytics campaign
@@ -208,7 +212,6 @@ const ViewProduct = props => {
     });
 
     console.log('link', link);
-    const url = `https://vetirstylist.page.link/productDetails?${productData.productId}`;
     const message = 'Please check this out.';
     Share.open({
       message: `${message} ${link}`,
