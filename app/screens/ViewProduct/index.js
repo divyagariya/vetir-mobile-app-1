@@ -397,34 +397,34 @@ const ViewProduct = props => {
         <VView style={{padding: 16}}>
           <VView>
             <VText
-              style={{fontSize: FONTS_SIZES.s3, fontWeight: '700'}}
+              style={{fontSize: FONTS_SIZES.s4, fontWeight: '700'}}
               text={productData?.productName}
             />
             <VText
               text={'$' + productData?.productPrice}
               style={{
-                fontSize: FONTS_SIZES.s3,
+                fontSize: FONTS_SIZES.s4,
                 fontWeight: '700',
                 paddingVertical: 8,
+                marginBottom: 8,
               }}
             />
             <Text style={styles.titleStyle}>Color</Text>
             <View
               style={{
                 flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 16,
-                marginTop: 8,
+                alignItems: 'baseline',
               }}>
+              <Text style={[styles.subitleStyle, {marginRight: 8}]}>
+                {productData.productColor}
+              </Text>
               <View
                 style={{
                   backgroundColor: productData.productColorCode,
-                  width: 40,
-                  height: 40,
-                  marginRight: 8,
+                  width: 12,
+                  height: 12,
                 }}
               />
-              <Text>{productData.productColor}</Text>
             </View>
             <Text style={styles.titleStyle}>Category</Text>
             <Text style={styles.subitleStyle}>{productData.categoryName}</Text>
@@ -465,9 +465,18 @@ const ViewProduct = props => {
       <View
         style={{
           position: 'absolute',
-          bottom: 16,
+          bottom: 0,
+          padding: 16,
           width: '100%',
           paddingHorizontal: 16,
+          backgroundColor: '#fff',
+          shadowColor: '#000000',
+          shadowOffset: {
+            width: 0,
+            height: 0,
+          },
+          shadowRadius: 4,
+          shadowOpacity: 0.16,
         }}>
         <Buttons text="Buy Now" onPress={openLink} />
         {!isStylistUser && (
@@ -475,12 +484,12 @@ const ViewProduct = props => {
             isInverse
             imageIcon={
               productData.addedToCloset
-                ? require('../../assets/closetCross.png')
+                ? require('../../assets/addedCloset.png')
                 : require('../../assets/iAdd.webp')
             }
             onPress={addToCloset}
             text={
-              productData.addedToCloset ? 'Remove from closet' : 'Add to closet'
+              productData.addedToCloset ? 'Added to closet' : 'Add to closet'
             }
           />
         )}
@@ -518,10 +527,10 @@ const styles = StyleSheet.create({
   },
   subitleStyle: {
     color: Colors.black60,
-    marginTop: 8,
+    marginTop: 4,
     marginBottom: 16,
   },
   titleStyle: {
-    marginTop: 8,
+    marginTop: 4,
   },
 });
