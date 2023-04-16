@@ -1,21 +1,34 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import AppNavigation from './app/navigation';
 import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {store, persistor} from './app/redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
-import {Platform, StatusBar, View} from 'react-native';
+import {View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {Colors} from './app/colors';
+import Lottie from 'lottie-react-native';
 
 let isNoch = DeviceInfo.hasNotch();
 
 const App = () => {
+  const [showLottie, setLottie] = useState(true);
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
+  if (showLottie) {
+    return (
+      <Lottie
+        source={require('./app/assets/splash_animation.json')}
+        autoPlay
+        onAnimationFinish={() => setLottie(false)}
+        loop={false}
+      />
+    );
+  }
 
   return (
     <NavigationContainer>
