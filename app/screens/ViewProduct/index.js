@@ -470,18 +470,20 @@ const ViewProduct = props => {
           paddingHorizontal: 16,
         }}>
         <Buttons text="Buy Now" onPress={openLink} />
-        <Buttons
-          isInverse
-          imageIcon={
-            productData.addedToCloset
-              ? require('../../assets/closetCross.png')
-              : require('../../assets/iAdd.webp')
-          }
-          onPress={addToCloset}
-          text={
-            productData.addedToCloset ? 'Remove from closet' : 'Add to closet'
-          }
-        />
+        {!isStylistUser && (
+          <Buttons
+            isInverse
+            imageIcon={
+              productData.addedToCloset
+                ? require('../../assets/closetCross.png')
+                : require('../../assets/iAdd.webp')
+            }
+            onPress={addToCloset}
+            text={
+              productData.addedToCloset ? 'Remove from closet' : 'Add to closet'
+            }
+          />
+        )}
       </View>
       {showClientModal && (
         <OverlayModal
