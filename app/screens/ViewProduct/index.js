@@ -336,10 +336,10 @@ const ViewProduct = props => {
     return null;
   }
   return (
-    <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 80}}>
+    <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 140}}>
       <VView>
         <Header
-          showAdd={!isStylistUser}
+          //showAdd={!isStylistUser}
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
           showLike={!isStylistUser}
@@ -469,7 +469,19 @@ const ViewProduct = props => {
           width: '100%',
           paddingHorizontal: 16,
         }}>
-        <Buttons text="buy from the store" onPress={openLink} />
+        <Buttons text="Buy Now" onPress={openLink} />
+        <Buttons
+          isInverse
+          imageIcon={
+            productData.addedToCloset
+              ? require('../../assets/closetCross.png')
+              : require('../../assets/iAdd.webp')
+          }
+          onPress={addToCloset}
+          text={
+            productData.addedToCloset ? 'Remove from closet' : 'Add to closet'
+          }
+        />
       </View>
       {showClientModal && (
         <OverlayModal
