@@ -9,6 +9,8 @@ import {
   updateUserProfile,
 } from '../../redux/actions/profileAction';
 import Toast from 'react-native-simple-toast';
+import {FONTS_SIZES} from '../../fonts';
+
 
 const ProfileSetup = props => {
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
@@ -114,8 +116,8 @@ const ProfileSetup = props => {
             style={{
               fontSize: 20,
               fontWeight: '700',
-              marginTop: 40,
-              marginBottom: 8,
+              marginTop: 16,
+              marginBottom: 16,
             }}>
             What’s your name?
           </Text>
@@ -144,23 +146,23 @@ const ProfileSetup = props => {
             style={{
               fontSize: 20,
               fontWeight: '700',
-              marginTop: 40,
-              marginBottom: 8,
+              marginTop: 16,
+              marginBottom: 16,
             }}>
             What’s your gender?
           </Text>
-          <View style={{flexDirection: 'row', marginVertical: 16}}>
+          <View style={{flexDirection: 'row', marginBottom: 16}}>
             {state.genderData.map((item, index) => {
               return (
                 <TouchableOpacity
                   style={{
-                    paddingVertical: 24,
-                    paddingHorizontal: 20,
-                    borderWidth: 1,
-                    borderColor:
+                    paddingVertical: 16,
+                    paddingHorizontal: 16,
+                    borderRadius: 8,
+                    backgroundColor:
                       item.type === state.genderSelected
-                        ? Colors.black
-                        : Colors.greyBorder,
+                        ? Colors.grey2
+                        : Colors.grey1,
                     marginHorizontal: index == 1 && 8,
                   }}
                   onPress={() => selectGeneder(item, index)}>
@@ -232,8 +234,8 @@ const ProfileSetup = props => {
             style={{
               fontSize: 20,
               fontWeight: '700',
-              marginTop: 40,
-              marginBottom: 8,
+              marginTop: 16,
+              marginBottom: 16,
             }}>
             Wanna upload your cool picture?
           </Text>
@@ -247,19 +249,47 @@ const ProfileSetup = props => {
                 }}
                 style={{width: 128, height: 128, borderRadius: 64}}
               />
-              <TouchableOpacity
-                style={{padding: 5, margin: 10}}
-                onPress={pickImage}>
-                <Text style={{color: '#217AFF'}}>Change</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{padding: 5}}
-                onPress={() => {
-                  setImage(false);
-                  setState({...state, userImage: null});
+              <View
+                style={{
+                  flexDirection: 'row',
+                  padding: 16,
+                  justifyContent: 'space-around',
                 }}>
-                <Text style={{color: '#217AFF'}}>Remove</Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={pickImage}>
+                  <Text
+                    style={{
+                      color: '#217AFF',
+                      fontSize: FONTS_SIZES.s4,
+                      fontWeight: '700',
+                      borderWidth: 1,
+                      padding: 16,
+                      borderRadius: 8,
+                      borderColor: Colors.greyBorder,
+                      marginRight: 16,
+                    }}>
+                    Change
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{paddingBottom: 4}}
+                  onPress={() => {
+                    setImage(false);
+                    setState({...state, userImage: null});
+                  }}>
+                  <Text
+                      style={{
+                        color: '#217AFF',
+                        fontSize: FONTS_SIZES.s4,
+                        fontWeight: '700',
+                        borderWidth: 1,
+                        padding: 16,
+                        borderRadius: 8,
+                        borderColor: Colors.greyBorder,
+                      }}>
+                      Remove
+                    </Text>
+                  </TouchableOpacity>
+                 </View> 
             </View>
           ) : (
             <>
@@ -270,7 +300,18 @@ const ProfileSetup = props => {
               <TouchableOpacity
                 style={{padding: 5, margin: 10}}
                 onPress={pickImage}>
-                <Text style={{color: '#217AFF'}}>Upload</Text>
+                <Text
+                  style={{
+                    color: '#217AFF',
+                      fontSize: FONTS_SIZES.s4,
+                      fontWeight: '700',
+                      borderWidth: 1,
+                      padding: 16,
+                      borderRadius: 8,
+                      borderColor: Colors.greyBorder,
+                  }}>
+                  Upload
+                </Text>
               </TouchableOpacity>
             </>
           )}
@@ -291,8 +332,8 @@ const ProfileSetup = props => {
   };
 
   return (
-    <View style={{padding: 16, flex: 1, backgroundColor: 'white'}}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+    <View style={{padding: 16, flex: 1, backgroundColor: 'white', marginTop: 32}}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16}}>
         <View
           style={{
             width: 100,

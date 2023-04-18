@@ -60,17 +60,17 @@ const Header = ({
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 20,
+        padding: 16,
         backgroundColor: 'white',
         alignItems: 'center',
       }}>
       <VView style={{flexDirection: 'row', alignItems: 'center'}}>
         {showBack && (
-          <TouchableOpacity style={{padding: 5}} onPress={back}>
+          <TouchableOpacity onPress={back}>
             <Image
               resizeMode="contain"
               source={require('../../assets/iBack.webp')}
-              style={{width: 24, height: 18}}
+              style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
         )}
@@ -80,9 +80,10 @@ const Header = ({
               title.length < 15 ? `${title}` : `${title.substring(0, 15)}...`
             }
             style={{
-              paddingLeft: !showBack || 20,
-              fontSize: FONTS_SIZES.s3,
+              paddingLeft: !showBack || 16,
+              fontSize: FONTS_SIZES.s2,
               fontWeight: '700',
+              color: '#212427',
               // width: 200,
             }}
           />
@@ -96,7 +97,7 @@ const Header = ({
         }}>
         {showAdd && (
           <VView style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={{marginRight: 20}} onPress={addToCloset}>
+            <TouchableOpacity style={{marginRight: 16}} onPress={addToCloset}>
               <Image
                 resizeMode="contain"
                 source={imageSrc}
@@ -107,7 +108,7 @@ const Header = ({
         )}
         {showLike && likeImageSrc !== null && (
           <VView style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={{marginRight: 20}} onPress={likeProduct}>
+            <TouchableOpacity style={{marginRight: 16}} onPress={likeProduct}>
               <Image
                 resizeMode="contain"
                 source={likeImageSrc}
@@ -119,19 +120,19 @@ const Header = ({
         {showRecommend && (
           <VView style={{flexDirection: 'row'}}>
             <TouchableOpacity
-              style={{marginRight: 20}}
+              style={{marginRight: 16}}
               onPress={recommendClients}>
               <Image
                 resizeMode="contain"
-                source={require('../../assets/iRecommend.png')}
-                style={{width: 24, height: 24}}
+                source={require('../../assets/iRecommend.webp')}
+                style={{width: 32, height: 32}}
               />
             </TouchableOpacity>
           </VView>
         )}
         {showshare && (
           <VView style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={{marginRight: 20}} onPress={onShare}>
+            <TouchableOpacity style={{marginRight: 16}} onPress={onShare}>
               <Image
                 resizeMode="contain"
                 source={require('../../assets/iShare.webp')}
@@ -142,12 +143,11 @@ const Header = ({
         )}
         {showFilter && (
           <TouchableOpacity
-            onPress={() => showFilterFunction(true)}
-            style={{paddingHorizontal: 10}}>
+            onPress={() => showFilterFunction(true)}>
             <Image
               resizeMode="stretch"
               source={require('../../assets/iFilter.webp')}
-              style={{width: 24, height: 24}}
+              style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
         )}
@@ -180,7 +180,7 @@ const Header = ({
             <Image
               resizeMode="contain"
               source={Images.menuBar}
-              style={{width: 22, height: 22}}
+              style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
         )}

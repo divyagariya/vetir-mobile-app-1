@@ -169,7 +169,7 @@ const Outfits = props => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
       <Header
         title="Outfits"
         showSort={getOutfitData.length > 0}
@@ -199,23 +199,27 @@ const Outfits = props => {
           }}>
           <Image
             source={require('../../assets/no_outfit.png')}
-            style={{width: 160, height: 160}}
+            style={{width: 160, height: 160, marginBottom: 32}}
           />
-          <Text style={{textAlign: 'center', padding: 16, lineHeight: 24}}>
-            No Outfits to show. {'\n'} Create outfits to get more personalised
-            clothing experinece
+          <Text style={{textAlign: 'center', fontSize: FONTS_SIZES.s3, fontWeight: '700', lineHeight: 24, marginBottom: 8}}>
+            No Outfit to show.
           </Text>
+          <Text style={{textAlign: 'center', fontSize: FONTS_SIZES.s4, lineHeight: 24, marginBottom: 32}}>
+            Create outfits to get more personalised clothing experience
+          </Text>
+          <View
+            style={{
+              width: '100%',
+            }}>
+            <Buttons
+              text="Create Outfit"
+              onPress={() => props.navigation.navigate('AddOutfit')}
+            />
+          </View>
         </View>
       )}
 
       <OverlayModal showModal={showModal} component={sortData()} />
-      <View
-        style={{padding: 16, position: 'absolute', bottom: 16, width: '100%'}}>
-        <Buttons
-          text="Create Outfit"
-          onPress={() => props.navigation.navigate('AddOutfit')}
-        />
-      </View>
     </View>
   );
 };

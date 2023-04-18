@@ -142,17 +142,25 @@ export default props => {
             source={require('../../assets/empty_closet.png')}
             style={styles.whiteBoxStyle}
           />
-          <VText
-            text={'Your closet is empty. Add clothes to get...'}
-            style={styles.emptyClosetText}
-          />
-          <VView style={{marginTop: 16}}>
-            <Image
-              source={Images.lineArrow}
-              style={styles.lineArrowStyle}
-              resizeMode="stretch"
-            />
-          </VView>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: FONTS_SIZES.s3,
+              fontWeight: '700',
+              lineHeight: 24,
+              marginBottom: 8,
+            }}>
+            Your closet is empty.
+          </Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: FONTS_SIZES.s4,
+              lineHeight: 24,
+              marginBottom: 32,
+            }}>
+            Add clothes to get more personalised clothing experience
+          </Text>
         </VView>
       </VView>
     );
@@ -422,12 +430,13 @@ export default props => {
       {showWebView ? (
         <View
           style={{
-            margin: 16,
+            margin: 8,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-start',
           }}>
           <TouchableOpacity
             style={{
+              margin: 8,
               width: '45%',
               alignItems: 'center',
               backgroundColor: 'black',
@@ -441,6 +450,7 @@ export default props => {
           <TouchableOpacity
             onPress={() => setWebView(false)}
             style={{
+              margin: 8,
               width: '45%',
               alignItems: 'center',
               backgroundColor: 'black',
@@ -1040,9 +1050,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     zIndex: -999,
+    paddingTop: 16,
   },
   footerImageContainer: {
-    marginRight: 16,
+    marginRight: 8,
     borderRadius: 20,
   },
   bodyContainer: {
@@ -1054,6 +1065,7 @@ const styles = StyleSheet.create({
   whiteBoxStyle: {
     height: 160,
     width: 160,
+    marginBottom: 32,
   },
   emptyClosetText: {
     marginTop: 16,

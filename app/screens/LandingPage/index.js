@@ -50,7 +50,6 @@ class LandingPage extends React.Component {
       showModal: false,
       modalData: null,
       type: '',
-      stylistEmail: 'rahulstylist@yopmail.com',
     };
   }
 
@@ -233,8 +232,8 @@ class LandingPage extends React.Component {
 
   renderStylistLogin = () => {
     return (
-      <View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={{marginBottom: 16, marginTop: 12}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12}}>
           <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
             Login as a Stylist
           </Text>
@@ -254,7 +253,7 @@ class LandingPage extends React.Component {
           value={this.state.stylistEmail}
           showIcon
         />
-        <Buttons text="login" onPress={this.stylistLogin} />
+        <Buttons text="login" onPress={this.stylistLogin}/>
       </View>
     );
   };
@@ -265,13 +264,12 @@ class LandingPage extends React.Component {
         <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
           <View
             style={{
-              backgroundColor: Colors.grey1,
-              paddingTop: 36,
+              paddingTop: 16,
             }}>
             <Carousel
               loop={true}
               autoplay={true}
-              layout="stack"
+              layout="default"
               layoutCardOffset={9}
               ref={c => (this._slider1Ref = c)}
               data={this.state.entries}
@@ -282,18 +280,21 @@ class LandingPage extends React.Component {
               useScrollView={true}
               onSnapToItem={index => this.setState({activeIndex: index})}
             />
-            <Pagination
-              dotsLength={this.state.entries.length}
-              activeDotIndex={this.state.activeIndex}
-              carouselRef={c => (this._slider1Ref = c)}
-              dotStyle={styles.dotStyle}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6}
-              tappableDots={true}
-            />
+            <View style={styles.dotsContainer}>
+              <Pagination
+                dotsLength={this.state.entries.length}
+                activeDotIndex={this.state.activeIndex}
+                carouselRef={c => (this._slider1Ref = c)}
+                dotStyle={styles.dotStyle}
+                dotColor="#000"
+                inactiveDotColor="rgba(0, 0, 0, 0.3)"
+                inactiveDotScale={1}
+                tappableDots={true}
+              />
+            </View>
           </View>
-          <View style={{paddingHorizontal: 16, marginTop: 36}}>
-            <Text style={styles.headingStyle}>Log in or sign up</Text>
+          <View style={{paddingHorizontal: 16}}>
+            <Text style={styles.headingStyle}>Log in or Sign up</Text>
             <Input
               placeholder="Email Id"
               onChangeText={e => this.setState({email: e, errorText: ''})}
@@ -305,7 +306,7 @@ class LandingPage extends React.Component {
               style={{
                 marginTop: 4,
               }}>
-              <Buttons text="continue" onPress={this.login} />
+              <Buttons text="Continue" onPress={this.login} />
             </View>
             {/* <View style={styles.orContainer}>
               <View style={styles.line} />
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
     height: 240,
   },
   header: {
-    color: '#222',
+    color: '#000',
     fontSize: FONTS_SIZES.s3,
     fontWeight: '700',
     paddingLeft: 20,
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   body: {
-    color: '#222',
+    color: '#000',
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 8,
@@ -410,17 +411,21 @@ const styles = StyleSheet.create({
     height: 44,
   },
   dotStyle: {
-    width: 10,
-    height: 10,
+    width: 6,
+    height: 6,
     borderRadius: 5,
     marginHorizontal: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.92)',
+    backgroundColor: 'rgba(33, 36, 39, 1)',
+  },
+  dotsContainer: {
+    alignItems: 'center',
+    padding: 8,
   },
   headingStyle: {
     fontSize: FONTS_SIZES.s3,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   tncContainer: {
     paddingBottom: 50,
@@ -438,7 +443,8 @@ const styles = StyleSheet.create({
   socialIconContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingVertical: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   orContainer: {
     flexDirection: 'row',
@@ -448,6 +454,7 @@ const styles = StyleSheet.create({
   },
   tncText: {
     color: '#217AFF',
+    lineHeight: 20,
   },
 });
 

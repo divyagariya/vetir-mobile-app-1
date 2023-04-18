@@ -17,8 +17,8 @@ const Input = ({
           <Image
             source={
               iconName
-                ? require('../../assets/iProfile.png')
-                : require('../../assets/mail.png')
+                ? require('../../assets/avatars_empty.webp')
+                : require('../../assets/mail.webp')
             }
             style={{
               width: 24,
@@ -50,8 +50,10 @@ const styles = StyleSheet.create({
       : value
       ? Colors.black60
       : Colors.greyBorder,
-    marginVertical: 8,
-    paddingLeft: showIcon ? 50 : 16,
+    paddingLeft: showIcon ? 48 : 16,
+    height: 56,
+    fontSize: 15,
+    borderRadius: 8,
   }),
   errorText: {
     color: Colors.red,
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   },
   iconStyle: {
     position: 'absolute',
-    paddingVertical: 22,
-    paddingHorizontal: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
   },
 });

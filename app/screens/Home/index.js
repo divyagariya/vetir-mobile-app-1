@@ -132,18 +132,18 @@ const Home = props => {
         <VView style={{flexDirection: 'row'}}>
           {searchIcon && (
             <TouchableOpacity
-              style={{paddingRight: 20}}
+              style={{paddingRight: 16}}
               onPress={() => props.navigation.navigate('Search')}>
               <Image
-                source={require('../../assets/search.webp')}
-                style={styles.menuIcon}
+                source={require('../../assets/search_top.webp')}
+                style={styles.menuIcons}
               />
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={() => props.navigation.navigate('Menu')}>
             <Image
               source={require('../../assets/menu.webp')}
-              style={styles.menuIcon}
+              style={styles.menuIcons}
               resizeMode="contain"
             />
           </TouchableOpacity>
@@ -156,6 +156,19 @@ const Home = props => {
         refreshControl={
           <RefreshControl refreshing={refreshHome} onRefresh={_onRefresh} />
         }>
+        <TouchableOpacity
+          style={styles.inputContainer}
+          onPress={() => props.navigation.navigate('Search')}>
+          <View style={{paddingHorizontal: 16}}>
+            <Image
+              source={require('../../assets/search.webp')}
+              style={styles.search}
+            />
+          </View>
+          <Text style={{color: Colors.black60, fontSize: FONTS_SIZES.s4}}>
+            Search jeans, top, hats...
+          </Text>
+        </TouchableOpacity>
         {!isStylistUser && (
           <Lottie
             source={require('../../assets/ripple.json')}
@@ -167,7 +180,9 @@ const Home = props => {
               justifyContent: 'center',
               alignItems: 'center',
               zIndex: -99,
+              flexDirection: 'row',
             }}>
+            <View>
             <TouchableOpacity
               style={{
                 height: 64,
@@ -190,22 +205,27 @@ const Home = props => {
                 />
               </View>
             </TouchableOpacity>
+              </View>
+              <View style={styles.liveVideos}>
+                <Image
+                  source={require('../../assets/live_soon.webp')}
+                  style={{width: 64, height: 64, marginRight: 16}}
+                />
+                <Image
+                  source={require('../../assets/live_soon.webp')}
+                  style={{width: 64, height: 64, marginRight: 16}}
+                />
+                <Image
+                  source={require('../../assets/live_soon.webp')}
+                  style={{width: 64, height: 64, marginRight: 16}}
+                />
+                <Image
+                  source={require('../../assets/live_soon.webp')}
+                  style={{width: 64, height: 64, marginRight: 16}}
+                />
+              </View>
           </Lottie>
         )}
-
-        <TouchableOpacity
-          style={styles.inputContainer}
-          onPress={() => props.navigation.navigate('Search')}>
-          <View style={{paddingHorizontal: 18}}>
-            <Image
-              source={require('../../assets/search.webp')}
-              style={styles.menuIcon}
-            />
-          </View>
-          <Text style={{color: Colors.black60}}>
-            Search jeans, top, hats...
-          </Text>
-        </TouchableOpacity>
         {homeResponse.length > 0 &&
           homeResponse.map(item => {
             return renderItem(item);
@@ -262,30 +282,45 @@ const styles = StyleSheet.create({
   conatiner: {
     flex: 1,
     backgroundColor: 'white',
+    paddingTop: 16,
   },
   headingContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 16,
+    paddingHorizontal: 16,
+    marginTop: 16,
   },
   headingText: {
     fontSize: FONTS_SIZES.s1,
     fontWeight: '700',
+    color: '#212427',
   },
-  menuIcon: {
-    height: 22,
-    width: 22,
+  menuIcons: {
+    height: 32,
+    width: 32,
+  },
+  search: {
+    height: 24,
+    width: 24,
   },
   inputContainer: {
     backgroundColor: Colors.grey1,
-    marginBottom: 32,
     marginTop: 16,
+    marginBottom: 8,
     marginHorizontal: 16,
     paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 8,
   },
   input: {
     padding: 16,
+  },
+  liveVideos: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    left: 96,
   },
 });

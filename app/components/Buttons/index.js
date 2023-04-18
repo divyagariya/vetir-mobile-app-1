@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {Colors} from '../../colors';
 import VText from '../Text';
+import {FONTS_SIZES} from '../../fonts';
 
 const Buttons = ({
   text = '',
@@ -48,15 +49,20 @@ export default Buttons;
 
 const styles = StyleSheet.create({
   buttonContainer: (isInverse, noBorder) => ({
-    backgroundColor: isInverse ? '#FFFFFF' : '#000000',
+    backgroundColor: isInverse ? '#FFFFFF' : '#212427',
     paddingVertical: 16,
     alignItems: 'center',
-    marginTop: 4,
-    borderWidth: 2,
-    borderColor: noBorder ? 'transparent' : Colors.grey1,
+    borderWidth: 1,
+    borderColor: noBorder ? 'transparent' : Colors.greyBorder,
+    height: 56,
+    borderRadius: 8,
+    marginBottom: 8,
   }),
   buttontext: (isInverse, textColor) => ({
     color: textColor ? textColor : isInverse ? 'black' : 'white',
-    textTransform: 'uppercase',
+    textTransform: 'capitalize',
+    fontSize: FONTS_SIZES.s4,
+    fontWeight: 'bold',
+    lineHeight: 20,
   }),
 });

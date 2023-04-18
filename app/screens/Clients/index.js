@@ -19,7 +19,7 @@ const ClientList = ({item, index, onPress}) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: 16,
       }}
       onPress={() => onPress(item)}>
       <View style={{flexDirection: 'row'}}>
@@ -42,7 +42,7 @@ const ClientList = ({item, index, onPress}) => {
 
       <View>
         <Image
-          source={require('../../assets/iRight.png')}
+          source={require('../../assets/rightArrow.png')}
           style={{width: 16, height: 16}}
           resizeMode="contain"
         />
@@ -74,7 +74,7 @@ const Clients = props => {
     dispatch(getAllClients());
   };
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
       <Header title="Clients" showMenu {...props} />
       <View style={{flex: 1, padding: 16}}>
         <ScrollView

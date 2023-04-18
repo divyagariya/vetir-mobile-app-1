@@ -108,7 +108,7 @@ const CategoryScreen = props => {
       if (recommendedToClientsRes.statusCode === 200) {
         setSelectedClients([]);
         dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
-        Toast.show('Recommended to clients successfuly');
+        Toast.show('Recommended to client');
       }
     }
   }, [recommendedToClientsRes, dispatch]);
@@ -117,7 +117,7 @@ const CategoryScreen = props => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
         dispatch({type: 'DELETE_CLOSET', value: {}});
-        Toast.show('Cloth successfully removed from closet');
+        Toast.show('Removed from closet');
         dispatch(getFilteredProducts(filterParams));
         dispatch(getClosetData());
       }
@@ -130,7 +130,7 @@ const CategoryScreen = props => {
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getClosetData());
         dispatch(getFilteredProducts(filterParams));
-        Toast.show('Cloth successfully added in closet');
+        Toast.show('Added to closet');
       }
     }
   }, [addClosetResponse, dispatch]);
@@ -372,7 +372,7 @@ const CategoryScreen = props => {
   };
 
   return (
-    <VView style={{backgroundColor: 'white', flex: 1}}>
+    <VView style={{backgroundColor: 'white', flex: 1, paddingTop: 16}}>
       <Header
         showSort
         title={props?.route?.params?.title}
@@ -385,7 +385,7 @@ const CategoryScreen = props => {
       {productList?.length > 0 && (
         <Text
           style={{
-            padding: 16,
+            paddingHorizontal: 16,
             color: Colors.black60,
           }}>{`${productList?.length} results found`}</Text>
       )}
@@ -414,11 +414,12 @@ const CategoryScreen = props => {
       ) : showLoader ? (
         <ActivityIndicator />
       ) : (
-        <View style={{alignSelf: 'center', paddingTop: 100}}>
+        <View style={{justifyContent: 'center', flex: 1, width: '100%'}}>
           <Text
             style={{
               color: Colors.black60,
               fontSize: 15,
+              alignSelf: 'center',
             }}>
             Umm, nothing is here...
           </Text>

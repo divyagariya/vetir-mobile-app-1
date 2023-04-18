@@ -273,7 +273,7 @@ const ClosetDetailsFrom = props => {
               textInputProps={{value: state.categorySelected?.name}}
               itemStyle={styles.searchItemContainer}
               itemTextStyle={{
-                color: '#222',
+                color: '#000',
               }}
               itemsContainerStyle={{
                 maxHeight: '60%',
@@ -295,7 +295,7 @@ const ClosetDetailsFrom = props => {
               textInputProps={{value: state.brandSelected?.name}}
               itemStyle={styles.searchItemContainer}
               itemTextStyle={{
-                color: '#222',
+                color: '#000',
               }}
               itemsContainerStyle={{
                 maxHeight: '60%',

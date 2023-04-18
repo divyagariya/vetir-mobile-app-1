@@ -7,6 +7,6 @@ export const FONTS_SIZES = {
   h6: 26,
   s1: 24,
   s2: 22,
-  s3: 20,
+  s3: 18,
   s4: 15,
 };

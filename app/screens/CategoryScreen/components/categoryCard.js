@@ -18,7 +18,7 @@ export default ({
     <>
       <VView
         style={{
-          marginBottom: 16,
+          marginBottom: 32,
           alignSelf: 'center',
           flex: 0.5,
           marginHorizontal: 8,
@@ -27,17 +27,17 @@ export default ({
           onPress={getProductDetails}
           activeOpacity={0.7}
           style={{
-            paddingVertical: 10,
-            paddingHorizontal: 13,
             width: '100%',
+            height: 218.67,
             alignSelf: 'center',
+            backgroundColor: Colors.grey1,
           }}>
           <Image
             source={{uri: item?.imageUrls[0]}}
             resizeMode="contain"
             style={{
               height: 192,
-              width: 144,
+              flex: 1,
             }}
           />
         </TouchableOpacity>
@@ -46,9 +46,11 @@ export default ({
             marginTop: 8,
           }}>
           {isStylistUser ? (
-            <TouchableOpacity onPress={recommentToClient}>
+            <TouchableOpacity
+              onPress={recommentToClient}
+              style={{marginVertical: 8, marginRight: 8}}>
               <Image
-                source={require('../../../assets/iRecommend.png')}
+                source={require('../../../assets/iRecommend.webp')}
                 style={{
                   height: 24,
                   width: 24,
@@ -59,10 +61,11 @@ export default ({
           ) : (
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
-                onPress={item.addedToCloset ? deletFromClost : addToCloset}>
+                onPress={item.addedToCloset ? deletFromClost : addToCloset}
+                style={{marginVertical: 8, marginRight: 8}}>
                 {item.addedToCloset ? (
                   <Image
-                    source={require('../../../assets/addedCloset.png')}
+                    source={require('../../../assets/addedCloset.webp')}
                     style={{
                       height: 24,
                       width: 24,
@@ -80,12 +83,10 @@ export default ({
                   />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{marginLeft: 10}}
-                onPress={dislikeProducts}>
+              <TouchableOpacity style={{margin: 8}} onPress={dislikeProducts}>
                 {item.isDisliked ? (
                   <Image
-                    source={require('../../../assets/iLike.png')}
+                    source={require('../../../assets/iDisliked.webp')}
                     style={{
                       height: 24,
                       width: 24,
@@ -94,7 +95,7 @@ export default ({
                   />
                 ) : item.isDisliked != undefined ? (
                   <Image
-                    source={require('../../../assets/iDisLike.png')}
+                    source={require('../../../assets/iDislike.webp')}
                     style={{
                       height: 24,
                       width: 24,
@@ -109,8 +110,8 @@ export default ({
             numberOfLines={1}
             style={{
               fontSize: FONTS_SIZES.s4,
-              fontWeight: 'bold',
-              marginTop: 8,
+              fontWeight: '600',
+              marginBottom: 4,
             }}>
             {item.productName}
           </Text>

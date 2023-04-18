@@ -100,7 +100,7 @@ const ClosetCategory = props => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
       <Header
         showBack
         showFilter
@@ -116,6 +116,7 @@ const ClosetCategory = props => {
             alignItems: 'center',
             flexDirection: 'row',
             flexWrap: 'wrap',
+            marginHorizontal: 8,
           }}>
           {closetData.map(item => {
             return (
@@ -124,14 +125,13 @@ const ClosetCategory = props => {
                   width: '45%',
                   alignItems: 'center',
                   backgroundColor: Colors.grey1,
-                  paddingHorizontal: 7,
-                  paddingVertical: 12,
-                  margin: 8,
+                  marginBottom: 16,
+                  marginHorizontal: 8
                 }}
                 onPress={() => openClosetInfo(item.closetItemId)}>
                 <Image
                   source={{uri: item.itemImageUrl}}
-                  style={{width: 150, height: 140}}
+                  style={{width: '100%', height: 140}}
                   resizeMode="contain"
                 />
               </TouchableOpacity>

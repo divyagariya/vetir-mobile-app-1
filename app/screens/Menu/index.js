@@ -48,7 +48,7 @@ const Menu = props => {
     },
     {
       icon: require('../../assets/preferences.png'),
-      manuName: 'YourPreferences',
+      manuName: 'Your Preferences',
       route: 'YourPreferences',
     },
     {
@@ -194,13 +194,13 @@ const Menu = props => {
 
   const RenderAddStylist = () => {
     return (
-      <View>
+      <View style={{marginBottom: 16}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View>
-            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
+            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold', marginBottom: 4}}>
               Add Personal Stylist
             </Text>
-            <Text style={{color: Colors.black30, marginTop: 4}}>
+            <Text style={{color: Colors.black60, marginTop: 4}}>
               Personal stylist can recommend you products
             </Text>
           </View>
@@ -242,7 +242,7 @@ const Menu = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{backgroundColor: 'white', flex: 1, paddingTop: 16}}>
       <Header showBack title="Menu" {...props} />
       <View style={{flex: 1}}>
         <View style={styles.container1}>
@@ -253,35 +253,61 @@ const Menu = props => {
                   ? {uri: userProfileResponse.profilePicUrl}
                   : require('../../assets/iProfile.png')
               }
-              style={{width: 80, height: 80, borderRadius: 40}}
+              style={{width: 64, height: 64, borderRadius: 40}}
             />
           </View>
           <View style={styles.profileDataContainer}>
             <Text
-              style={{fontWeight: 'bold', fontSize: FONTS_SIZES.s3}}
+              style={{
+                color: '#212427',
+                fontWeight: 'bold',
+                fontSize: FONTS_SIZES.s4,
+                textTransform: 'capitalize',
+                paddingBottom: 4,
+              }}
               numberOfLines={1}>
               {userProfileResponse?.name}
             </Text>
-            <Text style={{textTransform: 'capitalize'}}>
+            <Text
+              style={{
+                color: Colors.black60,
+                textTransform: 'capitalize',
+                fontSize: FONTS_SIZES.s4,
+                paddingBottom: 4,
+              }}>
               {userProfileResponse?.gender}
             </Text>
-            <Text>{userProfileResponse?.emailId}</Text>
+            <Text
+              style={{
+                color: Colors.black60,
+                fontSize: FONTS_SIZES.s4,
+                paddingBottom: 4,
+              }}>
+              {userProfileResponse?.emailId}</Text>
             {isStylistUser ? null : userProfileResponse?.hasPersonalStylist ? (
               <View style={{marginTop: 8}}>
-                <Text style={{color: Colors.black30}}>Personal Stylist:</Text>
-                <Text>
+                <Text
+                  style={{
+                    color: '#212427',
+                    fontSize: FONTS_SIZES.s4,
+                    fontWeight: '700',
+                    paddingBottom: 4,
+                  }}>
+                  Personal Stylist:
+                </Text>
+                <Text style={{fontSize: FONTS_SIZES.s4, paddingBottom: 4, color: Colors.black60}}>
                   {userProfileResponse?.personalStylistDetails[0].name}
                 </Text>
-                <Text>
+                <Text style={{fontSize: FONTS_SIZES.s4, paddingBottom: 4, color: Colors.black60}}>
                   {userProfileResponse?.personalStylistDetails[0].emailId}
                 </Text>
                 <TouchableOpacity onPress={deleteStylist}>
-                  <Text style={{color: Colors.red}}>Remove stylist</Text>
+                  <Text style={{color: Colors.red, fontSize: FONTS_SIZES.s4}}>Remove stylist</Text>
                 </TouchableOpacity>
               </View>
             ) : (
               <TouchableOpacity onPress={() => setModal(true)}>
-                <Text style={{color: Colors.blue, marginTop: 8}}>
+                <Text style={{color: Colors.blue, marginTop: 16}}>
                   Add Personal Stylist
                 </Text>
               </TouchableOpacity>
@@ -311,10 +337,10 @@ const Menu = props => {
                     {item.manuName}
                   </Text>
                 </View>
-                <View style={{paddingRight: 20}}>
+                <View style={{paddingRight: 16}}>
                   <Image
                     source={require('../../assets/rightArrow.png')}
-                    style={{width: 10, height: 14}}
+                    style={{width: 16, height: 16}}
                   />
                 </View>
               </TouchableOpacity>
@@ -339,7 +365,6 @@ const styles = StyleSheet.create({
   container1: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    paddingVertical: 24,
     marginVertical: 8,
   },
   profileDataContainer: {

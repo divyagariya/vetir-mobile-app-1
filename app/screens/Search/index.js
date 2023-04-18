@@ -13,6 +13,7 @@ import Toast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Header, OverlayModal, SortComponent} from '../../components';
+import {FONTS_SIZES} from '../../fonts';
 import {
   addDataInCloset,
   deleteClosetData,
@@ -223,17 +224,23 @@ const Search = props => {
         <>
           <View
             style={{
-              marginVertical: 20,
+              marginVertical: 24,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-around',
+              paddingHorizontal: 16,
             }}>
             <View style={{width: '75%'}}>
               <TextInput
                 style={{
-                  paddingVertical: 16,
                   backgroundColor: Colors.grey1,
-                  paddingLeft: 16,
+                  marginTop: 16,
+                  marginBottom: 8,
+                  paddingVertical: 16,
+                  paddingHorizontal: 16,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderRadius: 8,
                 }}
                 onChangeText={e => setSearchKey(e)}
                 placeholder="Search jeans, top, hats..."
@@ -247,7 +254,7 @@ const Search = props => {
             </TouchableOpacity>
           </View>
           <View
-            style={{flex: 1, justifyContent: 'center', paddingHorizontal: 16}}>
+            style={{flex: 0.5, justifyContent: 'center',alignItems: 'center', paddingHorizontal: 16}}>
             <Text style={{textAlign: 'center', color: Colors.black30}}>
               "If you love something, wear it all the time... Find things that
               suit you. That's how you look extraordinary."

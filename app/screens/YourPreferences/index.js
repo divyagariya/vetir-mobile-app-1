@@ -368,36 +368,36 @@ const YourPreferences = props => {
 
   const renderList = (data, answers) => {
     return (
-      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 16}}>
         {data.map((item, index) => {
           return (
             <TouchableOpacity
               key={index}
               onPress={() => setBrandsFilter(item)}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
-                borderWidth: 1,
                 opacity:
                   currentActiveTab === 7 && colorCodes.includes(item.colorCode)
                     ? 0.3
                     : 1,
-                padding: 8,
+                padding: 12,
                 marginRight: 8,
-                borderColor: Colors.greyBorder,
                 marginBottom: 8,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 backgroundColor: answers.includes(item.optionId)
                   ? '#DBDBDB'
-                  : 'transparent',
+                  : Colors.grey1,
                 alignItems: 'center',
               }}>
               {item.colorCode ? (
                 <View
+                  // eslint-disable-next-line react-native/no-inline-styles
                   style={{
                     backgroundColor: item.colorCode,
-                    height: 40,
-                    width: 40,
-                    marginRight: 4,
+                    height: 16,
+                    width: 16,
+                    marginRight: 8,
                   }}
                 />
               ) : null}
@@ -533,7 +533,7 @@ const YourPreferences = props => {
 
   return (
     <View
-      style={{padding: 16, flex: 1, backgroundColor: 'white', paddingTop: 20}}>
+      style={{padding: 16, flex: 1, backgroundColor: 'white', paddingTop: 32}}>
       <TouchableOpacity
         style={{position: 'absolute', top: 20, right: 16, zIndex: 999}}
         onPress={() => props.navigation.goBack()}>
@@ -552,6 +552,8 @@ const YourPreferences = props => {
                   width: Dimensions.get('window').width / 9,
                   borderWidth: 1,
                   marginRight: 8,
+                  marginTop: 16,
+                  marginBottom: 16,
                   borderColor:
                     currentActiveTab >= index + 1
                       ? Colors.black
@@ -562,7 +564,7 @@ const YourPreferences = props => {
           })}
       </View>
       <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{paddingTop: 40}} ref={ref}>
+        <ScrollView contentContainerStyle={{paddingTop: 16}} ref={ref}>
           {currentActiveTab === 1
             ? getFirstPage()
             : currentActiveTab === 2
@@ -580,10 +582,12 @@ const YourPreferences = props => {
             : null}
         </ScrollView>
 
-        <Buttons text="next" onPress={handleNext} />
-        {currentActiveTab > 1 && (
-          <Buttons text="back" isInverse onPress={handleBack} />
-        )}
+        <View style={{paddingVertical: 16}}>
+          <Buttons text="next" onPress={handleNext} />
+          {currentActiveTab > 1 && (
+            <Buttons text="back" isInverse onPress={handleBack} />
+          )}
+        </View>
       </View>
     </View>
   );

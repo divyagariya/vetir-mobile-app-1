@@ -25,7 +25,12 @@ const Categories = props => {
         onPress={() => props.getProductDetails(item.productId)}>
         <Image
           source={{uri: item.productImage}}
-          style={{height: 192, width: 144}}
+          style={{
+            height: 192,
+            width: 144,
+            backgroundColor: Colors.grey1,
+            marginBottom: 16,
+          }}
           resizeMode="contain"
         />
       </TouchableOpacity>
@@ -38,19 +43,22 @@ const Categories = props => {
         {fromStylist && !props.isStylistUser ? (
           <View style={{flexDirection: 'row'}}>
             <Image
-              source={require('../../../../assets/star.png')}
+              source={require('../../../../assets/star.webp')}
               style={{width: 24, height: 24}}
             />
             <View style={{marginLeft: 8}}>
               <Text style={styles.headingLeftText}>{optionName}</Text>
-              <Text>by your stylist</Text>
+              <Text style={{fontSize: FONTS_SIZES.s4, color: '#212427'}}>by your stylist</Text>
             </View>
           </View>
         ) : (
           <VText text={optionName} style={styles.headingLeftText} />
         )}
         <TouchableOpacity onPress={props.viewAll}>
-          <VText text="VIEW ALL" />
+          <VText
+            text="view all"
+            style={{fontSize: FONTS_SIZES.s4, color: '#212427'}}
+          />
         </TouchableOpacity>
       </VView>
       <FlatList
@@ -69,12 +77,15 @@ const styles = StyleSheet.create({
   headingContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 16,
+    marginTop: 16,
+    marginBottom: 16,
     alignItem: 'center',
     marginHorizontal: 16,
   },
   headingLeftText: {
     fontSize: FONTS_SIZES.s3,
     fontWeight: '700',
+    marginBottom: 4,
+    color: '#212427',
   },
 });

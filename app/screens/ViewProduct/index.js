@@ -68,7 +68,7 @@ const ViewProduct = props => {
       if (recommendedToClientsRes.statusCode === 200) {
         setSelectedClients([]);
         dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
-        Toast.show('Recommended to clients successfuly');
+        Toast.show('Recommended to client');
       }
     }
   }, [recommendedToClientsRes, dispatch]);
@@ -93,7 +93,7 @@ const ViewProduct = props => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
         dispatch({type: 'DELETE_CLOSET', value: {}});
-        Toast.show('Cloth successfully removed from closet');
+        Toast.show('Removed from closet');
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
       }
@@ -106,7 +106,7 @@ const ViewProduct = props => {
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
-        Toast.show('Cloth successfully added in closet');
+        Toast.show('Added in closet');
       }
     }
   }, [addClosetResponse, dispatch]);
@@ -336,7 +336,7 @@ const ViewProduct = props => {
     return null;
   }
   return (
-    <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 140}}>
+    <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 140, paddingTop: 16,}}>
       <VView>
         <Header
           //showAdd={!isStylistUser}
@@ -348,9 +348,9 @@ const ViewProduct = props => {
           {...props}
           likeImageSrc={
             productData.isDisliked
-              ? require('../../assets/iLike.png')
+              ? require('../../assets/iDisliked.webp')
               : productData.isDisliked != undefined
-              ? require('../../assets/iDisLike.png')
+              ? require('../../assets/iDislike.webp')
               : null
           }
           showBack
@@ -358,7 +358,7 @@ const ViewProduct = props => {
           likeProduct={dislikeProducts}
           imageSrc={
             productData.addedToCloset
-              ? require('../../assets/addedCloset.png')
+              ? require('../../assets/addedCloset.webp')
               : require('../../assets/iAdd.webp')
           }
         />
@@ -484,7 +484,7 @@ const ViewProduct = props => {
             isInverse
             imageIcon={
               productData.addedToCloset
-                ? require('../../assets/addedCloset.png')
+                ? require('../../assets/addedCloset.webp')
                 : require('../../assets/iAdd.webp')
             }
             onPress={addToCloset}
