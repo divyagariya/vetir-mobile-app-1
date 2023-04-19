@@ -139,8 +139,8 @@ const SubmitOutfit = props => {
             })
           }
         />
-        <View style={{paddingHorizontal: 16}}>
-          <Text style={{...styles.headingStyle, marginTop: 16}}>Name</Text>
+        <View style={{paddingHorizontal: 16, marginVertical: 16}}>
+          <Text style={{...styles.headingStyle}}>Name</Text>
           <Input
             placeholder="Name"
             onChangeText={e => {
@@ -153,7 +153,6 @@ const SubmitOutfit = props => {
           <Text style={styles.headingStyle}>Description</Text>
           <Input
             placeholder="Description"
-            errorText={descriptionErr}
             onChangeText={e => {
               setDescription(e);
               setDescErr('');
@@ -179,7 +178,7 @@ const SubmitOutfit = props => {
               );
             })}
           </View>
-          <View style={{marginTop: 12, marginBottom: 30}}>
+          <View style={{marginTop: 16, marginBottom: 16}}>
             <Buttons text="Add" onPress={addOutfitData} loading={loading} />
           </View>
         </View>
@@ -192,13 +191,12 @@ export default SubmitOutfit;
 
 const styles = StyleSheet.create({
   headingStyle: {
-    // marginTop: 1,
+    marginBottom: 8,
   },
   seasonContainer: {
     borderWidth: 1,
     marginRight: 8,
     padding: 8,
     borderColor: 'rgba(0,0,0,0.16)',
-    marginTop: 8,
   },
 });

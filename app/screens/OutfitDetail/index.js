@@ -83,25 +83,23 @@ const OutfitDetail = props => {
     return (
       <View
         style={{
-          marginBottom: 16,
+          marginBottom: 8,
           alignSelf: 'center',
           flex: 0.5,
-          marginHorizontal: 8,
+          margin: 8,
         }}>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => openClosetInfo(item.closetItemId)}
           style={{
             backgroundColor: Colors.grey1,
-            paddingVertical: 10,
-            paddingHorizontal: 13,
             width: '100%',
             alignSelf: 'center',
-            marginBottom: 8,
           }}>
           <Image
             source={{uri: item.itemImageUrl}}
             style={{
+              flex: 1,
               height: 140,
               width: 100,
               alignSelf: 'center',
@@ -207,9 +205,10 @@ const OutfitDetail = props => {
                 keyExtractor={item => item.closetItemId}
                 renderItem={({item, index}) => renderItem(item, index)}
                 contentContainerStyle={{
-                  paddingVertical: 16,
-                  paddingHorizontal: 8,
+                  padding: 0,
+                  margin: 0,
                   paddingBottom: 100,
+                  marginTop: 4,
                 }}
               />
             </View>

@@ -84,11 +84,11 @@ const AddCloset = props => {
       <TouchableOpacity
         onPress={() => setActiveTab(item.categoryName)}
         style={{
-          paddingHorizontal: 30,
-          paddingVertical: 15,
+          paddingHorizontal: 16,
+          paddingVertical: 8,
           borderBottomWidth: 1,
           borderBottomColor:
-            activeTab === item.categoryName ? Colors.black60 : 'transparent',
+            activeTab === item.categoryName ? '#212427' : 'transparent',
         }}>
         <Text>{item.categoryName}</Text>
       </TouchableOpacity>
@@ -182,8 +182,8 @@ const AddCloset = props => {
       <BottomSheet
         ref={ref => (panelRef.current = ref)}
         sliderMinHeight={Dimensions.get('window').height * 0.3}
-        wrapperStyle={{borderTopLeftRadius: 0, borderTopRightRadius: 0}}
-        innerContentStyle={{paddingBottom: 100}}
+        wrapperStyle={{borderTopLeftRadius: 16, borderTopRightRadius: 16}}
+        innerContentStyle={{paddingBottom: 50}}
         sliderMaxHeight={Dimensions.get('window').height * 0.7}>
         {onScrollEndDrag => (
           <ScrollView onScrollEndDrag={onScrollEndDrag}>
@@ -239,9 +239,12 @@ const AddCloset = props => {
       <View
         style={{
           position: 'absolute',
-          bottom: 16,
+          bottom: 0,
           width: '100%',
           paddingHorizontal: 16,
+          backgroundColor: Colors.white,
+          paddingBottom: 8,
+          paddingTop: 16,
         }}>
         {closetIds.length >= 1 && <Buttons text="next" onPress={onCapture} />}
       </View>

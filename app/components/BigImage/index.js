@@ -14,7 +14,7 @@ const BigImage = ({showEdit = false, imgSource = '', editImage = () => {}}) => {
         source={
           imgSource ? {uri: imgSource} : require('../../assets/sweatshirt.webp')
         }
-        style={{width: '80%', height: 375}}
+        style={{width: '100%', height: 375}}
         resizeMode="contain"
       />
       {showEdit && (
@@ -22,12 +22,12 @@ const BigImage = ({showEdit = false, imgSource = '', editImage = () => {}}) => {
           onPress={editImage}
           style={{
             position: 'absolute',
-            bottom: 16,
-            right: 40,
-            padding: 5,
+            bottom: 8,
+            right: 16,
+            padding: 8,
           }}>
           <Image
-            source={require('../../assets/pencil.png')}
+            source={require('../../assets/pencil.webp')}
             style={{width: 32, height: 32}}
           />
         </TouchableOpacity>

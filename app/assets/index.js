@@ -5,6 +5,6 @@ export const Images = {
   lineArrow: require('./lineArrow.webp'),
   photos: require('./photos.webp'),
   menuBar: require('./menu.webp'),
-  offIcon: require('./off.png'),
-  onIcon: require('./on.png'),
+  offIcon: require('./off.webp'),
+  onIcon: require('./on.webp'),
 };

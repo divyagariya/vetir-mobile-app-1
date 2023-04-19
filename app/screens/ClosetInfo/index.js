@@ -162,10 +162,10 @@ const ClosetInfo = props => {
                 {findOutFitList.length === 0 ? (
                   <>
                     <Image
-                      source={require('../../assets/iOutfit.png')}
+                      source={require('../../assets/iOutfit.webp')}
                       style={{width: 87, height: 87}}
                     />
-                    <Text style={{textAlign: 'center', paddingVertical: 20}}>
+                    <Text style={{textAlign: 'center', paddingTop: 16}}>
                       No Outfit created with this cloth
                     </Text>
                   </>
@@ -198,8 +198,8 @@ const ClosetInfo = props => {
                             <Image
                               source={{uri: item.outfitImageType}}
                               style={{
-                                height: '90%',
-                                width: '90%',
+                                height: '100%',
+                                width: '100%',
                               }}
                             />
                           </TouchableOpacity>
@@ -241,8 +241,8 @@ const ClosetInfo = props => {
                       <View
                         style={{
                           backgroundColor: item,
-                          width: 40,
-                          height: 40,
+                          width: 24,
+                          height: 24,
                           marginTop: 8,
                           marginRight: 8,
                         }}

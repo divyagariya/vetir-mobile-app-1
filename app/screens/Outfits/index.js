@@ -46,6 +46,7 @@ const Outfits = props => {
           marginBottom: 16,
           alignSelf: 'center',
           flex: 0.5,
+          height: 196,
           marginHorizontal: 8,
         }}>
         <TouchableOpacity
@@ -57,8 +58,7 @@ const Outfits = props => {
           }
           style={{
             backgroundColor: Colors.grey1,
-            paddingVertical: 10,
-            paddingHorizontal: 13,
+            flex: 1,
             width: '100%',
             alignSelf: 'center',
             marginBottom: 8,
@@ -67,8 +67,8 @@ const Outfits = props => {
             resizeMode="contain"
             source={{uri: item.outfitImageType}}
             style={{
-              height: 200,
-              width: 100,
+              flex: 1,
+              width: '100%',
               alignSelf: 'center',
             }}
           />
@@ -201,15 +201,29 @@ const Outfits = props => {
             source={require('../../assets/no_outfit.png')}
             style={{width: 160, height: 160, marginBottom: 32}}
           />
-          <Text style={{textAlign: 'center', fontSize: FONTS_SIZES.s3, fontWeight: '700', lineHeight: 24, marginBottom: 8}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: FONTS_SIZES.s3,
+              fontWeight: '700',
+              lineHeight: 24,
+              marginBottom: 8,
+            }}>
             No Outfit to show.
           </Text>
-          <Text style={{textAlign: 'center', fontSize: FONTS_SIZES.s4, lineHeight: 24, marginBottom: 32}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: FONTS_SIZES.s4,
+              lineHeight: 24,
+              marginBottom: 32,
+            }}>
             Create outfits to get more personalised clothing experience
           </Text>
           <View
             style={{
               width: '100%',
+              margin: 16,
             }}>
             <Buttons
               text="Create Outfit"
@@ -218,6 +232,17 @@ const Outfits = props => {
           </View>
         </View>
       )}
+
+      <View
+        style={{
+          padding: 16,
+          backgroundColor: Colors.white,
+        }}>
+        <Buttons
+          text="Create Outfit"
+          onPress={() => props.navigation.navigate('AddOutfit')}
+        />
+      </View>
 
       <OverlayModal showModal={showModal} component={sortData()} />
     </View>

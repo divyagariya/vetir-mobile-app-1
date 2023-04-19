@@ -119,9 +119,7 @@ const Header = ({
         )}
         {showRecommend && (
           <VView style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              style={{marginRight: 16}}
-              onPress={recommendClients}>
+            <TouchableOpacity onPress={recommendClients}>
               <Image
                 resizeMode="contain"
                 source={require('../../assets/iRecommend.webp')}
@@ -132,7 +130,7 @@ const Header = ({
         )}
         {showshare && (
           <VView style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={{marginRight: 16}} onPress={onShare}>
+            <TouchableOpacity onPress={onShare}>
               <Image
                 resizeMode="contain"
                 source={require('../../assets/iShare.webp')}
@@ -142,8 +140,7 @@ const Header = ({
           </VView>
         )}
         {showFilter && (
-          <TouchableOpacity
-            onPress={() => showFilterFunction(true)}>
+          <TouchableOpacity onPress={() => showFilterFunction(true)}>
             <Image
               resizeMode="stretch"
               source={require('../../assets/iFilter.webp')}
@@ -151,24 +148,20 @@ const Header = ({
             />
           </TouchableOpacity>
         )}
-        {showSwitch && (
-          <TouchableOpacity
-            style={{paddingHorizontal: 10}}
-            onPress={toggleSwitch}>
-            <Image
-              resizeMode="contain"
-              source={switchIcon ? Images.onIcon : Images.offIcon}
-              style={{width: 25, height: 25}}
-            />
-          </TouchableOpacity>
-        )}
         {showSort && (
-          <TouchableOpacity
-            onPress={sortClicked}
-            style={{paddingHorizontal: 10}}>
+          <TouchableOpacity onPress={sortClicked} style={{paddingLeft: 8}}>
             <Image
               resizeMode="contain"
               source={require('../../assets/sort.png')}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        )}
+        {showSwitch && (
+          <TouchableOpacity style={{paddingLeft: 8}} onPress={toggleSwitch}>
+            <Image
+              resizeMode="contain"
+              source={switchIcon ? Images.onIcon : Images.offIcon}
               style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
@@ -188,7 +181,7 @@ const Header = ({
         {showVerticalMenu && (
           <TouchableOpacity
             onPress={verticalMenuClicked}
-            style={{paddingHorizontal: 10}}>
+            style={{paddingLeft: 10}}>
             <Image
               resizeMode="contain"
               source={require('../../assets/vertical.png')}

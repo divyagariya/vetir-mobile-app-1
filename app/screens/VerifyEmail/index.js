@@ -195,16 +195,16 @@ const VerifyEmail = propsData => {
           value={value}
           onChangeText={setValue}
           cellCount={CELL_COUNT}
-          rootStyle={styles.codeFieldRoot}
           keyboardType="number-pad"
           textContentType="oneTimeCode"
+          rootStyle={styles.rootStyle}
           renderCell={({index, symbol, isFocused}) => (
             <Text
               key={index}
               style={[
                 styles.cell,
                 isFocused && styles.focusCell,
-                {borderColor: errorText ? Colors.red : Colors.black30},
+                {borderColor: errorText ? Colors.red : Colors.greyBorder},
               ]}
               onLayout={getCellOnLayoutHandler(index)}>
               {symbol || (isFocused ? <Cursor /> : null)}
@@ -251,19 +251,21 @@ export default VerifyEmail;
 
 const styles = StyleSheet.create({
   root: {flex: 1, padding: 20},
-  title: {textAlign: 'center', fontSize: 30},
-  codeFieldRoot: {marginTop: 20},
+  title: {textAlign: 'center', fontSize: FONTS_SIZES.s3},
   cell: {
-    fontSize: 24,
+    flex: 1,
+    fontSize: FONTS_SIZES.s3,
     borderWidth: 1,
-    borderColor: '#00000030',
+    borderColor: Colors.greyBorder,
     textAlign: 'center',
+    lineHeight: 70,
     height: 74,
-    width: 74,
-    lineHeight: 63,
+    borderRadius: 8,
+    margin: 8,
   },
   focusCell: {
-    borderColor: '#000',
-    justifyContent: 'center',
+    flex: 1,
+    textAlign: 'center',
+    borderColor: Colors.greyBorder,
   },
 });
