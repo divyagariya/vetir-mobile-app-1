@@ -36,6 +36,7 @@ const SubmitOutfit = props => {
         dispatch(getOutfitsList());
         dispatch({type: 'EDIT_OUTFIT', value: {}});
         Toast.show('Outfit edit successfully');
+        dispatch({type: 'OUTFIT_DETAILS', value: {}});
         props.navigation.navigate('OutfitDetail', {
           outfitId: editOutfitRepsponse.outfitId,
         });

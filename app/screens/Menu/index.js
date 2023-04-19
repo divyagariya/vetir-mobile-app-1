@@ -197,7 +197,12 @@ const Menu = props => {
       <View style={{marginBottom: 16}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View>
-            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold', marginBottom: 4}}>
+            <Text
+              style={{
+                fontSize: FONTS_SIZES.s3,
+                fontWeight: 'bold',
+                marginBottom: 4,
+              }}>
               Add Personal Stylist
             </Text>
             <Text style={{color: Colors.black60, marginTop: 4}}>
@@ -283,7 +288,8 @@ const Menu = props => {
                 fontSize: FONTS_SIZES.s4,
                 paddingBottom: 4,
               }}>
-              {userProfileResponse?.emailId}</Text>
+              {userProfileResponse?.emailId}
+            </Text>
             {isStylistUser ? null : userProfileResponse?.hasPersonalStylist ? (
               <View style={{marginTop: 8}}>
                 <Text
@@ -295,14 +301,26 @@ const Menu = props => {
                   }}>
                   Personal Stylist:
                 </Text>
-                <Text style={{fontSize: FONTS_SIZES.s4, paddingBottom: 4, color: Colors.black60}}>
+                <Text
+                  style={{
+                    fontSize: FONTS_SIZES.s4,
+                    paddingBottom: 4,
+                    color: Colors.black60,
+                  }}>
                   {userProfileResponse?.personalStylistDetails[0].name}
                 </Text>
-                <Text style={{fontSize: FONTS_SIZES.s4, paddingBottom: 4, color: Colors.black60}}>
+                <Text
+                  style={{
+                    fontSize: FONTS_SIZES.s4,
+                    paddingBottom: 4,
+                    color: Colors.black60,
+                  }}>
                   {userProfileResponse?.personalStylistDetails[0].emailId}
                 </Text>
                 <TouchableOpacity onPress={deleteStylist}>
-                  <Text style={{color: Colors.red, fontSize: FONTS_SIZES.s4}}>Remove stylist</Text>
+                  <Text style={{color: Colors.red, fontSize: FONTS_SIZES.s4}}>
+                    Remove stylist
+                  </Text>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -316,7 +334,7 @@ const Menu = props => {
         </View>
         <View>
           {menuData.map(item => {
-            if (isStylistUser && item.manuName === 'YourPreferences') {
+            if (isStylistUser && item.route === 'YourPreferences') {
               return null;
             }
             return (
