@@ -69,15 +69,18 @@ const OutfitDetail = props => {
   }, [dispatch, props.navigation, singleClosetReponse]);
 
   useEffect(() => {
-    if (props?.route?.params?.outfitId) {
-      dispatch(
-        getOutfitDetail({
-          userId: isStylistUser ? props?.route?.params?.id : userId,
-          outfitId: props?.route?.params?.outfitId,
-        }),
-      );
-    }
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      if (props?.route?.params?.outfitId) {
+        dispatch(
+          getOutfitDetail({
+            userId: isStylistUser ? props?.route?.params?.id : userId,
+            outfitId: props?.route?.params?.outfitId,
+          }),
+        );
+      }
+    });
+    return unsubscribe;
+  }, [props.navigation, dispatch]);
 
   const renderItem = (item, index) => {
     return (
