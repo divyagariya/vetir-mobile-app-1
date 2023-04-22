@@ -178,17 +178,29 @@ const Outfits = props => {
         handleSorting={handleSortingModal}
       />
       {getOutfitData.length > 0 ? (
-        <FlatList
-          data={getOutfitData}
-          numColumns={2}
-          keyExtractor={(item, index) => item.outfitId}
-          renderItem={({item, index}) => renderItem(item, index)}
-          contentContainerStyle={{
-            paddingVertical: 16,
-            paddingHorizontal: 8,
-            paddingBottom: 100,
-          }}
-        />
+        <View style={{flex: 1}}>
+          <FlatList
+            data={getOutfitData}
+            numColumns={2}
+            keyExtractor={(item, index) => item.outfitId}
+            renderItem={({item, index}) => renderItem(item, index)}
+            contentContainerStyle={{
+              paddingVertical: 16,
+              paddingHorizontal: 8,
+              paddingBottom: 100,
+            }}
+          />
+          <View
+            style={{
+              padding: 16,
+              backgroundColor: Colors.white,
+            }}>
+            <Buttons
+              text="Create Outfit"
+              onPress={() => props.navigation.navigate('AddOutfit')}
+            />
+          </View>
+        </View>
       ) : (
         <View
           style={{
@@ -232,17 +244,6 @@ const Outfits = props => {
           </View>
         </View>
       )}
-
-      <View
-        style={{
-          padding: 16,
-          backgroundColor: Colors.white,
-        }}>
-        <Buttons
-          text="Create Outfit"
-          onPress={() => props.navigation.navigate('AddOutfit')}
-        />
-      </View>
 
       <OverlayModal showModal={showModal} component={sortData()} />
     </View>
