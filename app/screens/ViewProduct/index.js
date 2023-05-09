@@ -11,7 +11,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Colors} from '../../colors';
-import {VText, VView, Buttons, Header, OverlayModal} from '../../components';
+import {
+  VText,
+  VView,
+  Buttons,
+  Header,
+  OverlayModal,
+  Loader,
+} from '../../components';
 import {FONTS_SIZES} from '../../fonts';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
@@ -35,6 +42,7 @@ export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
 
 const ViewProduct = props => {
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
   let _slider1Ref = useRef(null);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
@@ -204,6 +212,7 @@ const ViewProduct = props => {
   };
 
   const onShare = async () => {
+    setLoader(true);
     const link = await dynamicLinks().buildShortLink({
       link: `https://${productData.productId}`,
       ios: {
@@ -222,13 +231,16 @@ const ViewProduct = props => {
 
     console.log('link', link);
     const message = 'Please check this out.';
+
     Share.open({
       message: `${message} ${link}`,
     })
       .then(res => {
+        setLoader(false);
         console.log(res);
       })
       .catch(err => {
+        setLoader(false);
         err && console.log(err);
       });
   };
@@ -516,6 +528,7 @@ const ViewProduct = props => {
           component={RenderClients()}
         />
       )}
+      {loader && <Loader />}
     </VView>
   );
 };
