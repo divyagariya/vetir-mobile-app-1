@@ -136,7 +136,7 @@ const ViewProduct = props => {
         productId: productData.productId,
       },
     };
-    const response = await NoAuthAPI('user/track/lastActive', 'POST', data);
+    const response = await NoAuthAPI('event', 'POST', data);
     try {
       const url = productData?.productButtonLink;
       if (await InAppBrowser.isAvailable()) {
