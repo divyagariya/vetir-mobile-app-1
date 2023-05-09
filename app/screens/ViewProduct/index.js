@@ -29,6 +29,7 @@ import {
   recommendedAction,
 } from '../../redux/actions/stylistAction';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import {NoAuthAPI} from '../../services';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -129,6 +130,13 @@ const ViewProduct = props => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
   const openLink = async () => {
+    const data = {
+      name: 'product-referral',
+      metaData: {
+        productId: productData.productId,
+      },
+    };
+    const response = await NoAuthAPI('user/track/lastActive', 'POST', data);
     try {
       const url = productData?.productButtonLink;
       if (await InAppBrowser.isAvailable()) {
@@ -203,7 +211,8 @@ const ViewProduct = props => {
         appStoreId: '1345656565',
       },
       // domainUriPrefix is created in your Firebase console
-      domainUriPrefix: 'https://vetirstylist.page.link',
+      domainUriPrefix:
+        'https://vetirstylist.page.link/?link=https://google.com',
       // optional setup which updates Firebase analytics campaign
       // "banner". This also needs setting up before hand
       analytics: {
@@ -336,7 +345,13 @@ const ViewProduct = props => {
     return null;
   }
   return (
-    <VView style={{backgroundColor: 'white', flex: 1, paddingBottom: 140, paddingTop: 16,}}>
+    <VView
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+        paddingBottom: 140,
+        paddingTop: 16,
+      }}>
       <VView>
         <Header
           //showAdd={!isStylistUser}
