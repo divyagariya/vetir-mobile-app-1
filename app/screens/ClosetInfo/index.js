@@ -59,7 +59,7 @@ const ClosetInfo = props => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
         dispatch({type: 'DELETE_CLOSET', value: {}});
-        Toast.show('Cloth successfully removed from closet');
+        Toast.show('Item successfully removed from closet');
         props.navigation.navigate('ClosetScreen');
         dispatch(getClosetData());
       }
@@ -166,7 +166,7 @@ const ClosetInfo = props => {
                       style={{width: 87, height: 87}}
                     />
                     <Text style={{textAlign: 'center', paddingTop: 16}}>
-                      No Outfit created with this cloth
+                      No Outfit created with this item
                     </Text>
                   </>
                 ) : (

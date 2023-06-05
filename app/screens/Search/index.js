@@ -151,7 +151,7 @@ const Search = props => {
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getClosetData());
         dispatch(getFilteredProducts(filterParams));
-        Toast.show('Cloth successfully added in closet');
+        Toast.show('Item successfully added in closet');
       }
     }
   }, [addClosetResponse, dispatch]);
@@ -254,7 +254,12 @@ const Search = props => {
             </TouchableOpacity>
           </View>
           <View
-            style={{flex: 0.5, justifyContent: 'center',alignItems: 'center', paddingHorizontal: 16}}>
+            style={{
+              flex: 0.5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: 16,
+            }}>
             <Text style={{textAlign: 'center', color: Colors.black30}}>
               "If you love something, wear it all the time... Find things that
               suit you. That's how you look extraordinary."

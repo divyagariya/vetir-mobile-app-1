@@ -269,7 +269,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -424,7 +424,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -443,7 +443,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -462,7 +462,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -481,7 +481,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -502,7 +502,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />
@@ -521,7 +521,7 @@ const YourPreferences = props => {
             {data.question}
           </Text>
           <Input
-            placeholder="Search Brands"
+            placeholder="Search"
             onChangeText={e => searchBrand(e)}
             value={brandSearchKey}
           />

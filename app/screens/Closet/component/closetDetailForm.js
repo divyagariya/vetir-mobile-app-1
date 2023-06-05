@@ -66,6 +66,7 @@ const ClosetDetailsFrom = props => {
     brandSelected: '',
     categoryDataUpdated: [],
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (props?.route?.params?.editClosetData) {
@@ -98,10 +99,13 @@ const ClosetDetailsFrom = props => {
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
+        setLoading(false);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
-        Toast.show('Cloth successfully added in closet');
+        Toast.show('Item successfully added in closet');
         dispatch(getClosetData());
         props.navigation.navigate('ClosetScreen');
+      } else {
+        setLoading(false);
       }
     }
   }, [addClosetResponse, dispatch, props.navigation]);
@@ -109,11 +113,14 @@ const ClosetDetailsFrom = props => {
   useEffect(() => {
     if (Object.keys(editClosetResponse).length) {
       if (editClosetResponse.statusCode === 200) {
+        setLoading(false);
         dispatch({type: 'EDIT_CLOSET', value: {}});
-        Toast.show('Closet Information edit successfully');
+        Toast.show('Item Information edit successfully');
         props.navigation.navigate('ClosetInfo', {
           apiData: editClosetResponse,
         });
+      } else {
+        setLoading(false);
       }
     }
   }, [editClosetResponse, dispatch]);
@@ -200,6 +207,7 @@ const ClosetDetailsFrom = props => {
         ? bgImageUrl
         : `data:image/jpeg;base64,${props?.route?.params?.imgSource?.data}`,
     };
+    setLoading(true);
     if (props?.route?.params?.editCloset) {
       data.closetItemId = props.route?.params.editClosetData?.closetItemId;
       console.log('@@ edit data', JSON.stringify(data, undefined, 2));
@@ -373,7 +381,7 @@ const ClosetDetailsFrom = props => {
                 })}
               </View>
             </VView>
-            <Buttons text="Add" onPress={addCloset} />
+            <Buttons text="Add" onPress={addCloset} loading={loading} />
           </VView>
         </VView>
       </KeyboardAwareScrollView>

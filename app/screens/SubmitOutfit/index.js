@@ -63,7 +63,7 @@ const SubmitOutfit = props => {
     if (Object.keys(addOutfitReponse).length) {
       dispatch({type: 'ADD_OUTFIT', value: {}});
       if (addOutfitReponse.statusCode === 200) {
-        Toast.show('Cloth successfully added in Outfit');
+        Toast.show('Outfit created successfully');
         dispatch(getOutfitsList());
         setLoading(false);
         props.navigation.navigate('Outfit');
@@ -159,6 +159,7 @@ const SubmitOutfit = props => {
               setDescErr('');
             }}
             value={description}
+            errorText={descriptionErr}
           />
           <Text style={styles.headingStyle}>Season</Text>
           <View style={{flexDirection: 'row'}}>

@@ -201,7 +201,7 @@ const OutfitDetail = props => {
                   );
                 })}
               </View>
-              <Text style={styles.titleStyle}>Clothes in this outfit</Text>
+              <Text style={styles.titleStyle}>Items in this outfit</Text>
               <FlatList
                 data={getOutfitDetailData?.closetDetailsList}
                 numColumns={2}
