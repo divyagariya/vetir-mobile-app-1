@@ -593,7 +593,7 @@ export const FilterModal = ({
     setPriceFilter(priceFilter1);
   };
 
-  console.log('@@ selectedBrands', selectedBrands);
+  console.log('@@ selectedBrands', getColorsResponse);
 
   useEffect(() => {
     if (Object.keys(filterValue).length) {
@@ -683,12 +683,12 @@ export const FilterModal = ({
     ]);
   };
 
-  const setColorsFilter = colorName => {
+  const setColorsFilter = colorCode => {
     let colorsFilter1 = [...colorsFilter];
-    if (!colorsFilter1.includes(colorName)) {
-      colorsFilter1.push(colorName);
+    if (!colorsFilter1.includes(colorCode)) {
+      colorsFilter1.push(colorCode);
     } else {
-      colorsFilter1 = colorsFilter1.filter(i => i !== colorName);
+      colorsFilter1 = colorsFilter1.filter(i => i !== colorCode);
     }
     setColors(colorsFilter1);
   };
@@ -909,7 +909,7 @@ export const FilterModal = ({
                       {getColorsResponse?.map((item, index) => {
                         return (
                           <TouchableOpacity
-                            onPress={() => setColorsFilter(item.colorName)}
+                            onPress={() => setColorsFilter(item.colorCode)}
                             style={{
                               borderWidth: 1,
                               padding: 8,
@@ -919,7 +919,7 @@ export const FilterModal = ({
                               flexDirection: 'row',
                               justifyContent: 'space-between',
                               backgroundColor: colorsFilter.includes(
-                                item.colorName,
+                                item.colorCode,
                               )
                                 ? Colors.grey2
                                 : 'transparent',
@@ -929,14 +929,14 @@ export const FilterModal = ({
                               style={{
                                 width: 24,
                                 height: 24,
-                                backgroundColor: item.colorName,
+                                backgroundColor: item.colorCode,
                                 borderWidth: 1,
                                 borderColor: Colors.greyBorder,
                                 marginRight: 8,
                               }}
                             />
                             <Text>{item.colorName}</Text>
-                            {colorsFilter.includes(item.colorName) ? (
+                            {colorsFilter.includes(item.colorCode) ? (
                               <Image
                                 source={require('../../assets/crossIcon.png')}
                                 style={{width: 12, height: 12, marginLeft: 8}}
