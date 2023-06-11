@@ -220,8 +220,7 @@ const ViewProduct = props => {
         appStoreId: '1345656565',
       },
       // domainUriPrefix is created in your Firebase console
-      domainUriPrefix:
-        'https://vetirstylist.page.link/?link=https://google.com',
+      domainUriPrefix: 'https://vetirstylist.page.link',
       // optional setup which updates Firebase analytics campaign
       // "banner". This also needs setting up before hand
       analytics: {
