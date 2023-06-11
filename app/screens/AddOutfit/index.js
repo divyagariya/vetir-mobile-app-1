@@ -326,8 +326,8 @@ class App extends Component {
                 <Animated.View
                   {...this.panResponder(i, index).panHandlers}
                   style={{
-                    width: Dimensions.get('window').width,
-                    height: 400,
+                    width: 150,
+                    height: 200,
                     transform: [{translateX: i.pan.x}, {translateY: i.pan.y}],
                   }}>
                   <PhotoView
@@ -336,7 +336,7 @@ class App extends Component {
                     showsVerticalScrollIndicator={false}
                     resizeMode="contain"
                     minimumZoomScale={0.3}
-                    maximumZoomScale={10}
+                    maximumZoomScale={1}
                     style={{width: '100%', height: '100%'}}
                   />
                 </Animated.View>

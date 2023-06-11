@@ -113,6 +113,7 @@ const ClosetDetailsFrom = props => {
   useEffect(() => {
     if (Object.keys(editClosetResponse).length) {
       if (editClosetResponse.statusCode === 200) {
+        dispatch(getClosetData());
         setLoading(false);
         dispatch({type: 'EDIT_CLOSET', value: {}});
         Toast.show('Item details successfully updated');
