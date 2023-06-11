@@ -166,7 +166,7 @@ const ClosetInfo = props => {
                       style={{width: 87, height: 87}}
                     />
                     <Text style={{textAlign: 'center', paddingTop: 16}}>
-                      No Outfit created with this item
+                      No outfit created with this item
                     </Text>
                   </>
                 ) : (

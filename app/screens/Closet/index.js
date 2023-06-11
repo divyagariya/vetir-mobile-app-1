@@ -150,7 +150,7 @@ export default props => {
               lineHeight: 24,
               marginBottom: 8,
             }}>
-            Your closet is empty.
+            Your closet is empty
           </Text>
           <Text
             style={{

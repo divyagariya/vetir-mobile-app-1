@@ -281,31 +281,31 @@ const YourPreferences = props => {
 
   const handleNext = () => {
     if (currentActiveTab === 1 && firstQuestionData.length < 5) {
-      Toast.show('Please select minimum 5 brands');
+      Toast.show('Please select 5 favourite brands');
       return;
     }
     if (currentActiveTab === 2 && secondQuestionData.length < 5) {
-      Toast.show('Please select minimum 5 denim brands');
+      Toast.show('Please select 5 denim brands');
       return;
     }
     if (currentActiveTab === 3 && thirdQuestionData.length < 5) {
-      Toast.show('Please select minimum 5 shoe brands');
+      Toast.show('Please select 5 shoe brands');
       return;
     }
     if (currentActiveTab === 4 && forthQuestionData.length < 5) {
-      Toast.show('Please select minimum 5 dress brands');
+      Toast.show('Please select 5 dress brands');
       return;
     }
     if (currentActiveTab === 5 && fifthQuestionData.length < 5) {
-      Toast.show('Please select minimum 5 handbags brands');
+      Toast.show('Please select 5 handbags brands');
       return;
     }
     if (currentActiveTab === 6 && sixthQuestionData.length < 3) {
-      Toast.show('Please select minimum 3 colors');
+      Toast.show('Please select 3 colors');
       return;
     }
     if (currentActiveTab === 7 && seventhQuestionData.length < 3) {
-      Toast.show('Please select minimum 3 colors not like to wear');
+      Toast.show('Please select 3 colors');
       return;
     }
     ref.current?.scrollTo({

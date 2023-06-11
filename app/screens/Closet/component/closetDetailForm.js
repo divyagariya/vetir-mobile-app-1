@@ -101,7 +101,7 @@ const ClosetDetailsFrom = props => {
       if (addClosetResponse.statusCode == 200) {
         setLoading(false);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
-        Toast.show('Item successfully added in closet');
+        Toast.show('Item successfully added to closet');
         dispatch(getClosetData());
         props.navigation.navigate('ClosetScreen');
       } else {
@@ -115,7 +115,7 @@ const ClosetDetailsFrom = props => {
       if (editClosetResponse.statusCode === 200) {
         setLoading(false);
         dispatch({type: 'EDIT_CLOSET', value: {}});
-        Toast.show('Item Information edit successfully');
+        Toast.show('Item details successfully updated');
         props.navigation.navigate('ClosetInfo', {
           apiData: editClosetResponse,
         });

@@ -221,7 +221,7 @@ const Outfits = props => {
               lineHeight: 24,
               marginBottom: 8,
             }}>
-            No Outfits yet.
+            No outfits yet
           </Text>
           <Text
             style={{

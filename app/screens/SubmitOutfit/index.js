@@ -35,7 +35,7 @@ const SubmitOutfit = props => {
       if (editOutfitRepsponse.statusCode === 200) {
         dispatch(getOutfitsList());
         dispatch({type: 'EDIT_OUTFIT', value: {}});
-        Toast.show('Outfit edit successfully');
+        Toast.show('Outfit successfully edited');
         dispatch({type: 'OUTFIT_DETAILS', value: {}});
         props.navigation.navigate('OutfitDetail', {
           outfitId: editOutfitRepsponse.outfitId,
@@ -63,7 +63,7 @@ const SubmitOutfit = props => {
     if (Object.keys(addOutfitReponse).length) {
       dispatch({type: 'ADD_OUTFIT', value: {}});
       if (addOutfitReponse.statusCode === 200) {
-        Toast.show('Outfit created successfully');
+        Toast.show('Outfit successfully created');
         dispatch(getOutfitsList());
         setLoading(false);
         props.navigation.navigate('Outfit');
