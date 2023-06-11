@@ -89,10 +89,6 @@ const SubmitOutfit = props => {
       setNameError('Please enter outfit name');
       return;
     }
-    if (!description) {
-      setDescErr('Please enter outfit description');
-      return;
-    }
     if (!selectedSeason.length) {
       Toast.show('Please select season');
       return;

@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Linking,
+} from 'react-native';
 import {Colors} from '../../colors';
 import {Buttons, Input} from '../../components';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -10,7 +17,6 @@ import {
 } from '../../redux/actions/profileAction';
 import Toast from 'react-native-simple-toast';
 import {FONTS_SIZES} from '../../fonts';
-
 
 const ProfileSetup = props => {
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
@@ -84,9 +90,28 @@ const ProfileSetup = props => {
       height: 400,
       cropping: true,
       includeBase64: true,
-    }).then(image => {
-      setState({...state, userImage: image, fromLocal: true});
-    });
+    })
+      .then(image => {
+        setState({...state, userImage: image, fromLocal: true});
+      })
+      .catch(err => {
+        if (err.message === 'User did not grant library permission.') {
+          Alert.alert('Vetir', 'Please provide access to photos', [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                Linking.openSettings();
+              },
+            },
+          ]);
+        }
+        console.log('err', err.message);
+      });
   };
 
   const handleName = () => {
@@ -277,19 +302,19 @@ const ProfileSetup = props => {
                     setState({...state, userImage: null});
                   }}>
                   <Text
-                      style={{
-                        color: '#217AFF',
-                        fontSize: FONTS_SIZES.s4,
-                        fontWeight: '700',
-                        borderWidth: 1,
-                        padding: 16,
-                        borderRadius: 8,
-                        borderColor: Colors.greyBorder,
-                      }}>
-                      Remove
-                    </Text>
-                  </TouchableOpacity>
-                 </View> 
+                    style={{
+                      color: '#217AFF',
+                      fontSize: FONTS_SIZES.s4,
+                      fontWeight: '700',
+                      borderWidth: 1,
+                      padding: 16,
+                      borderRadius: 8,
+                      borderColor: Colors.greyBorder,
+                    }}>
+                    Remove
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <>
@@ -303,12 +328,12 @@ const ProfileSetup = props => {
                 <Text
                   style={{
                     color: '#217AFF',
-                      fontSize: FONTS_SIZES.s4,
-                      fontWeight: '700',
-                      borderWidth: 1,
-                      padding: 16,
-                      borderRadius: 8,
-                      borderColor: Colors.greyBorder,
+                    fontSize: FONTS_SIZES.s4,
+                    fontWeight: '700',
+                    borderWidth: 1,
+                    padding: 16,
+                    borderRadius: 8,
+                    borderColor: Colors.greyBorder,
                   }}>
                   Upload
                 </Text>
@@ -332,8 +357,14 @@ const ProfileSetup = props => {
   };
 
   return (
-    <View style={{padding: 16, flex: 1, backgroundColor: 'white', marginTop: 32}}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16}}>
+    <View
+      style={{padding: 16, flex: 1, backgroundColor: 'white', marginTop: 32}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginBottom: 16,
+        }}>
         <View
           style={{
             width: 100,
