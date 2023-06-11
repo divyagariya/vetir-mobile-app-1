@@ -226,13 +226,15 @@ const ProfileSetup = props => {
       gender: state.genderSelected.toLowerCase(),
     };
     if (!state.fromLocal) {
-      data.base64ImgString = null;
+      data.isImageUpated = false;
     }
     if (state.fromLocal) {
       data.base64ImgString = `data:image/png;base64,${state.userImage?.data}`;
+      data.isImageUpated = true;
     }
     if (isProfileCreated && isImageRemove) {
       data.base64ImgString = null;
+      data.isImageUpated = true;
     }
     if (
       state.name === userProfileResponse?.name &&
