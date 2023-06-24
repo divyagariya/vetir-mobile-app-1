@@ -30,6 +30,8 @@ const Header = ({
   likeProduct = () => {},
   showRecommend = false,
   recommendClients = () => {},
+  showWhatsapp = false,
+  onWhatsappClick = () => {},
 }) => {
   const [switchIcon, setSwitch] = useState(false);
   const dispatch = useDispatch();
@@ -116,6 +118,15 @@ const Header = ({
               />
             </TouchableOpacity>
           </VView>
+        )}
+        {showWhatsapp && (
+          <TouchableOpacity style={{marginRight: 16}} onPress={onWhatsappClick}>
+            <Image
+              resizeMode="contain"
+              source={require('../../assets/iWhatsapp.png')}
+              style={{width: 24, height: 24}}
+            />
+          </TouchableOpacity>
         )}
         {showRecommend && (
           <VView style={{flexDirection: 'row'}}>

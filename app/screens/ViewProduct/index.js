@@ -352,6 +352,13 @@ const ViewProduct = props => {
     );
   };
 
+  const onWhatsappClick = () => {
+    Linking.openURL(`whatsapp://send?phone=${9891586442}`).catch(err => {
+      console.log(err.message);
+      Toast.show('Something went wrong');
+    });
+  };
+
   if (Object.keys(productData).length === 0) {
     return null;
   }
@@ -365,6 +372,8 @@ const ViewProduct = props => {
       }}>
       <VView>
         <Header
+          showWhatsapp
+          onWhatsappClick={onWhatsappClick}
           //showAdd={!isStylistUser}
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
