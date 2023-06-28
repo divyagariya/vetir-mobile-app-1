@@ -22,9 +22,11 @@ import {
   getProductDetailsApi,
 } from '../../redux/actions/homeActions';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import VimeoVideoPlayer from './components/VimeoVideos';
 
 const Home = props => {
   const dispatch = useDispatch();
+  const [vimeoPlayer, setVimeoPlayer] = useState(false);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
@@ -125,6 +127,10 @@ const Home = props => {
     dispatch(getHomePageData());
   };
 
+  const runVimeoVideos = () => {
+    setVimeoPlayer(true);
+  };
+
   return (
     <VView style={styles.conatiner}>
       <VView style={styles.headingContainer}>
@@ -169,7 +175,7 @@ const Home = props => {
             Search jeans, top, hats...
           </Text>
         </TouchableOpacity>
-        {!isStylistUser && (
+        {/* {!isStylistUser && (
           <Lottie
             source={require('../../assets/ripple.json')}
             autoPlay
@@ -183,49 +189,44 @@ const Home = props => {
               flexDirection: 'row',
             }}>
             <View>
+              <TouchableOpacity
+                style={{
+                  height: 64,
+                  width: 64,
+                  borderRadius: 32,
+                  backgroundColor: Colors.grey1,
+                  margin: 20,
+                  zIndex: 99,
+                }}
+                onPress={() => setShowBambuser(true)}>
+                <Image
+                  resizeMode="contain"
+                  source={require('../../assets/live.png')}
+                  style={{width: '100%', height: '100%'}}
+                />
+                <View style={{position: 'absolute', bottom: -10, left: 13}}>
+                  <Image
+                    source={require('../../assets/livetext.png')}
+                    style={{width: 40, height: 24}}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
-              style={{
-                height: 64,
-                width: 64,
-                borderRadius: 32,
-                backgroundColor: Colors.grey1,
-                margin: 20,
-                zIndex: 99,
-              }}
-              onPress={() => setShowBambuser(true)}>
+              style={styles.liveVideos}
+              onPress={runVimeoVideos}>
               <Image
-                resizeMode="contain"
-                source={require('../../assets/live.png')}
-                style={{width: '100%', height: '100%'}}
+                source={{uri: 'https://vumbnail.com/839254093.jpg'}}
+                style={{
+                  width: 64,
+                  height: 64,
+                  marginRight: 16,
+                  borderRadius: 32,
+                }}
               />
-              <View style={{position: 'absolute', bottom: -10, left: 13}}>
-                <Image
-                  source={require('../../assets/livetext.png')}
-                  style={{width: 40, height: 24}}
-                />
-              </View>
             </TouchableOpacity>
-              </View>
-              <View style={styles.liveVideos}>
-                <Image
-                  source={require('../../assets/live_soon.webp')}
-                  style={{width: 64, height: 64, marginRight: 16}}
-                />
-                <Image
-                  source={require('../../assets/live_soon.webp')}
-                  style={{width: 64, height: 64, marginRight: 16}}
-                />
-                <Image
-                  source={require('../../assets/live_soon.webp')}
-                  style={{width: 64, height: 64, marginRight: 16}}
-                />
-                <Image
-                  source={require('../../assets/live_soon.webp')}
-                  style={{width: 64, height: 64, marginRight: 16}}
-                />
-              </View>
           </Lottie>
-        )}
+        )} */}
         {homeResponse.length > 0 &&
           homeResponse.map(item => {
             return renderItem(item);
@@ -247,6 +248,30 @@ const Home = props => {
           </View>
         )}
       </ScrollView>
+
+      {vimeoPlayer && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: '#000',
+          }}>
+          <TouchableOpacity
+            style={{
+              alignSelf: 'flex-end',
+            }}
+            onPress={() => setVimeoPlayer(false)}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={{width: 44, height: 44}}
+            />
+          </TouchableOpacity>
+          <VimeoVideoPlayer vimeoId={'839254093'} />
+        </View>
+      )}
 
       {showBambuser && (
         <View
