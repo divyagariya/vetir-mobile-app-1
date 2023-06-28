@@ -353,7 +353,9 @@ const ViewProduct = props => {
   };
 
   const onWhatsappClick = () => {
-    Linking.openURL(`whatsapp://send?phone=${9891586442}`).catch(err => {
+    Linking.openURL(
+      `whatsapp://send?phone=${productData.vendorWhatsappNumber}`,
+    ).catch(err => {
       console.log(err.message);
       Toast.show('Something went wrong');
     });
