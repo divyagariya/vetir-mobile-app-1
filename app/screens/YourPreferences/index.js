@@ -281,23 +281,23 @@ const YourPreferences = props => {
 
   const handleNext = () => {
     if (currentActiveTab === 1 && firstQuestionData.length < 5) {
-      Toast.show('Please select 5 favourite brands');
+      Toast.show('Please select 5 brands');
       return;
     }
     if (currentActiveTab === 2 && secondQuestionData.length < 5) {
-      Toast.show('Please select 5 denim brands');
+      Toast.show('Please select 5 brands');
       return;
     }
     if (currentActiveTab === 3 && thirdQuestionData.length < 5) {
-      Toast.show('Please select 5 shoe brands');
+      Toast.show('Please select 5 brands');
       return;
     }
     if (currentActiveTab === 4 && forthQuestionData.length < 5) {
-      Toast.show('Please select 5 dress brands');
+      Toast.show('Please select 5 brands');
       return;
     }
     if (currentActiveTab === 5 && fifthQuestionData.length < 5) {
-      Toast.show('Please select 5 handbags brands');
+      Toast.show('Please select 5 brands');
       return;
     }
     if (currentActiveTab === 6 && sixthQuestionData.length < 3) {

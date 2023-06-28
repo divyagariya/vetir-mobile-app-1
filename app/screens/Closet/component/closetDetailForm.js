@@ -116,7 +116,7 @@ const ClosetDetailsFrom = props => {
         dispatch(getClosetData());
         setLoading(false);
         dispatch({type: 'EDIT_CLOSET', value: {}});
-        Toast.show('Item details successfully updated');
+        Toast.show('Information edited successfully');
         props.navigation.navigate('ClosetInfo', {
           apiData: editClosetResponse,
         });

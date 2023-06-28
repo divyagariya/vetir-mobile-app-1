@@ -99,14 +99,13 @@ const ClosetFilter = props => {
                     width: '45%',
                     alignItems: 'center',
                     backgroundColor: Colors.grey1,
-                    paddingHorizontal: 7,
-                    paddingVertical: 12,
                     margin: 8,
                   }}
                   onPress={() => openClosetInfo(item.closetItemId)}>
                   <Image
                     source={{uri: item.itemImageUrl}}
                     style={{width: 150, height: 140}}
+                    resizeMode="contain"
                   />
                 </TouchableOpacity>
               );

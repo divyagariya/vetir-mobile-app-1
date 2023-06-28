@@ -264,7 +264,7 @@ const ProfileSetup = props => {
               marginTop: 16,
               marginBottom: 16,
             }}>
-            Wanna upload your cool picture?
+            Would you like to upload your picture?
           </Text>
         </View>
         <View style={{alignItems: 'center'}}>
