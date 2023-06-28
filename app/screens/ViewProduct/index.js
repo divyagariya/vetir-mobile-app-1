@@ -374,7 +374,7 @@ const ViewProduct = props => {
       }}>
       <VView>
         <Header
-          showWhatsapp
+          showWhatsapp={productData.vendorWhatsappNumber}
           onWhatsappClick={onWhatsappClick}
           //showAdd={!isStylistUser}
           recommendClients={recommentToClient}
