@@ -194,7 +194,11 @@ const OutfitDetail = props => {
                     <Text
                       style={[
                         styles.subitleStyle,
-                        {marginVertical: 8, marginRight: 8},
+                        {
+                          marginVertical: 8,
+                          marginRight: 8,
+                          textTransform: 'capitalize',
+                        },
                       ]}>
                       {item}
                     </Text>

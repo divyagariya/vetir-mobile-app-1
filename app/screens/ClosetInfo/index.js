@@ -227,7 +227,11 @@ const ClosetInfo = props => {
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   {props.route?.params?.apiData?.season.map(item => {
                     return (
-                      <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                      <Text
+                        style={[
+                          styles.subitleStyle,
+                          {marginRight: 4, textTransform: 'capitalize'},
+                        ]}>
                         {item}
                       </Text>
                     );
