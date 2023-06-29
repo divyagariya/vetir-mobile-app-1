@@ -72,7 +72,7 @@ const ProfileSetup = props => {
   useEffect(() => {
     if (Object.keys(udpateProfileRepose).length) {
       if (udpateProfileRepose.statusCode == 200 && isProfileCreated) {
-        Toast.show('Profile Update successfully');
+        Toast.show('Profile updated successfully');
         props.navigation.navigate('TabData');
         dispatch({type: 'PROFILE_DATA_UPDATED', value: ''});
         dispatch(getUserProfile());
@@ -232,6 +232,7 @@ const ProfileSetup = props => {
       data.base64ImgString = `data:image/png;base64,${state.userImage?.data}`;
       data.isImageUpated = true;
     }
+    console.log(isProfileCreated, isImageRemove, 'testing image removed');
     if (isProfileCreated && isImageRemove) {
       data.base64ImgString = null;
       data.isImageUpated = true;
