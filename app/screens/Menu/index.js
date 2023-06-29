@@ -241,7 +241,7 @@ const Menu = props => {
             showIcon
           />
         </View>
-        <Buttons text="recommend" onPress={addStylist} />
+        <Buttons text="Add" onPress={addStylist} />
       </View>
     );
   };

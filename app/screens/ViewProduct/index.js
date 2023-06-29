@@ -115,7 +115,7 @@ const ViewProduct = props => {
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
-        Toast.show('Added in closet');
+        Toast.show('Added to closet');
       }
     }
   }, [addClosetResponse, dispatch]);
