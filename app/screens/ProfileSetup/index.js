@@ -250,6 +250,7 @@ const ProfileSetup = props => {
     if (!isStylistUser) {
       data.userId = userId;
     }
+    console.log('@@ image update', data);
     dispatch(updateUserProfile(data));
   };
 
@@ -300,7 +301,7 @@ const ProfileSetup = props => {
                 <TouchableOpacity
                   style={{paddingBottom: 4}}
                   onPress={() => {
-                    setImage(false);
+                    setImage(true);
                     setState({...state, userImage: null});
                   }}>
                   <Text
@@ -358,6 +359,17 @@ const ProfileSetup = props => {
     );
   };
 
+  const renderSection = () => {
+    switch (state.currentActiveTab) {
+      case 2:
+        return getProfilePic();
+      case 1:
+        return getGender();
+      default:
+        return getname();
+    }
+  };
+
   return (
     <View
       style={{padding: 16, flex: 1, backgroundColor: 'white', marginTop: 32}}>
@@ -390,11 +402,7 @@ const ProfileSetup = props => {
           }}
         />
       </View>
-      {state.currentActiveTab === 0
-        ? getname()
-        : state.currentActiveTab == 1
-        ? getGender()
-        : getProfilePic()}
+      {renderSection()}
     </View>
   );
 };
