@@ -16,7 +16,7 @@ import BottomSheet from 'react-native-simple-bottom-sheet';
 import {useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Buttons, Header} from '../../components';
-import {PinchGestureHandler, State} from 'react-native-gesture-handler';
+import {GestureDetector, State} from 'react-native-gesture-handler';
 import PhotoView from 'react-native-photo-view-ex';
 import ViewShot, {captureRef} from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
@@ -316,42 +316,85 @@ class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Animated.View style={styles.container}>
         {this.props.outfitImages.map((i, index) => {
           return (
-            <View style={{width: 100, height: 100}} key={i.closetItemId}>
-              <PinchGestureHandler
-                onGestureEvent={this.onPinchEvent(i)}
-                onHandlerStateChange={this.onPinchStateChange}>
-                <Animated.View
-                  {...this.panResponder(i, index).panHandlers}
-                  style={{
-                    width: 150,
-                    height: 200,
-                    transform: [{translateX: i.pan.x}, {translateY: i.pan.y}],
-                  }}>
-                  <PhotoView
-                    source={{uri: i.imageSrc}}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    resizeMode="contain"
-                    minimumZoomScale={0.3}
-                    maximumZoomScale={1}
-                    style={{width: '100%', height: '100%'}}
-                  />
-                </Animated.View>
-              </PinchGestureHandler>
-            </View>
+            <Animated.View
+              {...this.panResponder(i, index).panHandlers}
+              style={{
+                width: Dimensions.get('window').width / 3,
+                height: 150,
+                transform: [{translateX: i.pan.x}, {translateY: i.pan.y}],
+              }}>
+              <PhotoView
+                source={{uri: i.imageSrc}}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                resizeMode="contain"
+                minimumZoomScale={0.3}
+                maximumZoomScale={1.5}
+                style={{width: '100%', height: '100%'}}
+              />
+            </Animated.View>
           );
         })}
-      </View>
+      </Animated.View>
     );
   }
 }
 
+//   const pan = useRef(new Animated.ValueXY()).current;
+
+//   const panResponder = useRef(
+//     PanResponder.create({
+//       onMoveShouldSetPanResponder: () => true,
+//       onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}]),
+//       onPanResponderRelease: () => {
+//         pan.extractOffset();
+//       },
+//     }),
+//   ).current;
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.titleText}>Drag this box!</Text>
+//       {outfitImages.map((i, index) => {
+//         return (
+//           <Animated.View
+//             style={{
+//               transform: [{translateX: pan.x}, {translateY: pan.y}],
+//               borderWidth: 2,
+//               backgroundColor: 'red',
+//             }}
+//             {...panResponder(i, index).panHandlers}>
+//             <View
+//               style={{backgroundColor: 'green'}}
+//               onLayout={event => {
+//                 var {x, y, width, height} = event.nativeEvent.layout;
+//                 console.warn('@@ width', width, height);
+//               }}>
+//               <PhotoView
+//                 source={{uri: i.imageSrc}}
+//                 showsHorizontalScrollIndicator={false}
+//                 showsVerticalScrollIndicator={false}
+//                 resizeMode="contain"
+//                 minimumZoomScale={0.3}
+//                 maximumZoomScale={1}
+//                 style={{width: 100, height: 100}}
+//               />
+//             </View>
+//           </Animated.View>
+//         );
+//       })}
+//     </View>
+//   );
+// };
+
 const styles = StyleSheet.create({
   container: {
     height: Dimensions.get('window').height * 0.5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   titleText: {
     fontSize: 14,
