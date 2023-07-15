@@ -52,9 +52,9 @@ const VideoList = props => {
           data={videoListRes}
           numColumns={4}
           keyExtractor={item => item._id}
-          onEndReached={loadMoreData}
-          onEndReachedThreshold={10}
-          ListFooterComponent={ListFooterComponent}
+          //   onEndReached={loadMoreData}
+          //   onEndReachedThreshold={10}
+          //   ListFooterComponent={ListFooterComponent}
           renderItem={({item}) => (
             <View style={{marginRight: 16}}>
               <Videos item={item} runVideoVideos={() => runVideoVideos(item)} />
