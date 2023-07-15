@@ -50,7 +50,7 @@ const VideoList = props => {
         <FlatList
           contentContainerStyle={{alignSelf: 'center'}}
           data={videoListRes}
-          //   numColumns={4}
+          numColumns={4}
           keyExtractor={item => item._id}
           onEndReached={loadMoreData}
           onEndReachedThreshold={10}
