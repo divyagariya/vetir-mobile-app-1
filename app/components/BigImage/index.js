@@ -2,7 +2,12 @@ import React from 'react';
 import {Dimensions, Image, View, TouchableOpacity} from 'react-native';
 import {Colors} from '../../colors';
 
-const BigImage = ({showEdit = false, imgSource = '', editImage = () => {}}) => {
+const BigImage = ({
+  showEdit = false,
+  imgSource = '',
+  editImage = () => {},
+  showWaterMark = false,
+}) => {
   return (
     <View
       style={{
@@ -32,6 +37,13 @@ const BigImage = ({showEdit = false, imgSource = '', editImage = () => {}}) => {
           />
         </TouchableOpacity>
       )}
+      <View style={{position: 'absolute', bottom: 10, right: 10}}>
+        <Image
+          source={require('../../assets/logo.png')}
+          style={{width: 55, height: 23}}
+          resizeMode="contain"
+        />
+      </View>
     </View>
   );
 };

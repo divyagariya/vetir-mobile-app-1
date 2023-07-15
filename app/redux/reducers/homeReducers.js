@@ -4,6 +4,7 @@ const initialState = {
   filteredProducts: [],
   searchAPiResponse: [],
   refreshHome: false,
+  videoListRes: [],
 };
 
 const HomeReducer = (state = initialState, action) => {
@@ -40,6 +41,13 @@ const HomeReducer = (state = initialState, action) => {
       return {
         ...state,
         refreshHome: action.value,
+      };
+    }
+
+    case 'GET_VIDEO_LIST': {
+      return {
+        ...state,
+        videoListRes: action.value,
       };
     }
 

@@ -127,7 +127,7 @@ const AddCloset = props => {
     // setBgImg(false);
     setTimeout(() => {
       captureRef(captureViewRef, {
-        format: 'jpeg',
+        format: 'jpg',
         quality: 0.9,
       }).then(
         uri => {
@@ -325,6 +325,8 @@ class App extends Component {
                 width: Dimensions.get('window').width / 3,
                 height: 150,
                 transform: [{translateX: i.pan.x}, {translateY: i.pan.y}],
+                position: 'absolute',
+                left: 10,
               }}>
               <PhotoView
                 source={{uri: i.imageSrc}}
@@ -333,7 +335,7 @@ class App extends Component {
                 resizeMode="contain"
                 minimumZoomScale={0.3}
                 maximumZoomScale={1.5}
-                style={{width: '100%', height: '100%'}}
+                style={{width: '200%', height: '200%'}}
               />
             </Animated.View>
           );

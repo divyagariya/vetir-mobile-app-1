@@ -20,13 +20,16 @@ import Lottie from 'lottie-react-native';
 import {
   getHomePageData,
   getProductDetailsApi,
+  getVideoList,
+  viewVideo,
 } from '../../redux/actions/homeActions';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
-import VimeoVideoPlayer from './components/VimeoVideos';
+import Videos from '../Videos/components/Videos';
 
 const Home = props => {
+  const [videoList] = [1, 2, 3, 4, 5, 6, 7, 8];
   const dispatch = useDispatch();
-  const [vimeoPlayer, setVimeoPlayer] = useState(false);
+  const [videoPlayer, setVideoPlayer] = useState(false);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
@@ -38,12 +41,16 @@ const Home = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
+  const userId = useSelector(state => state.AuthReducer.userId);
+  const videoListRes =
+    useSelector(state => state.HomeReducer.videoListRes) || [];
   const refreshHome = useSelector(state => state.HomeReducer.refreshHome);
 
   const isPreferences =
     useSelector(
       state => state.ProfileReducer.userProfileResponse.isPreferences,
     ) || false;
+  const [videoLink, setVideoLink] = useState('');
 
   useEffect(() => {
     if (Object.keys(productDetailResponse).length && showProducts) {
@@ -125,10 +132,21 @@ const Home = props => {
   const _onRefresh = () => {
     dispatch({type: 'REFRESH_HOME', value: true});
     dispatch(getHomePageData());
+    dispatch(getVideoList());
   };
 
-  const runVimeoVideos = () => {
-    setVimeoPlayer(true);
+  const runVideoVideos = item => {
+    const data = {
+      userId: userId,
+      videoId: item._id,
+    };
+    dispatch(viewVideo(data));
+    setVideoLink(item.videoLink);
+    setVideoPlayer(true);
+  };
+
+  const navigateToVideos = () => {
+    props.navigation.navigate('VideoList');
   };
 
   return (
@@ -212,21 +230,43 @@ const Home = props => {
                 </View>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.liveVideos}
-              onPress={runVimeoVideos}>
-              <Image
-                source={{uri: 'https://vumbnail.com/839254093.jpg'}}
-                style={{
-                  width: 64,
-                  height: 64,
-                  marginRight: 16,
-                  borderRadius: 32,
-                }}
-              />
-            </TouchableOpacity>
           </Lottie>
         )} */}
+        {videoListRes.length > 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              marginTop: 8,
+            }}>
+            {videoListRes.map((item, index) => {
+              if (index < 3) {
+                return (
+                  <Videos
+                    item={item}
+                    runVideoVideos={() => runVideoVideos(item)}
+                  />
+                );
+              }
+              return null;
+            })}
+            <TouchableOpacity
+              style={{
+                marginLeft: 20,
+                width: 74,
+                alignItems: 'center',
+                backgroundColor: Colors.grey1,
+                height: 74,
+                borderRadius: 37,
+                justifyContent: 'center',
+              }}
+              onPress={navigateToVideos}>
+              <Text>View All</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {homeResponse.length > 0 &&
           homeResponse.map(item => {
             return renderItem(item);
@@ -248,8 +288,7 @@ const Home = props => {
           </View>
         )}
       </ScrollView>
-
-      {vimeoPlayer && (
+      {videoPlayer && (
         <View
           style={{
             position: 'absolute',
@@ -257,22 +296,22 @@ const Home = props => {
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: '#000',
           }}>
           <TouchableOpacity
-            style={{
-              alignSelf: 'flex-end',
-            }}
-            onPress={() => setVimeoPlayer(false)}>
+            style={{position: 'absolute', top: 16, right: 16, zIndex: 999}}
+            onPress={() => setVideoPlayer(false)}>
             <Image
               source={require('../../assets/cross.webp')}
               style={{width: 44, height: 44}}
             />
           </TouchableOpacity>
-          <VimeoVideoPlayer vimeoId={'839254093'} />
+          <WebView
+            source={{
+              uri: videoLink,
+            }}
+          />
         </View>
       )}
-
       {showBambuser && (
         <View
           style={{
@@ -342,10 +381,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   liveVideos: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    position: 'absolute',
-    left: 96,
+    paddingLeft: 16,
   },
 });

@@ -37,13 +37,14 @@ import SubmitOutfit from '../screens/SubmitOutfit';
 import OutfitDetail from '../screens/OutfitDetail';
 import {getOutfitsList} from '../redux/actions/outfitActions';
 import ClosetFilter from '../screens/ClosetFilter';
-import {getHomePageData} from '../redux/actions/homeActions';
+import {getHomePageData, getVideoList} from '../redux/actions/homeActions';
 import {NoAuthAPI} from '../services';
 import YourPreferences from '../screens/YourPreferences';
 import Search from '../screens/Search';
 import Clients from '../screens/Clients';
 import {getAllClients} from '../redux/actions/stylistAction';
 import ClientDetails from '../screens/ClinetDetails';
+import VideoList from '../screens/Videos';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,6 +72,7 @@ function ShopStack() {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="ViewProduct" component={ViewProduct} />
       <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
+      <Stack.Screen name="VideoList" component={VideoList} />
     </Stack.Navigator>
   );
 }
@@ -197,6 +199,7 @@ function AppNavigation() {
       dispatch(getCategoryData());
       dispatch(getColorData());
       dispatch(getSizesData());
+      dispatch(getVideoList());
       if (!isStylistUser) {
         dispatch(getClosetData());
         dispatch(getOutfitsList());

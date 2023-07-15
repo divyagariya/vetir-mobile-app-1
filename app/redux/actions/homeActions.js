@@ -32,14 +32,35 @@ export function getProductDetailsApi(productId) {
   };
 }
 
+export function getVideoList() {
+  return async (dispatch, getState) => {
+    const apiResponse = await NoAuthAPI(
+      `videos?userId=${getState().AuthReducer.userId}&page=1&limit=10`,
+      'GET',
+    );
+    console.log('Videos', apiResponse);
+    if (Object.keys(apiResponse).length) {
+      dispatch({type: 'GET_VIDEO_LIST', value: apiResponse.videoData});
+    }
+  };
+}
+
+export function viewVideo(data) {
+  return async (dispatch, getState) => {
+    const apiResponse = await NoAuthAPI('video/view', 'POST', data);
+    console.log('Videos view', apiResponse);
+    if (Object.keys(apiResponse).length) {
+      dispatch(getVideoList());
+    }
+  };
+}
+
 export function getFilteredProducts(data) {
   return async (dispatch, getState) => {
-    console.log('@@ data', data);
     const data1 = data;
     data1.userId = getState().AuthReducer.userId;
     let url = 'get/allProducts/v1';
     const apiResponse = await NoAuthAPI(url, 'POST', data1);
-    console.log('@@ filter res', JSON.stringify(apiResponse, undefined, 2));
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'FILTERED_PRODUCTS', value: apiResponse});
     }

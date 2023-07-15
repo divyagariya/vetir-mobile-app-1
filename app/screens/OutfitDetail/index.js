@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -11,7 +11,14 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors} from '../../colors';
-import {BigImage, Buttons, Header, Input, OverlayModal} from '../../components';
+import {
+  BigImage,
+  Buttons,
+  Header,
+  Input,
+  Loader,
+  OverlayModal,
+} from '../../components';
 import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -21,8 +28,13 @@ import {
 import {deleteOutfit} from '../../redux/actions/outfitActions';
 import SimpleToast from 'react-native-simple-toast';
 import {openClosetDetails} from '../../redux/actions/closetAction';
+import RNFS from 'react-native-fs';
+import {captureRef} from 'react-native-view-shot';
+import Share from 'react-native-share';
 
 const OutfitDetail = props => {
+  const [loader, setLoader] = useState(false);
+  const captureViewRef = useRef();
   const getOutfitDetailData = useSelector(
     state => state.OutfitReducer.getOutfitDetailData,
   );
@@ -165,6 +177,31 @@ const OutfitDetail = props => {
     dispatch(openClosetDetails(data));
   };
 
+  const onShare = () => {
+    setLoader(true);
+    captureRef(captureViewRef, {
+      format: 'jpg',
+      quality: 0.9,
+    }).then(uri => {
+      RNFS.readFile(uri, 'base64').then(res => {
+        const imageUrl = 'data:image/png;base64,' + res;
+        let shareImage = {
+          title: 'Hey Checkout my Outfit', //string
+          message: 'Hey Checkout my Outfit', //string
+          url: imageUrl,
+          // urls: [imageUrl, imageUrl], // eg.'http://img.gemejo.com/product/8c/099/cf53b3a6008136ef0882197d5f5.jpg',
+        };
+        Share.open(shareImage)
+          .then(res => {
+            setLoader(false);
+          })
+          .catch(err => {
+            setLoader(false);
+          });
+      });
+    });
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <Header
@@ -172,11 +209,18 @@ const OutfitDetail = props => {
         showVerticalMenu={!isStylistUser}
         {...props}
         openMenu={openMenu}
+        showshare
+        onShare={onShare}
       />
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         {Object.keys(getOutfitDetailData).length > 0 ? (
           <>
-            <BigImage imgSource={getOutfitDetailData?.outfitImageType} />
+            <View ref={captureViewRef}>
+              <BigImage
+                imgSource={getOutfitDetailData?.outfitImageType}
+                showWaterMark
+              />
+            </View>
             <View style={{padding: 16}}>
               <Text style={styles.titleStyle}>Name</Text>
               <Text style={styles.subitleStyle}>
@@ -237,6 +281,7 @@ const OutfitDetail = props => {
           />
         )}
       </KeyboardAwareScrollView>
+      {loader && <Loader />}
     </View>
   );
 };
