@@ -32,15 +32,18 @@ export function getProductDetailsApi(productId) {
   };
 }
 
-export function getVideoList() {
+export function getVideoList(page = 1, limit = 10) {
   return async (dispatch, getState) => {
     const apiResponse = await NoAuthAPI(
-      `videos?userId=${getState().AuthReducer.userId}&page=1&limit=10`,
+      `videos?userId=${
+        getState().AuthReducer.userId
+      }&page=${page}&limit=${limit}`,
       'GET',
     );
-    console.log('Videos', apiResponse);
+    console.log('Videos', JSON.stringify(apiResponse, undefined, 2));
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_VIDEO_LIST', value: apiResponse.videoData});
+      dispatch({type: 'TOTAL_VIDEOS', value: apiResponse.totalCount || 0});
     }
   };
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -16,12 +16,33 @@ import {getVideoList, viewVideo} from '../../redux/actions/homeActions';
 
 const VideoList = props => {
   const [isLoading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const [videoPlayer, setVideoPlayer] = useState(false);
-  const videoListRes =
-    useSelector(state => state.HomeReducer.videoListRes) || [];
+  const totalVideos = useSelector(state => state.HomeReducer.totalVideos) || 0;
+  const videoListRes = useSelector(state => state.HomeReducer.videoListRes);
   const userId = useSelector(state => state.AuthReducer.userId);
   const [videoLink, setVideoLink] = useState('');
+  const [videoList, setVideoList] = useState([]);
+  const [shouldPaginate, setPaginate] = useState(false);
+
+  useEffect(() => {
+    dispatch(getVideoList(1, 100));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (videoListRes.length) {
+      if (shouldPaginate) {
+        setVideoList(prev => [...prev, ...videoListRes]);
+        setPaginate(false);
+      } else {
+        setVideoList(videoListRes);
+      }
+
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoListRes]);
 
   const runVideoVideos = item => {
     const data = {
@@ -34,8 +55,12 @@ const VideoList = props => {
   };
 
   const loadMoreData = () => {
-    setLoading(true);
-    dispatch(getVideoList());
+    if (totalVideos > videoList.length) {
+      setPage(prev => prev + 1);
+      setPaginate(true);
+      setLoading(true);
+      dispatch(getVideoList(page + 1, 100));
+    }
   };
 
   const ListFooterComponent = () => {
@@ -49,12 +74,12 @@ const VideoList = props => {
       <View style={{flex: 1}}>
         <FlatList
           contentContainerStyle={{alignSelf: 'center'}}
-          data={videoListRes}
+          data={videoList}
           numColumns={4}
           keyExtractor={item => item._id}
-          //   onEndReached={loadMoreData}
-          //   onEndReachedThreshold={10}
-          //   ListFooterComponent={ListFooterComponent}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={10}
+          ListFooterComponent={ListFooterComponent}
           renderItem={({item}) => (
             <View style={{marginRight: 16}}>
               <Videos item={item} runVideoVideos={() => runVideoVideos(item)} />

@@ -5,6 +5,7 @@ const initialState = {
   searchAPiResponse: [],
   refreshHome: false,
   videoListRes: [],
+  totalVideos: 0,
 };
 
 const HomeReducer = (state = initialState, action) => {
@@ -48,6 +49,13 @@ const HomeReducer = (state = initialState, action) => {
       return {
         ...state,
         videoListRes: action.value,
+      };
+    }
+
+    case 'TOTAL_VIDEOS': {
+      return {
+        ...state,
+        totalVideos: action.value,
       };
     }
 

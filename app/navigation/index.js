@@ -199,7 +199,7 @@ function AppNavigation() {
       dispatch(getCategoryData());
       dispatch(getColorData());
       dispatch(getSizesData());
-      dispatch(getVideoList());
+      dispatch(getVideoList(1, 3));
       if (!isStylistUser) {
         dispatch(getClosetData());
         dispatch(getOutfitsList());

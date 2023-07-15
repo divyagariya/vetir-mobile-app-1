@@ -132,7 +132,7 @@ const Home = props => {
   const _onRefresh = () => {
     dispatch({type: 'REFRESH_HOME', value: true});
     dispatch(getHomePageData());
-    dispatch(getVideoList());
+    dispatch(getVideoList(1, 5));
   };
 
   const runVideoVideos = item => {
