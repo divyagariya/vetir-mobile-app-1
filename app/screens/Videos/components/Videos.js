@@ -7,7 +7,10 @@ const Videos = ({runVideoVideos = () => {}, item = {}}) => {
     <TouchableOpacity
       style={[
         styles.liveVideos,
-        {borderWidth: 2, borderColor: !item.view ? '#217AFF' : 'transparent'},
+        {
+          borderWidth: !item.view ? 2 : 1,
+          borderColor: !item.view ? '#217AFF' : '#00000029',
+        },
       ]}
       onPress={runVideoVideos}>
       <Image source={{uri: item.thumbnail}} style={styles.image} />
