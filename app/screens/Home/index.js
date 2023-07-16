@@ -88,6 +88,7 @@ const Home = props => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       dispatch(getHomePageData());
+      dispatch(getVideoList(1, 5));
     });
     return unsubscribe;
   }, [props.navigation, dispatch]);
