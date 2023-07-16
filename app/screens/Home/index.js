@@ -234,13 +234,7 @@ const Home = props => {
           </Lottie>
         )} */}
         {videoListRes.length > 0 && (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              marginTop: 8,
-            }}>
+          <View style={styles.videosContainer}>
             {videoListRes.map((item, index) => {
               if (index < 3) {
                 return (
@@ -254,16 +248,17 @@ const Home = props => {
             })}
             <TouchableOpacity
               style={{
-                marginLeft: 20,
+                marginLeft: 8,
+                marginRight: 8,
                 width: 74,
                 alignItems: 'center',
                 backgroundColor: Colors.grey1,
                 height: 74,
-                borderRadius: 37,
+                borderRadius: 36,
                 justifyContent: 'center',
               }}
               onPress={navigateToVideos}>
-              <Text>View All</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 10}}>View All</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -275,11 +270,16 @@ const Home = props => {
         {!isPreferences && !isStylistUser && (
           <View
             style={{padding: 16, backgroundColor: Colors.grey1, margin: 16}}>
-            <Text style={{fontSize: FONTS_SIZES.s1, fontWeight: 'bold'}}>
+            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
               For You
             </Text>
             <Text
-              style={{color: Colors.black60, marginTop: 8, marginBottom: 16}}>
+              style={{
+                color: Colors.black60,
+                marginTop: 8,
+                marginBottom: 16,
+                lineHeight: 20,
+              }}>
               Products will be shown based on your preferences.
             </Text>
             <Buttons
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: Colors.grey1,
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 16,
     marginHorizontal: 16,
     paddingVertical: 16,
     flexDirection: 'row',
@@ -385,5 +385,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 16,
+    backgroundColor: 'red',
+  },
+  videosContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    marginLeft: 8,
+    marginRight: 8,
   },
 });

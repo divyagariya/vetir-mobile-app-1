@@ -71,9 +71,15 @@ const VideoList = props => {
   return (
     <View style={styles.container}>
       <Header {...props} showBack title="Fashion Videos" />
-      <View style={{flex: 1}}>
+      <View
+        style={{
+          flex: 1,
+          marginLeft: 8,
+          marginLeft: 8,
+          justifyContent: 'flex-start',
+        }}>
         <FlatList
-          contentContainerStyle={{alignSelf: 'center'}}
+          contentContainerStyle={{alignSelf: 'flex-start'}}
           data={videoList}
           numColumns={4}
           keyExtractor={item => item._id}
@@ -81,9 +87,7 @@ const VideoList = props => {
           onEndReachedThreshold={10}
           ListFooterComponent={ListFooterComponent}
           renderItem={({item}) => (
-            <View style={{marginRight: 16}}>
-              <Videos item={item} runVideoVideos={() => runVideoVideos(item)} />
-            </View>
+            <Videos item={item} runVideoVideos={() => runVideoVideos(item)} />
           )}
         />
       </View>

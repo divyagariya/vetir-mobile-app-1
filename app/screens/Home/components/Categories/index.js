@@ -48,7 +48,9 @@ const Categories = props => {
             />
             <View style={{marginLeft: 8}}>
               <Text style={styles.headingLeftText}>{optionName}</Text>
-              <Text style={{fontSize: FONTS_SIZES.s4, color: '#212427'}}>by your stylist</Text>
+              <Text style={{fontSize: FONTS_SIZES.s4, color: '#212427'}}>
+                by your stylist
+              </Text>
             </View>
           </View>
         ) : (

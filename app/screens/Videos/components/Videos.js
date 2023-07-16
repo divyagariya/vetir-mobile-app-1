@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {Colors} from '../../../colors';
+import {VView} from '../../../components';
 
 const Videos = ({runVideoVideos = () => {}, item = {}}) => {
   return (
@@ -25,12 +26,13 @@ export default Videos;
 
 const styles = StyleSheet.create({
   liveVideos: {
-    marginLeft: 16,
-    marginVertical: 16,
+    marginLeft: 8,
+    marginRight: 8,
+    marginBottom: 32,
     borderRadius: 36,
-    width: 64,
-    height: 64,
-    padding: 3,
+    width: 74,
+    height: 74,
+    padding: 2,
   },
   image: {
     width: '100%',
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.black60,
     marginTop: 8,
-    textAlign: 'left',
+    textAlign: 'center',
+    lineHeight: 14,
   },
 });
