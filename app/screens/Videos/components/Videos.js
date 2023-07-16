@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
     marginBottom: 32,
-    borderRadius: 36,
+    borderRadius: 37,
     width: 74,
     height: 74,
     padding: 2,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 36,
+    borderRadius: 37,
   },
   title: {
     fontSize: 10,
