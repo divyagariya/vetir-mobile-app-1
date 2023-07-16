@@ -38,6 +38,13 @@ const AddCloset = props => {
   const [imageData, setImageData] = useState([]);
 
   useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      setBgImg(true);
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
+  useEffect(() => {
     if (props?.route?.params?.editOutfitData) {
       let closetIds = [];
       props?.route?.params?.editOutfitData?.closetDetailsList?.map(item => {
@@ -124,7 +131,7 @@ const AddCloset = props => {
   }, [activeTab, getcloset]);
 
   const onCapture = () => {
-    // setBgImg(false);
+    setBgImg(false);
     setTimeout(() => {
       captureRef(captureViewRef, {
         format: 'jpg',
