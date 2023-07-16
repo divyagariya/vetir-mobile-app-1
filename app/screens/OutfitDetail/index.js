@@ -187,7 +187,6 @@ const OutfitDetail = props => {
         const imageUrl = 'data:image/png;base64,' + res;
         let shareImage = {
           title: 'Hey Checkout my Outfit', //string
-          message: 'Hey Checkout my Outfit', //string
           url: imageUrl,
           // urls: [imageUrl, imageUrl], // eg.'http://img.gemejo.com/product/8c/099/cf53b3a6008136ef0882197d5f5.jpg',
         };
