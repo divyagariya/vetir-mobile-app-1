@@ -327,13 +327,13 @@ class App extends Component {
         {this.props.outfitImages.map((i, index) => {
           return (
             <Animated.View
+              key={i.closetItemId}
               {...this.panResponder(i, index).panHandlers}
               style={{
                 width: Dimensions.get('window').width / 3,
                 height: 150,
                 transform: [{translateX: i.pan.x}, {translateY: i.pan.y}],
                 position: 'absolute',
-                left: 10,
               }}>
               <PhotoView
                 source={{uri: i.imageSrc}}
@@ -342,7 +342,7 @@ class App extends Component {
                 resizeMode="contain"
                 minimumZoomScale={0.3}
                 maximumZoomScale={1.5}
-                style={{width: '200%', height: '200%'}}
+                style={{width: '150%', height: '150%'}}
               />
             </Animated.View>
           );
