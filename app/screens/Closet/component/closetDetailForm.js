@@ -360,16 +360,23 @@ const ClosetDetailsFrom = props => {
                           : 'transparent',
                         alignItems: 'center',
                       }}>
-                      <View
-                        style={{
-                          width: 24,
-                          height: 24,
-                          backgroundColor: item.colorCode,
-                          borderWidth: 1,
-                          borderColor: Colors.greyBorder,
-                          marginRight: 8,
-                        }}
-                      />
+                      {item.colorName === 'multi' ? (
+                        <Image
+                          source={require('../../../assets/multi.png')}
+                          style={{width: 24, height: 24, marginRight: 8}}
+                        />
+                      ) : (
+                        <View
+                          style={{
+                            width: 24,
+                            height: 24,
+                            backgroundColor: item.colorCode,
+                            borderWidth: 1,
+                            borderColor: Colors.greyBorder,
+                            marginRight: 8,
+                          }}
+                        />
+                      )}
                       <Text>{item.colorName}</Text>
                       {colorsFilter.includes(item.colorCode) ? (
                         <Image

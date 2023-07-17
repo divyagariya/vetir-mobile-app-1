@@ -556,7 +556,6 @@ export const FilterModal = ({
   const categoryData = useSelector(state => state.ClosetReducer.categoryData);
   const brandData = useSelector(state => state.ClosetReducer.brandData);
   const brandData2 = useSelector(state => state.ClosetReducer.brandData2);
-  console.log('@@ brandData2', JSON.stringify(brandData2, undefined, 2));
   const getColorsResponse = useSelector(
     state => state.ClosetReducer.getColorsResponse,
   );
@@ -593,7 +592,12 @@ export const FilterModal = ({
     setPriceFilter(priceFilter1);
   };
 
-  console.log('@@ selectedBrands', getColorsResponse);
+  console.log(
+    '@@ getColorsResponse',
+    JSON.stringify(getColorsResponse, undefined, 2),
+  );
+
+  console.log('@@ colorFilter', JSON.stringify(colorsFilter, undefined, 2));
 
   useEffect(() => {
     if (Object.keys(filterValue).length) {
@@ -925,16 +929,23 @@ export const FilterModal = ({
                                 : 'transparent',
                               alignItems: 'center',
                             }}>
-                            <View
-                              style={{
-                                width: 24,
-                                height: 24,
-                                backgroundColor: item.colorCode,
-                                borderWidth: 1,
-                                borderColor: Colors.greyBorder,
-                                marginRight: 8,
-                              }}
-                            />
+                            {item.colorName === 'multi' ? (
+                              <Image
+                                source={require('../../assets/multi.png')}
+                                style={{width: 24, height: 24, marginRight: 8}}
+                              />
+                            ) : (
+                              <View
+                                style={{
+                                  width: 24,
+                                  height: 24,
+                                  backgroundColor: item.colorCode,
+                                  borderWidth: 1,
+                                  borderColor: Colors.greyBorder,
+                                  marginRight: 8,
+                                }}
+                              />
+                            )}
                             <Text>{item.colorName}</Text>
                             {colorsFilter.includes(item.colorCode) ? (
                               <Image
