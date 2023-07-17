@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 import {Header} from '../../components';
 import {
   getFilterCloset,
@@ -7,7 +14,6 @@ import {
 } from '../../redux/actions/closetAction';
 import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
-import {ScrollView} from 'react-native-gesture-handler';
 import {FilterModal} from '../Closet';
 
 const ClosetFilter = props => {
