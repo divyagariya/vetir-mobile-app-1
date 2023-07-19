@@ -271,7 +271,7 @@ const ViewProduct = props => {
     setSelectedClients(selectedClients1);
   };
 
-  const recommendToClients = () => {
+  const recommendToClients = note => {
     if (!selectedClients.length) {
       Toast.show('Please select atleast one client');
       return;
@@ -280,6 +280,7 @@ const ViewProduct = props => {
       personalStylistId: userId,
       userIds: selectedClients,
       productId: recommendedProductId,
+      note: note,
     };
     console.log('data', data);
     setShowClientModal(false);
