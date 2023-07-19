@@ -37,6 +37,7 @@ import {
 } from '../../redux/actions/stylistAction';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 import {NoAuthAPI} from '../../services';
+import {RenderClients} from '../CategoryScreen';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -61,6 +62,7 @@ const ViewProduct = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
+  const [selectedProductImg, setSelectedProductImg] = useState('');
   const [recommendedProductId, setRecommendedProductId] = useState('');
   const [showModal, setModal] = useState(false);
   const [showClientModal, setShowClientModal] = useState(false);
@@ -256,6 +258,7 @@ const ViewProduct = props => {
   const recommentToClient = () => {
     setShowClientModal(true);
     setRecommendedProductId(productData.productId);
+    setSelectedProductImg(productData.imageUrls[0]);
   };
 
   const selectClient = item => {
@@ -266,49 +269,6 @@ const ViewProduct = props => {
       selectedClients1 = selectedClients1.filter(id => id !== item.userId);
     }
     setSelectedClients(selectedClients1);
-  };
-
-  const ClientList = ({item, index}) => {
-    return (
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginVertical: 8,
-        }}
-        onPress={() => selectClient(item)}>
-        <View style={{flexDirection: 'row'}}>
-          {item.profilePicUrl ? (
-            <Image
-              source={{uri: item.profilePicUrl}}
-              style={{width: 40, height: 40, borderRadius: 20}}
-            />
-          ) : (
-            <Image
-              source={require('../../assets/iProfile.png')}
-              style={{width: 40, height: 40}}
-            />
-          )}
-          <View style={{marginLeft: 8}}>
-            <Text>{item.name}</Text>
-            <Text style={{color: Colors.black30}}>{item.emailId}</Text>
-          </View>
-        </View>
-
-        <View>
-          <Image
-            source={
-              selectedClients.includes(item.userId)
-                ? require('../../assets/iSelectedCheck.png')
-                : require('../../assets/iCheck.png')
-            }
-            style={{width: 16, height: 16}}
-            resizeMode="contain"
-          />
-        </View>
-      </TouchableOpacity>
-    );
   };
 
   const recommendToClients = () => {
@@ -326,32 +286,7 @@ const ViewProduct = props => {
     dispatch(recommendedAction(data));
   };
 
-  const RenderClients = () => {
-    return (
-      <View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View>
-            <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
-              Recommend to your clients
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => setShowClientModal(false)}>
-            <Image
-              source={require('../../assets/cross.webp')}
-              style={{width: 32, height: 32}}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={{marginVertical: 16}}>
-          {allClientDataRespo.map((item, index) => {
-            return <ClientList item={item} index={index} />;
-          })}
-        </View>
-        <Buttons text="recommend" onPress={recommendToClients} />
-      </View>
-    );
-  };
-
+  console.log('@ productData', JSON.stringify(productData, undefined, 2));
   const onWhatsappClick = () => {
     Linking.openURL(
       `whatsapp://send?phone=${productData.vendorWhatsappNumber}`,
@@ -496,6 +431,19 @@ const ViewProduct = props => {
               style={{color: Colors.black60, marginBottom: 16, marginTop: 8}}
               text={productData.productDescription}
             />
+            {productData.note ? (
+              <>
+                <Text>Note from the Stylist</Text>
+                <VText
+                  style={{
+                    color: Colors.black60,
+                    marginBottom: 16,
+                    marginTop: 8,
+                  }}
+                  text={productData.note}
+                />
+              </>
+            ) : null}
           </VView>
         </VView>
       </ScrollView>
@@ -535,7 +483,15 @@ const ViewProduct = props => {
         <OverlayModal
           isScrollEnabled={false}
           showModal={showClientModal}
-          component={RenderClients()}
+          component={
+            <RenderClients
+              setShowClientModal={setShowClientModal}
+              selectClient={selectClient}
+              selectedClients={selectedClients}
+              recommendToClients={recommendToClients}
+              selectedProductImg={selectedProductImg}
+            />
+          }
         />
       )}
       {loader && <Loader />}

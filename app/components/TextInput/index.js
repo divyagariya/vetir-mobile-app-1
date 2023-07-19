@@ -9,6 +9,8 @@ const Input = ({
   errorText = '',
   showIcon = false,
   iconName = '',
+  propStyle = {},
+  multiline = false,
 }) => {
   return (
     <View>
@@ -30,9 +32,10 @@ const Input = ({
       )}
       <TextInput
         placeholder={placeholder}
-        style={styles.input(errorText, showIcon, value)}
+        style={[styles.input(errorText, showIcon, value), propStyle]}
         value={value}
         onChangeText={onChangeText}
+        multiline={multiline}
       />
       <Text style={styles.errorText}>{errorText}</Text>
     </View>

@@ -88,7 +88,9 @@ const Home = props => {
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       dispatch(getHomePageData());
-      dispatch(getVideoList(1, 5));
+      if (!isStylistUser) {
+        dispatch(getVideoList(1, 5));
+      }
     });
     return unsubscribe;
   }, [props.navigation, dispatch]);
@@ -133,7 +135,9 @@ const Home = props => {
   const _onRefresh = () => {
     dispatch({type: 'REFRESH_HOME', value: true});
     dispatch(getHomePageData());
-    dispatch(getVideoList(1, 5));
+    if (!isStylistUser) {
+      dispatch(getVideoList(1, 5));
+    }
   };
 
   const runVideoVideos = item => {

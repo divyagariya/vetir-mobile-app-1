@@ -101,6 +101,7 @@ const Menu = props => {
           type: 'IS_STYLIST',
           value: false,
         });
+        dispatch({type: 'GET_VIDEO_LIST', value: []});
       }
     }
   }, [deleteAccountResponse, dispatch]);
@@ -119,6 +120,7 @@ const Menu = props => {
       type: 'IS_STYLIST',
       value: false,
     });
+    dispatch({type: 'GET_VIDEO_LIST', value: []});
   };
 
   const menuClick = item => {
