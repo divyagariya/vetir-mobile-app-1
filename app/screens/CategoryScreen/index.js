@@ -223,7 +223,7 @@ export const RenderClients = ({
           );
         })}
       </View>
-      <Buttons text="recommend" onPress={recommendToClients} />
+      <Buttons text="recommend" onPress={() => recommendToClients(note)} />
       <Buttons text="add note (optional)" isInverse onPress={addNote} />
     </View>
   );
@@ -471,7 +471,7 @@ const CategoryScreen = props => {
     setSelectedClients(selectedClients1);
   };
 
-  const recommendToClients = note => {
+  const recommendToClients = (note = '') => {
     if (!selectedClients.length) {
       Toast.show('Please select atleast one client');
       return;
@@ -480,8 +480,10 @@ const CategoryScreen = props => {
       personalStylistId: userId,
       userIds: selectedClients,
       productId: recommendedProductId,
-      note: note,
     };
+    if (note) {
+      data.note = note;
+    }
     console.log('data', data);
     setShowClientModal(false);
     dispatch(recommendedAction(data));
