@@ -18,14 +18,19 @@ export function getHomePageData() {
   };
 }
 
-export function getProductDetailsApi(productId) {
+export function getProductDetailsApi(productId, id = '') {
   return async (dispatch, getState) => {
-    const apiResponse = await NoAuthAPI(
-      `get/productDetails?productId=${productId}&userId=${
+    let url = '';
+    if (id) {
+      url = `get/productDetails?productId=${productId}&personalStylistId=${
         getState().AuthReducer.userId
-      }`,
-      'GET',
-    );
+      }&userId=${id}`;
+    } else {
+      url = `get/productDetails?productId=${productId}&userId=${
+        getState().AuthReducer.userId
+      }`;
+    }
+    const apiResponse = await NoAuthAPI(url, 'GET');
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_PRODUCT_DETAILS', value: apiResponse});
     }

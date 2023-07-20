@@ -231,7 +231,9 @@ const ClientDetails = props => {
   };
 
   const getProductDetails = productId => {
-    dispatch(getProductDetailsApi(productId));
+    dispatch(
+      getProductDetailsApi(productId, props?.route?.params?.item?.userId),
+    );
   };
 
   return (
