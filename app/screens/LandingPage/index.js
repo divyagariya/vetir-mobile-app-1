@@ -59,7 +59,7 @@ class LandingPage extends React.Component {
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       // Repleace with your webClientId generated from Firebase console
       webClientId:
-        '42976996434-853vucqpl1ec33rput6l2ij3jkbjm8m3.apps.googleusercontent.com',
+        '185367964920-kda1aa1ddf0b43c6bvg1fqqo8eflrb5f.apps.googleusercontent.com',
     });
   }
   _renderItem = ({item, index}) => {
@@ -233,7 +233,12 @@ class LandingPage extends React.Component {
   renderStylistLogin = () => {
     return (
       <View style={{marginBottom: 16, marginTop: 12}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 12,
+          }}>
           <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
             Login as a Stylist
           </Text>
@@ -253,7 +258,7 @@ class LandingPage extends React.Component {
           value={this.state.stylistEmail}
           showIcon
         />
-        <Buttons text="login" onPress={this.stylistLogin}/>
+        <Buttons text="login" onPress={this.stylistLogin} />
       </View>
     );
   };

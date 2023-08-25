@@ -14,7 +14,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B130CB92506718A8695BF458 /* libPods-Closet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70DC6D69003C7A83834CA0CB /* libPods-Closet.a */; };
 		BDEC8F2BB2E2B15F759F0084 /* libPods-Closet-ClosetTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F9D809194C15B65424A14AB /* libPods-Closet-ClosetTests.a */; };
-		D5A207F229EABE590035FEFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5A207F129EABE590035FEFE /* GoogleService-Info.plist */; };
+		D5B8A2CA2A991ABF00D8602F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5B8A2C92A991ABF00D8602F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Closet/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Closet-ClosetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Closet-ClosetTests.release.xcconfig"; path = "Target Support Files/Pods-Closet-ClosetTests/Pods-Closet-ClosetTests.release.xcconfig"; sourceTree = "<group>"; };
 		B7B20286290B0DEA00B5C99D /* Closet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Closet.entitlements; path = Closet/Closet.entitlements; sourceTree = "<group>"; };
-		D5A207F129EABE590035FEFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D5B8A2C92A991ABF00D8602F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Closet/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -89,7 +89,7 @@
 		13B07FAE1A68108700A75B9A /* Closet */ = {
 			isa = PBXGroup;
 			children = (
-				D5A207F129EABE590035FEFE /* GoogleService-Info.plist */,
+				D5B8A2C92A991ABF00D8602F /* GoogleService-Info.plist */,
 				B7B20286290B0DEA00B5C99D /* Closet.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -250,7 +250,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				D5A207F229EABE590035FEFE /* GoogleService-Info.plist in Resources */,
+				D5B8A2CA2A991ABF00D8602F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

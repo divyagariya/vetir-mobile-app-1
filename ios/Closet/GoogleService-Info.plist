@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>42976996434-853vucqpl1ec33rput6l2ij3jkbjm8m3.apps.googleusercontent.com</string>
+	<string>185367964920-kda1aa1ddf0b43c6bvg1fqqo8eflrb5f.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.42976996434-853vucqpl1ec33rput6l2ij3jkbjm8m3</string>
+	<string>com.googleusercontent.apps.185367964920-kda1aa1ddf0b43c6bvg1fqqo8eflrb5f</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDSg-yti3AswtNAFSApqtRmYTXmaSQLHxs</string>
+	<string>AIzaSyCbqrThTgK6BbwAZEdZmXoYXlsP6Y3MqhE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>42976996434</string>
+	<string>185367964920</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.app.closet.stylist</string>
 	<key>PROJECT_ID</key>
-	<string>stylist-510f3</string>
+	<string>vetir-112233</string>
 	<key>STORAGE_BUCKET</key>
-	<string>stylist-510f3.appspot.com</string>
+	<string>vetir-112233.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:42976996434:ios:1034fbdd51ed6539bdc38b</string>
+	<string>1:185367964920:ios:d4bf19861684b03d795f0d</string>
 </dict>
 </plist>

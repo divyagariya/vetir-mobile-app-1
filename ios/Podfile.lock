@@ -460,7 +460,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNDeviceInfo (10.6.0):
+  - RNDeviceInfo (10.7.0):
     - React-Core
   - RNFBApp (17.5.0):
     - Firebase/CoreOnly (= 10.7.0)
@@ -534,6 +534,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
+  - FirebaseCore
   - Flipper (= 0.125.0)
   - Flipper-Boost-iOSX (= 1.76.0.1.11)
   - Flipper-DoubleConversion (= 3.2.0.1)
@@ -831,7 +832,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNDeviceInfo: 475a4c447168d0ad4c807e48ef5e0963a0f4eb1b
+  RNDeviceInfo: 25d818c85db769cc0e7083d39efaa01a6f450df3
   RNFBApp: 0d8bf86673bbad0524d1ceac3944d71ccf48a0e4
   RNFBDynamicLinks: 8cdcc0425d0b636ff079b4220785eb1132c24228
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
@@ -848,6 +849,6 @@ SPEC CHECKSUMS:
   Yoga: 6c8252e38d65aa387daee699eacf027e055e0b31
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6e71db6452448665c0a86ed1e68584f65b93f067
+PODFILE CHECKSUM: 01d779c3ebb1372692c4918b291df4ca6d1425c9
 
 COCOAPODS: 1.12.1
