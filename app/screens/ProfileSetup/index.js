@@ -180,6 +180,7 @@ const ProfileSetup = props => {
             {state.genderData.map((item, index) => {
               return (
                 <TouchableOpacity
+                  key={index}
                   style={{
                     paddingVertical: 16,
                     paddingHorizontal: 16,

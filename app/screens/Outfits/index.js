@@ -151,6 +151,7 @@ const Outfits = props => {
         {sortingData.map((item, index) => {
           return (
             <TouchableOpacity
+              key={index}
               onPress={() => handleSortingOption(item, index)}
               style={{paddingVertical: 12, flexDirection: 'row'}}>
               <View
