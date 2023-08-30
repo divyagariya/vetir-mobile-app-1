@@ -79,8 +79,8 @@ const Home = props => {
     dynamicLinks()
       .getInitialLink()
       .then(link => {
-        if (link.url.split('/')[2]) {
-          getProductDetails(link.url.split('/')[2]);
+        if (link?.url.split('/')[2]) {
+          getProductDetails(link?.url.split('/')[2]);
         }
       });
   }, []);

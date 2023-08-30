@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'"
+    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.2.2",
@@ -25,6 +26,7 @@
     "lottie-ios": "3.4.0",
     "lottie-react-native": "^5.1.4",
     "moment": "^2.29.4",
+    "patch-package": "^8.0.0",
     "prettier": "^2.8.7",
     "react": "18.1.0",
     "react-native": "0.70.1",
