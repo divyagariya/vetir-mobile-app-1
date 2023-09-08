@@ -89,10 +89,10 @@ const SubmitOutfit = props => {
       setNameError('Please enter outfit name');
       return;
     }
-    if (!selectedSeason.length) {
-      Toast.show('Please select season');
-      return;
-    }
+    // if (!selectedSeason.length) {
+    //   Toast.show('Please select season');
+    //   return;
+    // }
     let data = {
       userId: userId,
       closetItemIds: closetIds,

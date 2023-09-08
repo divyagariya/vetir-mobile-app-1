@@ -169,8 +169,8 @@ const AddCloset = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header showBack {...props} showSwitch switchValue={switchValue} />
-      {showBgImage ? (
+      <Header showBack {...props} />
+      {/* {showBgImage ? (
         <ImageBackground
           source={require('../../assets/bg.png')}
           resizeMode="contain"
@@ -179,13 +179,13 @@ const AddCloset = props => {
             <App outfitImages={outfitImages} imageLocations={imageLocations} />
           </View>
         </ImageBackground>
-      ) : (
-        <View
-          style={{backgroundColor: Colors.grey1, overflow: 'hidden'}}
-          ref={captureViewRef}>
-          <App outfitImages={outfitImages} imageLocations={imageLocations} />
-        </View>
-      )}
+      ) : ( */}
+      <View
+        style={{backgroundColor: Colors.grey1, overflow: 'hidden'}}
+        ref={captureViewRef}>
+        <App outfitImages={outfitImages} imageLocations={imageLocations} />
+      </View>
+      {/* )} */}
       <BottomSheet
         ref={ref => (panelRef.current = ref)}
         sliderMinHeight={Dimensions.get('window').height * 0.3}
