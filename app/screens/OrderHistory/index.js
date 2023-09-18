@@ -38,6 +38,9 @@ const OrderHistory = props => {
         key={item?.id}
         imageLink={require('../../assets/orderHistoryStatic.png')}
         orderId={item?.orderId}
+        onPress={() => {
+          navigation.navigate('OrderHistoryDetails');
+        }}
         itemPrice={item?.itemPrice}
         orderDate={item?.orderDate}
         status={item?.status}

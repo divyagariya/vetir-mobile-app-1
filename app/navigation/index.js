@@ -48,6 +48,7 @@ import DashboardScreen from '../screens/DashboardScreen';
 import ProfileDetails from '../screens/ProfileDetails';
 import ItemsByCategory from '../screens/ItemsByCategory';
 import OrderHistory from '../screens/OrderHistory';
+import OrderHistoryDetails from '../screens/OrderHistoryDetails';
 import VideoList from '../screens/Videos';
 
 const Tab = createBottomTabNavigator();
@@ -256,6 +257,10 @@ function AppNavigation() {
           <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
           <Stack.Screen name="ItemsByCategory" component={ItemsByCategory} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
+          <Stack.Screen
+            name="OrderHistoryDetails"
+            component={OrderHistoryDetails}
+          />
         </>
       )}
     </Stack.Navigator>

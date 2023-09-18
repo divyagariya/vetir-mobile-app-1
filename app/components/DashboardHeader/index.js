@@ -11,7 +11,7 @@ import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 
 const DashboardHeader = props => {
-  const {headerText, navigation} = props;
+  const {headerText, navigation, showRightBtn} = props;
   return (
     <SafeAreaView style={Styles.headerContainer}>
       <TouchableOpacity
@@ -23,6 +23,17 @@ const DashboardHeader = props => {
         />
       </TouchableOpacity>
       <Text style={Styles.headerText}>{headerText}</Text>
+      {showRightBtn ? (
+        <TouchableOpacity
+          style={Styles.rightBtn}
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../assets/chat.png')}
+            style={Styles.rightIcon}
+          />
+          <Text style={Styles.rightBtnText}>{'Get Help'}</Text>
+        </TouchableOpacity>
+      ) : undefined}
     </SafeAreaView>
   );
 };
@@ -35,7 +46,7 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    height: hp(40),
+    height: hp(50),
   },
   backBtn: {
     height: hp(20),
@@ -50,6 +61,26 @@ const Styles = StyleSheet.create({
   headerText: {
     marginLeft: wp(20),
     fontWeight: 'bold',
+    width: '50%',
     fontSize: FONTS_SIZES.s3,
+  },
+  rightBtn: {
+    width: wp(110),
+    height: hp(30),
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'space-between',
+    borderColor: Colors.greyBorder,
+    borderWidth: 1,
+    borderRadius: 24,
+  },
+  rightBtnText: {
+    fontWeight: '700',
+    fontSize: FONTS_SIZES.s14,
+  },
+  rightIcon: {
+    height: wp(20),
+    width: wp(20),
   },
 });

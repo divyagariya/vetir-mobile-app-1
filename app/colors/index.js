@@ -5,6 +5,7 @@ export const Colors = {
   black30: 'rgba(33, 36, 39, 0.3)',
   greyBorder: 'rgba(33, 36, 39, 0.16)',
   red: '#CE1A1A',
+  green: '#26A411',
   grey2: '#DBDBDB',
   blue: '#217AFF',
   greyText: '#21242799',
