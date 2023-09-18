@@ -29,9 +29,42 @@ const purchaseInsightsArray = [
 ];
 
 const DashboardScreen = props => {
+  const {navigation} = props;
+
+  const onPressCard = id => {
+    switch (id) {
+      case 1:
+        props.navigation.navigate('OrderHistory', {});
+        break;
+      case 2:
+        props.navigation.navigate('ItemsByCategory', {
+          comingFromItemCat: true,
+          isColorComp: false,
+          headerText: 'Items by category',
+        });
+        break;
+      case 3:
+        props.navigation.navigate('ItemsByCategory', {
+          comingFromItemCat: false,
+          isColorComp: false,
+          headerText: 'Top Brands',
+        });
+        break;
+      case 4:
+        props.navigation.navigate('ItemsByCategory', {
+          comingFromItemCat: false,
+          isColorComp: true,
+          headerText: 'Favorite Colors',
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <ScrollView bounces={false} style={Styles.container}>
-      <DashboardHeader navigation={props.navigation} headerText={'Dashboard'} />
+      <DashboardHeader navigation={navigation} headerText={'Dashboard'} />
       <View style={Styles.profileDetailsContainer}>
         <View style={Styles.profileImageContainer}>
           <Image
@@ -56,7 +89,17 @@ const DashboardScreen = props => {
           <View style={Styles.separatorView} />
           <BoldLightText headerText={'$5678'} bodyText={'CLOSET ITEMS'} />
         </View>
-        <TouchableOpacity style={Styles.viewProfileBtn}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('ProfileDetails', {
+              userName: 'Vinay',
+              gender: 'Female',
+              email: 'paula.lee008@gmail.com',
+              phone: '+1122342434',
+              add: '264 Orphan road, Buffalo',
+            });
+          }}
+          style={Styles.viewProfileBtn}>
           <Text style={Styles.btnText}>View Profile details</Text>
         </TouchableOpacity>
       </View>
@@ -64,8 +107,9 @@ const DashboardScreen = props => {
       {purchaseInsightsArray.map(item => {
         return (
           <PurchaseInsightsCard
-            navigation={props.navigation}
+            navigation={navigation}
             title={item.title}
+            onPress={() => onPressCard(item.id)}
             icon={item.icon}
           />
         );

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {wp, hp} from '../../utils/normalise';
 import {FONTS_SIZES} from '../../fonts';
+import {Colors} from '../../colors';
 
 const DashboardHeader = props => {
   const {headerText, navigation} = props;
@@ -33,6 +34,7 @@ const Styles = StyleSheet.create({
     paddingHorizontal: wp(20),
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: Colors.white,
     height: hp(40),
   },
   backBtn: {

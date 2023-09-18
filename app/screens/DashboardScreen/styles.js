@@ -7,6 +7,7 @@ export const Styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+    backgroundColor: Colors.white,
   },
   profileDetailsContainer: {
     marginTop: hp(20),

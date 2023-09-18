@@ -4,11 +4,9 @@ import {wp, hp} from '../../utils/normalise';
 import {FONTS_SIZES} from '../../fonts';
 
 const PurchaseInsightsCard = props => {
-  const {title, icon, navigation} = props;
+  const {title, icon, onPress} = props;
   return (
-    <TouchableOpacity
-      style={Styles.cardContainer}
-      onPress={() => navigation.goBack()}>
+    <TouchableOpacity style={Styles.cardContainer} onPress={onPress}>
       <Image source={icon} style={Styles.backIcon} />
       <Text style={Styles.headerText}>{title}</Text>
       <Image
