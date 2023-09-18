@@ -44,6 +44,7 @@ import Search from '../screens/Search';
 import Clients from '../screens/Clients';
 import {getAllClients} from '../redux/actions/stylistAction';
 import ClientDetails from '../screens/ClinetDetails';
+import DashboardScreen from '../screens/DashboardScreen';
 import VideoList from '../screens/Videos';
 
 const Tab = createBottomTabNavigator();
@@ -248,6 +249,7 @@ function AppNavigation() {
           <Stack.Screen name="YourPreferences" component={YourPreferences} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="ClientDetails" component={ClientDetails} />
+          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
         </>
       )}
     </Stack.Navigator>

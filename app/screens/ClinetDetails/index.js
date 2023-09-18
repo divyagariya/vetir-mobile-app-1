@@ -24,6 +24,7 @@ import {
   recommendedProductsAction,
 } from '../../redux/actions/stylistAction';
 import {RenderClients} from '../CategoryScreen';
+import {Styles} from './styles';
 
 export const RenderItem = ({
   item,
@@ -240,7 +241,11 @@ const ClientDetails = props => {
 
   return (
     <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
         <TouchableOpacity
           style={{padding: 5}}
           onPress={() => props.navigation.goBack()}>
@@ -250,7 +255,10 @@ const ClientDetails = props => {
             style={{width: 24, height: 18}}
           />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginLeft: 12}}>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
           {clinetData.profilePicUrl ? (
             <Image
               source={{uri: clinetData.profilePicUrl}}
@@ -262,10 +270,18 @@ const ClientDetails = props => {
               style={{width: 40, height: 40}}
             />
           )}
-          <View style={{marginLeft: 8}}>
+          <View style={{marginLeft: 8, width: '68%'}}>
             <Text>{clinetData.name}</Text>
             <Text style={{color: Colors.black30}}>{clinetData.emailId}</Text>
           </View>
+          <TouchableOpacity
+            style={Styles.dashboardBtn}
+            onPress={() => props.navigation.navigate('DashboardScreen')}>
+            <Image
+              resizeMode="contain"
+              source={require('../../assets/dashboardicon.png')}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={{marginTop: 12, flex: 1}}>
