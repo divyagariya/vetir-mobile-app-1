@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {wp, hp} from '../../utils/normalise';
+import {wp, hp, normalize, spV, spH} from '../../utils/normalise';
 import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 
@@ -46,13 +46,13 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    height: hp(50),
+    height: spV(52),
   },
   backBtn: {
     height: hp(20),
     alignItems: 'center',
     justifyContent: 'center',
-    width: wp(20),
+    width: spH(20),
   },
   backIcon: {
     height: hp(24),
@@ -66,7 +66,7 @@ const Styles = StyleSheet.create({
   },
   rightBtn: {
     width: wp(110),
-    height: hp(30),
+    height: normalize(35),
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,

@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
-import {hp, wp} from '../../utils/normalise';
+import {hp, spH, spV, wp} from '../../utils/normalise';
 
 export const Styles = StyleSheet.create({
   container: {
@@ -38,8 +38,8 @@ export const Styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    width: wp(165),
-    height: hp(50),
+    width: spH(165),
+    height: spV(50),
     borderRadius: hp(8),
     borderWidth: 1,
     borderColor: Colors.greyBorder,

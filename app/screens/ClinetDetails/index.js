@@ -279,7 +279,7 @@ const ClientDetails = props => {
             onPress={() => props.navigation.navigate('DashboardScreen')}>
             <Image
               resizeMode="contain"
-              source={require('../../assets/dashboardicon.png')}
+              source={require('../../assets/dashboardicon.webp')}
             />
           </TouchableOpacity>
         </View>
