@@ -66,7 +66,7 @@ const Styles = StyleSheet.create({
   },
   rightBtn: {
     width: wp(110),
-    height: normalize(35),
+    height: normalize(37),
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,
@@ -77,7 +77,7 @@ const Styles = StyleSheet.create({
   },
   rightBtnText: {
     fontWeight: '700',
-    fontSize: FONTS_SIZES.s14,
+    fontSize: normalize(14),
   },
   rightIcon: {
     height: wp(20),
