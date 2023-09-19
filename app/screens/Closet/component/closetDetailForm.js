@@ -176,10 +176,10 @@ const ClosetDetailsFrom = props => {
       Toast.show('Please select Category from given options');
       return;
     }
-    if (!selectedSeason.length) {
-      Toast.show('Please select seasons');
-      return;
-    }
+    // if (!selectedSeason.length) {
+    //   Toast.show('Please select seasons');
+    //   return;
+    // }
     if (categorySelected && !categorySelected?.id) {
       Toast.show('Please select Category from given options');
       return;
