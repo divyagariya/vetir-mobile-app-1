@@ -28,11 +28,17 @@ const OrderHistoryDetails = props => {
       </View>
       <View style={Styles.btncontainer}>
         <TouchableOpacity style={Styles.reOrderBtn}>
-          <Image source={require('../../assets/reorder.png')} />
+          <Image
+            style={Styles.icon}
+            source={require('../../assets/reorder.webp')}
+          />
           <Text style={Styles.btnText}>{'Reorder'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={Styles.reOrderBtn}>
-          <Image source={require('../../assets/down.png')} />
+          <Image
+            style={Styles.icon}
+            source={require('../../assets/down.webp')}
+          />
           <Text style={Styles.btnText}>{'Invoice'}</Text>
         </TouchableOpacity>
       </View>

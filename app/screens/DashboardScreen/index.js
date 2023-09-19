@@ -9,22 +9,22 @@ const purchaseInsightsArray = [
   {
     id: 1,
     title: 'Order History',
-    icon: require('../../assets/orderHis.png'),
+    icon: require('../../assets/orderHis.webp'),
   },
   {
     id: 2,
     title: 'Items by category',
-    icon: require('../../assets/itemBycat.png'),
+    icon: require('../../assets/itemByCat.webp'),
   },
   {
     id: 3,
     title: 'Top brands',
-    icon: require('../../assets/topBr.png'),
+    icon: require('../../assets/topBr.webp'),
   },
   {
     id: 4,
     title: 'Favorite colors',
-    icon: require('../../assets/favCol.png'),
+    icon: require('../../assets/favCol.webp'),
   },
 ];
 
@@ -92,7 +92,7 @@ const DashboardScreen = props => {
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate('ProfileDetails', {
-              userName: 'Vinay',
+              userName: 'Paula Lee',
               gender: 'Female',
               email: 'paula.lee008@gmail.com',
               phone: '+1122342434',

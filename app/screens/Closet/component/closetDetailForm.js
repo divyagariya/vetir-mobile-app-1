@@ -1,21 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   Image,
   View,
   Text,
+  TextInput,
 } from 'react-native';
-import {
-  VView,
-  VText,
-  Buttons,
-  Header,
-  BigImage,
-  OverlayModal,
-} from '../../../components';
+import {VView, VText, Buttons, Header, BigImage} from '../../../components';
 import {Colors} from '../../../colors';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
@@ -28,21 +21,16 @@ import Toast from 'react-native-simple-toast';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ColorPicker from 'react-native-wheel-color-picker';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import {hp} from '../../../utils/normalise';
 
 const ClosetDetailsFrom = props => {
   const dispatch = useDispatch();
   const [bgImageUrl, setBgImag] = useState(
     props?.route?.params?.imgSource?.path,
   );
-  const [currentColor, setCurrentColor] = useState('');
-  const [swatchesOnly, setSwatchesOnly] = useState('');
 
-  const [swatchesLast, setSwatchesLast] = useState(true);
-  const [swatchesEnabled, setSwatchesEnabled] = useState('');
-  const [disc, setDisc] = useState('');
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [getColor, setGetColor] = useState('#fff');
-  const [showModal, setShowModal] = useState(false);
+  const [priceText, setPriceText] = useState('');
+  const [notesText, setNotesText] = useState('');
   const [selectedSeason, setSeason] = useState([]);
   const brandData = useSelector(state => state.ClosetReducer.brandData);
   const categoryData = useSelector(state => state.ClosetReducer.categoryData);
@@ -94,7 +82,7 @@ const ClosetDetailsFrom = props => {
         categorySelected: categorySelected1,
       });
     }
-  }, []);
+  }, [props.route?.params?.editClosetData, state]);
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
@@ -124,7 +112,7 @@ const ClosetDetailsFrom = props => {
         setLoading(false);
       }
     }
-  }, [editClosetResponse, dispatch]);
+  }, [editClosetResponse, dispatch, props.navigation]);
 
   useEffect(() => {
     let brandSelected1 = {};
@@ -219,10 +207,6 @@ const ClosetDetailsFrom = props => {
     dispatch(addDataInCloset(data));
   };
 
-  const onColorSelect = clr => {
-    setGetColor(clr);
-  };
-
   const editImage = () => {
     ImageCropPicker.openCropper({
       path: props?.route?.params?.editCloset
@@ -258,6 +242,14 @@ const ClosetDetailsFrom = props => {
       colorsFilter1 = colorsFilter1.filter(i => i !== colorCode);
     }
     setColors(colorsFilter1);
+  };
+
+  const onChangePriceText = value => {
+    setPriceText(value);
+  };
+
+  const onChangeNotesText = value => {
+    setNotesText(value);
   };
 
   return (
@@ -315,7 +307,25 @@ const ClosetDetailsFrom = props => {
               resPtValue={false}
               underlineColorAndroid="transparent"
             />
-
+            <VText text="Price" />
+            <TextInput
+              placeholder={'Price in which item was bought'}
+              style={styles.priceInput}
+              value={priceText || ''}
+              maxLength={8}
+              keyboardType="number-pad"
+              onChangeText={onChangePriceText}
+              autoCorrect={false}
+            />
+            <VText text="Notes" />
+            <TextInput
+              placeholder={'Add a note'}
+              style={[styles.priceInput, {height: hp(60), padding: hp(10)}]}
+              value={notesText || ''}
+              multiline
+              onChangeText={onChangeNotesText}
+              autoCorrect={true}
+            />
             <VText text="Season" />
             <VView style={{flexDirection: 'row'}}>
               {['spring', 'summer', 'autumn', 'winter'].map((item, index) => {
@@ -428,5 +438,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderColor: '#bbb',
     borderWidth: 1,
+  },
+  priceInput: {
+    padding: 16,
+    borderWidth: 1,
+    marginVertical: hp(5),
+    borderColor: '#ccc',
+    backgroundColor: '#FFFFFF',
   },
 });

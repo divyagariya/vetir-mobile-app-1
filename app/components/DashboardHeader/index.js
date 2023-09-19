@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {wp, hp} from '../../utils/normalise';
+import {wp, hp, normalize, spV, spH} from '../../utils/normalise';
 import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 
@@ -28,7 +28,7 @@ const DashboardHeader = props => {
           style={Styles.rightBtn}
           onPress={() => navigation.goBack()}>
           <Image
-            source={require('../../assets/chat.png')}
+            source={require('../../assets/chat.webp')}
             style={Styles.rightIcon}
           />
           <Text style={Styles.rightBtnText}>{'Get Help'}</Text>
@@ -46,13 +46,13 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    height: hp(50),
+    height: spV(52),
   },
   backBtn: {
     height: hp(20),
     alignItems: 'center',
     justifyContent: 'center',
-    width: wp(20),
+    width: spH(20),
   },
   backIcon: {
     height: hp(24),
@@ -61,12 +61,12 @@ const Styles = StyleSheet.create({
   headerText: {
     marginLeft: wp(20),
     fontWeight: 'bold',
-    width: '50%',
+    width: '55%',
     fontSize: FONTS_SIZES.s3,
   },
   rightBtn: {
     width: wp(110),
-    height: hp(30),
+    height: normalize(37),
     alignItems: 'center',
     flexDirection: 'row',
     padding: 10,
@@ -77,7 +77,7 @@ const Styles = StyleSheet.create({
   },
   rightBtnText: {
     fontWeight: '700',
-    fontSize: FONTS_SIZES.s14,
+    fontSize: normalize(14),
   },
   rightIcon: {
     height: wp(20),
