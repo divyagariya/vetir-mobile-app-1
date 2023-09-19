@@ -28,7 +28,7 @@ const DashboardHeader = props => {
           style={Styles.rightBtn}
           onPress={() => navigation.goBack()}>
           <Image
-            source={require('../../assets/chat.png')}
+            source={require('../../assets/chat.webp')}
             style={Styles.rightIcon}
           />
           <Text style={Styles.rightBtnText}>{'Get Help'}</Text>
@@ -61,7 +61,7 @@ const Styles = StyleSheet.create({
   headerText: {
     marginLeft: wp(20),
     fontWeight: 'bold',
-    width: '50%',
+    width: '55%',
     fontSize: FONTS_SIZES.s3,
   },
   rightBtn: {

@@ -53,4 +53,8 @@ export const Styles = StyleSheet.create({
     marginTop: 5,
     backgroundColor: Colors.white,
   },
+  icon: {
+    height: 24,
+    width: 24,
+  },
 });

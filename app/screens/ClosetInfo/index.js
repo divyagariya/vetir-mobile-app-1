@@ -222,21 +222,24 @@ const ClosetInfo = props => {
                 <Text style={styles.subitleStyle}>
                   {props.route?.params?.apiData?.brandName}
                 </Text>
-                <Text style={styles.titleStyle}>Season</Text>
-
-                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {props.route?.params?.apiData?.season.map(item => {
-                    return (
-                      <Text
-                        style={[
-                          styles.subitleStyle,
-                          {marginRight: 4, textTransform: 'capitalize'},
-                        ]}>
-                        {item}
-                      </Text>
-                    );
-                  })}
-                </View>
+                {props.route?.params?.apiData?.season.length > 0 && (
+                  <>
+                    <Text style={styles.titleStyle}>Season</Text>
+                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      {props.route?.params?.apiData?.season.map(item => {
+                        return (
+                          <Text
+                            style={[
+                              styles.subitleStyle,
+                              {marginRight: 4, textTransform: 'capitalize'},
+                            ]}>
+                            {item}
+                          </Text>
+                        );
+                      })}
+                    </View>
+                  </>
+                )}
 
                 <Text style={styles.titleStyle}>Color</Text>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>

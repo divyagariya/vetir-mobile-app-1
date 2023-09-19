@@ -11,7 +11,7 @@ const PurchaseInsightsCard = props => {
       <Text style={Styles.headerText}>{title}</Text>
       <Image
         source={require('../../assets/rightArrowDash.png')}
-        style={Styles.rightIcon}
+        style={Styles.icon}
       />
     </TouchableOpacity>
   );
@@ -28,6 +28,9 @@ const Styles = StyleSheet.create({
   },
   backIcon: {
     backgroundColor: '#F7F7F7',
+    borderRadius: 8,
+    height: 36,
+    width: 36,
   },
   headerText: {
     marginLeft: wp(20),
