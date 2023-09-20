@@ -522,6 +522,7 @@ export default props => {
           filterValue={{
             selectedCategory: [],
             setSeasonData: [],
+            setGenderData: [],
             selectedBrands: [],
             selectedSubCategory: [],
             colorsFilter: [],
@@ -552,7 +553,7 @@ export const FilterModal = ({
   onResetFilter = () => {},
   from = '',
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState('Category');
+  const [selectedFilter, setSelectedFilter] = useState('Gender');
   const categoryData = useSelector(state => state.ClosetReducer.categoryData);
   const brandData = useSelector(state => state.ClosetReducer.brandData);
   const brandData2 = useSelector(state => state.ClosetReducer.brandData2);
@@ -568,11 +569,12 @@ export const FilterModal = ({
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState([]);
   const [seasonData, setSeasonData] = useState([]);
+  const [genderData, setGenderData] = useState([]);
   const [colorsFilter, setColors] = useState([]);
   const [sizeFilter, setSizeFilter] = useState([]);
   const filterKeys =
     from !== 'closet'
-      ? ['Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
+      ? ['Gender', 'Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
       : ['Category', 'Brand', 'Season', 'Color'];
   const [priceFilterObj, setPriceObj] = useState([]);
 
@@ -605,6 +607,7 @@ export const FilterModal = ({
       setSelectedSubCategory(filterValue?.selectedSubCategory);
       setSelectedBrands(filterValue?.selectedBrands);
       setSeasonData(filterValue?.setSeasonData);
+      setGenderData(filterValue?.setGenderData);
       setColors(filterValue?.colorsFilter);
       setSizeFilter(filterValue?.sizeFilter);
     }
@@ -618,6 +621,16 @@ export const FilterModal = ({
       selectedSeason1 = selectedSeason1.filter(i => i !== item);
     }
     setSeasonData(selectedSeason1);
+  };
+
+  const setGenderDataFunction = item => {
+    let selectedGender1 = [...genderData];
+    if (!genderData.includes(item)) {
+      selectedGender1.push(item);
+    } else {
+      selectedGender1 = selectedGender1.filter(i => i !== item);
+    }
+    setGenderData(selectedGender1);
   };
 
   const setSizesData = item => {
@@ -674,6 +687,7 @@ export const FilterModal = ({
     setSelectedCategory([]);
     setSelectedSubCategory([]);
     setSeasonData([]);
+    setGenderData([]);
     setColors([]);
     setSizeFilter([]);
     setPriceFilter([
@@ -774,7 +788,45 @@ export const FilterModal = ({
             </View>
             <View style={{width: '70%'}}>
               <ScrollView>
-                {selectedFilter === 'Category' ? (
+                {selectedFilter === 'Gender' ? (
+                  <>
+                    <Text style={{marginVertical: 8, fontWeight: 'bold'}}>
+                      Gender
+                    </Text>
+                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                      {['Male', 'Female'].map((item, index) => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => setGenderDataFunction(item)}
+                            style={{
+                              borderWidth: 1,
+                              padding: 8,
+                              marginRight: 8,
+                              borderColor: Colors.greyBorder,
+                              marginBottom: 8,
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              backgroundColor: genderData.includes(item)
+                                ? '#DBDBDB'
+                                : 'transparent',
+                              alignItems: 'center',
+                            }}>
+                            <VText
+                              style={{textTransform: 'capitalize'}}
+                              text={item}
+                            />
+                            {genderData.includes(item) ? (
+                              <Image
+                                source={require('../../assets/crossIcon.png')}
+                                style={{width: 12, height: 12, marginLeft: 8}}
+                              />
+                            ) : null}
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  </>
+                ) : selectedFilter === 'Category' ? (
                   <View>
                     {categoryData.map(item => {
                       return (
@@ -1042,6 +1094,7 @@ export const FilterModal = ({
                     selectedCategory: [...new Set(selectedCategory)],
                     selectedSubCategory,
                     seasonData,
+                    genderData,
                     colorsFilter,
                     sizeFilter,
                     priceFilter: priceFilterObj,

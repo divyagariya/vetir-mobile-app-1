@@ -261,6 +261,9 @@ const CategoryScreen = props => {
   const [selectedSortIndex, setSelectedSortIndex] = useState(null);
   const dispatch = useDispatch();
   const [productList, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
   const filteredProducts = useSelector(
     state => state.HomeReducer.filteredProducts,
   );
@@ -345,7 +348,7 @@ const CategoryScreen = props => {
       setFilterParametrs(data);
       dispatch(getFilteredProducts(data));
     }
-  }, []);
+  }, [dispatch, props.route.params.data]);
 
   useEffect(() => {
     if (Object.keys(filteredProducts).length) {
@@ -353,7 +356,7 @@ const CategoryScreen = props => {
       setProducts(filteredProducts?.productDetails);
       dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
-  }, [filteredProducts]);
+  }, [dispatch, filteredProducts]);
 
   const getProductDetails = productId => {
     dispatch(getProductDetailsApi(productId));
@@ -404,7 +407,6 @@ const CategoryScreen = props => {
   };
 
   const setFilter = data => {
-    console.log('data.selectedBrands', data.selectedBrands);
     setModal(false);
     setLoader(true);
     let data1 = {};
@@ -425,6 +427,9 @@ const CategoryScreen = props => {
     }
     if (data.sizeFilter.length) {
       data1.size = data.sizeFilter;
+    }
+    if (data.genderData.length) {
+      data1.gender = data.genderData;
     }
     let priceFilters = [];
     if (data.priceFilter.length > 0) {
