@@ -245,7 +245,13 @@ const ClosetDetailsFrom = props => {
   };
 
   const onChangePriceText = value => {
-    setPriceText(value);
+    if (priceText.length === 0) {
+      setPriceText(`$${value}`);
+    } else if (value.length === 1 && value[0] === '$') {
+      setPriceText('');
+    } else {
+      setPriceText(value);
+    }
   };
 
   const onChangeNotesText = value => {
@@ -313,7 +319,7 @@ const ClosetDetailsFrom = props => {
               style={styles.priceInput}
               value={priceText || ''}
               maxLength={8}
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               onChangeText={onChangePriceText}
               autoCorrect={false}
             />
