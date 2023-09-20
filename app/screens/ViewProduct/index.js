@@ -183,7 +183,9 @@ const ViewProduct = props => {
           },
         });
         await this.sleep(800);
-      } else Linking.openURL(url);
+      } else {
+        Linking.openURL(url);
+      }
     } catch (error) {
       // Alert.alert(error.message);
     }
@@ -209,7 +211,6 @@ const ViewProduct = props => {
       isImageBase64: false,
       productId: productData.productId,
     };
-    console.log('data', JSON.stringify(data, undefined, 2));
     dispatch(addDataInCloset(data));
   };
 
@@ -230,7 +231,6 @@ const ViewProduct = props => {
       },
     });
 
-    console.log('link', link);
     const message = 'Please check this out.';
 
     Share.open({
@@ -285,12 +285,10 @@ const ViewProduct = props => {
       data.note = note;
     }
 
-    console.log('data', data);
     setShowClientModal(false);
     dispatch(recommendedAction(data));
   };
 
-  console.log('@ productData', JSON.stringify(productData, undefined, 2));
   const onWhatsappClick = () => {
     Linking.openURL(
       `whatsapp://send?phone=${productData.vendorWhatsappNumber}`,
