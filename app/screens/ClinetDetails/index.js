@@ -204,7 +204,6 @@ const ClientDetails = props => {
     if (note) {
       data.note = note;
     }
-    console.log('data', data);
     setShowClientModal(false);
     dispatch(recommendedAction(data));
   };

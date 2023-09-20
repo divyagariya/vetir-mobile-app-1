@@ -594,13 +594,6 @@ export const FilterModal = ({
     setPriceFilter(priceFilter1);
   };
 
-  console.log(
-    '@@ getColorsResponse',
-    JSON.stringify(getColorsResponse, undefined, 2),
-  );
-
-  console.log('@@ colorFilter', JSON.stringify(colorsFilter, undefined, 2));
-
   useEffect(() => {
     if (Object.keys(filterValue).length) {
       setSelectedCategory(filterValue?.selectedCategory);

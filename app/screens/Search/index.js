@@ -56,6 +56,8 @@ const Search = props => {
   const [searchKey, setSearchKey] = useState('');
   const dispatch = useDispatch();
   const [productList, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalDataCount, setTotalDataCount] = useState(0);
   const filteredProducts = useSelector(
     state => state.HomeReducer.filteredProducts,
   );
@@ -83,7 +85,7 @@ const Search = props => {
         dispatch(getClosetData());
       }
     }
-  }, [deleteClosetResponse, dispatch]);
+  }, [deleteClosetResponse, dispatch, filterParams]);
 
   const showFilterFunction = value => {
     setModal(true);
@@ -119,10 +121,21 @@ const Search = props => {
 
   useEffect(() => {
     if (Object.keys(filteredProducts).length) {
-      setProducts(filteredProducts?.productDetails);
       setLoader(false);
+      setTotalDataCount(filteredProducts?.total);
+      setProducts([...productList, ...filteredProducts?.productDetails]);
+      dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
-  }, [filteredProducts]);
+  }, [dispatch, filteredProducts, productList]);
+
+  // useEffect(() => {
+  //   if (Object.keys(filteredProducts).length) {
+  //     setProducts(filteredProducts?.productDetails);
+  //     // setProducts([...productList, ...filteredProducts?.productDetails]);
+  //     setLoader(false);
+  //     setTotalDataCount(filteredProducts?.total);
+  //   }
+  // }, [filteredProducts, productList]);
 
   useEffect(() => {
     if (Object.keys(productDetailResponse).length) {
@@ -139,6 +152,7 @@ const Search = props => {
       dispatch({type: 'GET_SEARCH_RESULT', value: []});
       const data = {
         key: searchKey,
+        page: currentPage,
       };
       setFilterParametrs(data);
       dispatch(getFilteredProducts(data));
@@ -215,7 +229,19 @@ const Search = props => {
     data1.key = searchKey;
     setFilterParametrs(data);
     dispatch(getFilteredProducts(data1));
-    console.log('@@ data', JSON.stringify(data1, undefined, 2));
+  };
+
+  const loadMoreData = () => {
+    setLoader(true);
+    const nextPage = currentPage + 1;
+    const data = {
+      key: searchKey,
+      page: nextPage,
+    };
+    console.log('loadMoreData', data);
+    // setFilterParametrs(data);
+    dispatch(getFilteredProducts(data));
+    setCurrentPage(nextPage);
   };
 
   return (
@@ -304,7 +330,7 @@ const Search = props => {
               style={{
                 padding: 16,
                 color: Colors.black60,
-              }}>{`${productList?.length} results found`}</Text>
+              }}>{`${totalDataCount} results found`}</Text>
           )}
           {productList.length > 0 ? (
             <FlatList
@@ -325,6 +351,13 @@ const Search = props => {
                 paddingVertical: 16,
                 paddingHorizontal: 8,
               }}
+              // onEndReached={loadMoreData} // Triggered when the user reaches the end
+              // onEndReachedThreshold={0.01}
+              // ListFooterComponent={() =>
+              //   showLoader && (
+              //     <ActivityIndicator size="small" color={Colors.greyText} />
+              //   )
+              // }
             />
           ) : showLoader ? (
             <ActivityIndicator />
