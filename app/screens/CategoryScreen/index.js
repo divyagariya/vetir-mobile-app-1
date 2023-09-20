@@ -262,7 +262,7 @@ const CategoryScreen = props => {
   const dispatch = useDispatch();
   const [productList, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const [totalDataCount, setTotalDataCount] = useState(0);
 
   const filteredProducts = useSelector(
     state => state.HomeReducer.filteredProducts,
@@ -344,19 +344,21 @@ const CategoryScreen = props => {
     if (props.route.params.data) {
       const data = {
         optionId: props.route.params.data.optionId,
+        page: currentPage,
       };
       setFilterParametrs(data);
       dispatch(getFilteredProducts(data));
     }
-  }, [dispatch, props.route.params.data]);
+  }, [currentPage, dispatch, props.route.params.data]);
 
   useEffect(() => {
     if (Object.keys(filteredProducts).length) {
       setLoader(false);
-      setProducts(filteredProducts?.productDetails);
+      setTotalDataCount(filteredProducts?.total);
+      setProducts([...productList, ...filteredProducts?.productDetails]);
       dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
-  }, [dispatch, filteredProducts]);
+  }, [dispatch, filteredProducts, productList]);
 
   const getProductDetails = productId => {
     dispatch(getProductDetailsApi(productId));
@@ -504,6 +506,19 @@ const CategoryScreen = props => {
     dispatch(dislikeProductAction(data));
   };
 
+  const loadMoreData = () => {
+    setLoader(true);
+    const nextPage = currentPage + 1;
+    const data = {
+      optionId: props.route.params.data.optionId,
+      page: nextPage,
+    };
+    console.log('loadMoreData', data);
+    // setFilterParametrs(data);
+    dispatch(getFilteredProducts(data));
+    setCurrentPage(nextPage);
+  };
+
   return (
     <VView style={{backgroundColor: 'white', flex: 1, paddingTop: 16}}>
       <Header
@@ -520,7 +535,7 @@ const CategoryScreen = props => {
           style={{
             paddingHorizontal: 16,
             color: Colors.black60,
-          }}>{`${productList?.length} results found`}</Text>
+          }}>{`${totalDataCount} results found`}</Text>
       )}
       {productList.length > 0 ? (
         <FlatList
@@ -543,6 +558,13 @@ const CategoryScreen = props => {
             paddingVertical: 16,
             paddingHorizontal: 8,
           }}
+          onEndReached={loadMoreData} // Triggered when the user reaches the end
+          onEndReachedThreshold={0.01}
+          ListFooterComponent={() =>
+            showLoader && (
+              <ActivityIndicator size="small" color={Colors.greyText} />
+            )
+          }
         />
       ) : showLoader ? (
         <ActivityIndicator />
