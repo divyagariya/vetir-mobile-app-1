@@ -370,15 +370,24 @@ const ViewProduct = props => {
         </VView>
         <VView style={{padding: 16}}>
           <VView>
+            <Text
+              numberOfLines={1}
+              style={{
+                fontSize: FONTS_SIZES.s4,
+                fontWeight: '600',
+                marginBottom: 4,
+              }}>
+              {productData.brandName}
+            </Text>
             <VText
-              style={{fontSize: FONTS_SIZES.s4, fontWeight: '700'}}
+              style={{fontSize: FONTS_SIZES.s4, fontWeight: '400'}}
               text={productData?.productName}
             />
             <VText
               text={'$' + productData?.productPrice}
               style={{
                 fontSize: FONTS_SIZES.s4,
-                fontWeight: '700',
+                fontWeight: '400',
                 paddingVertical: 8,
                 marginBottom: 8,
               }}

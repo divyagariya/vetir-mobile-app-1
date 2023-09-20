@@ -113,6 +113,16 @@ export default ({
               fontWeight: '600',
               marginBottom: 4,
             }}>
+            {item.brandName}
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={{
+              fontSize: FONTS_SIZES.s4,
+              fontWeight: '400',
+
+              marginBottom: 4,
+            }}>
             {item.productName}
           </Text>
 
