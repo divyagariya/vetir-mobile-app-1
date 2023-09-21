@@ -149,7 +149,11 @@ function TabData() {
       backBehavior="order">
       <Tab.Screen name="Shop" component={ShopStack} />
       {isStylistUser ? (
-        <Tab.Screen name="Clients" component={Clients} />
+        <>
+          <Tab.Screen name="Clients" component={Clients} />
+          <Tab.Screen name="Closet" component={ClosetStack} />
+          <Tab.Screen name="Outfits" component={OutfitStack} />
+        </>
       ) : (
         <>
           <Tab.Screen name="Closet" component={ClosetStack} />
