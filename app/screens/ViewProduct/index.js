@@ -417,16 +417,21 @@ const ViewProduct = props => {
             </Text>
             <Text style={styles.titleStyle}>Brand</Text>
             <Text style={styles.subitleStyle}>{productData.brandName}</Text>
-            <Text style={styles.titleStyle}>Season</Text>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-              {productData.seasons.map(item => {
-                return (
-                  <Text style={[styles.subitleStyle, {marginRight: 4}]}>
-                    {item}
-                  </Text>
-                );
-              })}
-            </View>
+            {productData.seasons && productData.seasons.length > 0 && (
+              <>
+                <Text style={styles.titleStyle}>Season</Text>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  {productData.seasons.map(item => {
+                    return (
+                      <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                        {item}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </>
+            )}
+
             <Text style={styles.titleStyle}>Size</Text>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {productData.productSizes.map(item => {
