@@ -1,8 +1,8 @@
 import Home from '../screens/Home';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, AppState} from 'react-native';
+import {Image, AppState, Text} from 'react-native';
 import React, {useEffect} from 'react';
-import {VText, VView} from '../components';
+import {VView} from '../components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ViewProduct from '../screens/ViewProduct';
 import CategoryScreen from '../screens/CategoryScreen';
@@ -50,23 +50,20 @@ import ItemsByCategory from '../screens/ItemsByCategory';
 import OrderHistory from '../screens/OrderHistory';
 import OrderHistoryDetails from '../screens/OrderHistoryDetails';
 import VideoList from '../screens/Videos';
+import {Colors} from '../colors';
+import {normalize} from '../utils/normalise';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const renderTab = (route, imgSource) => {
+const renderTab = (route, imgSource, focused) => {
   return (
-    <VView
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
+    <VView>
       <Image
         source={imgSource}
-        style={{width: 24, height: 24}}
+        style={{width: normalize(20), height: normalize(20)}}
         resizeMode="contain"
       />
-      <VText text={route.name} style={{paddingLeft: 8}} />
     </VView>
   );
 };
@@ -141,9 +138,20 @@ function TabData() {
               : require('../assets/selectedClientIcon.png');
           }
 
-          return renderTab(route, imgSource);
+          return renderTab(route, imgSource, focused);
         },
-        tabBarShowLabel: false,
+        tabBarLabel: ({focused}) => {
+          return (
+            <Text
+              style={{
+                fontSize: normalize(13),
+                fontWeight: '400',
+                color: focused ? 'black' : Colors.greyText,
+              }}>
+              {route.name}
+            </Text>
+          );
+        },
         headerShown: false,
       })}
       backBehavior="order">
