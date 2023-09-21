@@ -11,12 +11,12 @@ import DeviceInfo from 'react-native-device-info';
 import {Colors} from './app/colors';
 import Lottie from 'lottie-react-native';
 import * as Animatable from 'react-native-animatable'; // Import Animatable from react-native-animatable
+import {auth} from './app/firebase';
 
 let isNoch = DeviceInfo.hasNotch();
 
 const App = () => {
   const [showLottie, setLottie] = useState(true);
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);

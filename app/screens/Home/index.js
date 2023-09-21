@@ -25,12 +25,21 @@ import {
 } from '../../redux/actions/homeActions';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 import Videos from '../Videos/components/Videos';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import {auth} from '../../firebase';
 
 const Home = props => {
   const [videoList] = [1, 2, 3, 4, 5, 6, 7, 8];
   const dispatch = useDispatch();
   const [videoPlayer, setVideoPlayer] = useState(false);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const userEmail = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.emailId,
+  );
+  console.log('userEmail', userEmail);
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
   const [searchIcon, showSearchIcon] = useState(false);

@@ -75,7 +75,7 @@ const Clients = props => {
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
-      <Header title="Clients" showMenu {...props} />
+      <Header title="Clients" showMenu showChat {...props} />
       <View style={{flex: 1, padding: 16}}>
         <ScrollView
           showsVerticalScrollIndicator={false}

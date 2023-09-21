@@ -13,6 +13,7 @@ const Header = ({
   showFilter = false,
   showBack = false,
   showMenu = false,
+  showChat = false,
   showSwitch = false,
   switchValue = () => {},
   showVerticalMenu = false,
@@ -173,6 +174,17 @@ const Header = ({
             <Image
               resizeMode="contain"
               source={switchIcon ? Images.onIcon : Images.offIcon}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        )}
+        {showChat && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ChatScreen')}
+            style={{paddingLeft: 10}}>
+            <Image
+              resizeMode="contain"
+              source={Images.chaticon}
               style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
