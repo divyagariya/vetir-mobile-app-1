@@ -61,7 +61,7 @@ const renderTab = (route, imgSource, focused) => {
     <VView>
       <Image
         source={imgSource}
-        style={{width: normalize(20), height: normalize(20)}}
+        style={{width: 24, height: 24}}
         resizeMode="contain"
       />
     </VView>
@@ -144,14 +144,17 @@ function TabData() {
           return (
             <Text
               style={{
-                fontSize: normalize(13),
+                fontSize: 9,
                 fontWeight: '400',
-                color: focused ? 'black' : Colors.greyText,
+                textTransform: 'uppercase',
+                letterSpacing: 1,
+                color: Colors.black,
               }}>
               {route.name}
             </Text>
           );
         },
+
         headerShown: false,
       })}
       backBehavior="order">

@@ -547,11 +547,15 @@ const CategoryScreen = props => {
         {...props}
       />
       {productList?.length > 0 && (
-        <Text
-          style={{
-            paddingHorizontal: 16,
-            color: Colors.black60,
-          }}>{`${totalDataCount} results found`}</Text>
+        <View style={{backgroundColor: 'white', paddingBottom: 8}}>
+          <Text
+            style={{
+              paddingHorizontal: 16,
+              color: Colors.black60,
+            }}>
+            {`${totalDataCount} results found`}
+          </Text>
+        </View>
       )}
       {productList.length > 0 ? (
         <FlatList

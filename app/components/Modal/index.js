@@ -14,8 +14,8 @@ const OverlayModal = ({
       <Modal
         animationIn="fadeInUpBig"
         avoidKeyboard
-        animationInTiming={400}
-        animationOutTiming={900}
+        animationInTiming={200}
+        animationOutTiming={600}
         isVisible={showModal}
         style={{
           margin: 0,
