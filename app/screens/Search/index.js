@@ -25,6 +25,7 @@ import {
 } from '../../redux/actions/homeActions';
 import CategoryCard from '../CategoryScreen/components/categoryCard';
 import {FilterModal} from '../Closet';
+import {debounce} from '../../utils/common';
 
 const Search = props => {
   const sortingData = [
@@ -57,6 +58,8 @@ const Search = props => {
   const dispatch = useDispatch();
   const [productList, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [totalDataCount, setTotalDataCount] = useState(0);
   const filteredProducts = useSelector(
     state => state.HomeReducer.filteredProducts,
@@ -123,6 +126,7 @@ const Search = props => {
     if (Object.keys(filteredProducts).length) {
       setLoader(false);
       setTotalDataCount(filteredProducts?.total);
+      setTotalPageCount(filteredProducts?.totalPage);
       setProducts([...productList, ...filteredProducts?.productDetails]);
       dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
@@ -231,18 +235,34 @@ const Search = props => {
     dispatch(getFilteredProducts(data1));
   };
 
-  const loadMoreData = () => {
-    setLoader(true);
-    const nextPage = currentPage + 1;
-    const data = {
-      key: searchKey,
-      page: nextPage,
-    };
-    console.log('loadMoreData', data);
-    // setFilterParametrs(data);
-    dispatch(getFilteredProducts(data));
-    setCurrentPage(nextPage);
+  // Your loadMoreData function that fetches more data
+  const loadMoreData = async () => {
+    if (showLoader) {
+      return; // Return if already loading more data to prevent multiple requests
+    }
+
+    try {
+      if (currentPage !== totalPageCount) {
+        setLoader(true);
+        const nextPage = currentPage + 1;
+        const data = {
+          key: searchKey,
+          page: nextPage,
+        };
+        // setFilterParametrs(data);
+        dispatch(getFilteredProducts(data));
+        setCurrentPage(nextPage);
+        setLoader(false);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('Error loading more data:', error);
+      setLoader(false);
+    }
   };
+
+  // Debounce the loadMoreData function with a 500ms delay
+  const debouncedLoadMoreData = debounce(loadMoreData, 200);
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -351,13 +371,13 @@ const Search = props => {
                 paddingVertical: 16,
                 paddingHorizontal: 8,
               }}
-              // onEndReached={loadMoreData} // Triggered when the user reaches the end
-              // onEndReachedThreshold={0.01}
-              // ListFooterComponent={() =>
-              //   showLoader && (
-              //     <ActivityIndicator size="small" color={Colors.greyText} />
-              //   )
-              // }
+              onEndReached={debouncedLoadMoreData} // Triggered when the user reaches the end
+              onEndReachedThreshold={0.01}
+              ListFooterComponent={() =>
+                showLoader && (
+                  <ActivityIndicator size="small" color={Colors.greyText} />
+                )
+              }
             />
           ) : showLoader ? (
             <ActivityIndicator />
