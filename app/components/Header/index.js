@@ -33,6 +33,7 @@ const Header = ({
   recommendClients = () => {},
   showWhatsapp = false,
   onWhatsappClick = () => {},
+  onPressChat,
 }) => {
   const [switchIcon, setSwitch] = useState(false);
   const dispatch = useDispatch();
@@ -179,9 +180,7 @@ const Header = ({
           </TouchableOpacity>
         )}
         {showChat && (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ChatScreen')}
-            style={{paddingLeft: 10}}>
+          <TouchableOpacity onPress={onPressChat} style={{paddingLeft: 10}}>
             <Image
               resizeMode="contain"
               source={Images.chaticon}

@@ -174,6 +174,23 @@ const Home = props => {
               />
             </TouchableOpacity>
           )}
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('ChatScreen', {
+                receiverDetails: {
+                  emailId: 'rvinay032@gmail.com.com',
+                  name: 'Vinay',
+                  userId: 'OYeYAPDmXRhnjC0OqrEGoUqt9cV2',
+                },
+              });
+            }}>
+            <Image
+              source={require('../../assets/menu.webp')}
+              style={styles.menuIcons}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => props.navigation.navigate('Menu')}>
             <Image
               source={require('../../assets/menu.webp')}

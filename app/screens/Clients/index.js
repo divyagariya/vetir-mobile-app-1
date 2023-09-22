@@ -75,7 +75,21 @@ const Clients = props => {
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
-      <Header title="Clients" showMenu showChat {...props} />
+      <Header
+        onPressChat={() => {
+          props.navigation.navigate('ChatScreen', {
+            receiverDetails: {
+              emailId: 'vetest@yopmail.com',
+              name: 'Test',
+              userId: '0d8688d4-e3f1-4559-82e3-589233997dcf',
+            },
+          });
+        }}
+        title="Clients"
+        showMenu
+        showChat
+        {...props}
+      />
       <View style={{flex: 1, padding: 16}}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -93,6 +107,7 @@ const Clients = props => {
                 onPress={item => {
                   dispatch({type: 'CLOSET_DATA', value: []});
                   dispatch({type: 'GET_OUTFIT', value: []});
+                  console.log('item', item);
                   props.navigation.navigate('ClientDetails', {
                     item,
                   });

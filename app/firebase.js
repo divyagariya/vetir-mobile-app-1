@@ -2,7 +2,7 @@ import {initializeApp, getApp} from 'firebase/app';
 import {initializeFirestore} from 'firebase/firestore';
 import {getAuth} from 'firebase/auth';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyA0mcU5B7BIJ4_XNfv5Gc7Q8ra7TULZmoU',
   authDomain: 'vetir-112233.firebaseapp.com',
   projectId: 'vetir-112233',
