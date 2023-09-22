@@ -160,7 +160,7 @@ const Home = props => {
               style={{paddingRight: 16}}
               onPress={() => props.navigation.navigate('Search')}>
               <Image
-                source={require('../../assets/search_top.webp')}
+                source={require('../../assets/search.webp')}
                 style={styles.menuIcons}
               />
             </TouchableOpacity>
@@ -186,7 +186,7 @@ const Home = props => {
           onPress={() => props.navigation.navigate('Search')}>
           <View style={{paddingHorizontal: 16}}>
             <Image
-              source={require('../../assets/search.webp')}
+              source={require('../../assets/search_small.webp')}
               style={styles.search}
             />
           </View>
@@ -347,26 +347,31 @@ const styles = StyleSheet.create({
   conatiner: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: 16,
   },
   headingContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
     marginTop: 16,
+    backgroundColor: 'white',
   },
   headingText: {
-    fontSize: FONTS_SIZES.s1,
-    fontWeight: '700',
+    fontSize: FONTS_SIZES.s3,
+    fontWeight: '900',
     color: '#212427',
+    textTransform: 'uppercase',
   },
   menuIcons: {
-    height: 32,
-    width: 32,
+    height: 24,
+    width: 24,
   },
   search: {
     height: 24,
     width: 24,
+    color: Colors.black60,
   },
   inputContainer: {
     backgroundColor: Colors.grey1,

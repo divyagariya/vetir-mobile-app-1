@@ -374,8 +374,8 @@ const ViewProduct = props => {
               numberOfLines={1}
               style={{
                 fontSize: FONTS_SIZES.s4,
-                fontWeight: '600',
-                marginBottom: 4,
+                fontWeight: '700',
+                marginBottom: 8,
               }}>
               {productData.brandName}
             </Text>
@@ -480,7 +480,7 @@ const ViewProduct = props => {
           shadowOpacity: 0.16,
         }}>
         <Buttons text="Buy Now" onPress={openLink} />
-        {!isStylistUser && (
+        {isStylistUser && (
           <Buttons
             isInverse
             imageIcon={

@@ -1134,7 +1134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     position: 'absolute',
-    bottom: 16,
+    bottom: 8,
   },
   footerImage: {
     height: 44,

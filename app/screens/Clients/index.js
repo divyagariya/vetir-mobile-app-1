@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Header} from '../../components';
 import {getAllClients} from '../../redux/actions/stylistAction';
+import {FONTS_SIZES} from '../../fonts';
 
 const ClientList = ({item, index, onPress}) => {
   return (
@@ -22,7 +23,7 @@ const ClientList = ({item, index, onPress}) => {
         marginBottom: 16,
       }}
       onPress={() => onPress(item)}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
         {item.profilePicUrl ? (
           <Image
             source={{uri: item.profilePicUrl}}
@@ -34,16 +35,20 @@ const ClientList = ({item, index, onPress}) => {
             style={{width: 40, height: 40}}
           />
         )}
-        <View style={{marginLeft: 8}}>
-          <Text>{item.name}</Text>
-          <Text style={{color: Colors.black30}}>{item.emailId}</Text>
+        <View style={{marginLeft: 16}}>
+          <Text style={{marginBottom: 4, fontSize: FONTS_SIZES.s4}}>
+            {item.name}
+          </Text>
+          <Text style={{color: Colors.black60, fontSize: FONTS_SIZES.s4}}>
+            {item.emailId}
+          </Text>
         </View>
       </View>
 
       <View>
         <Image
-          source={require('../../assets/rightArrow.png')}
-          style={{width: 16, height: 16}}
+          source={require('../../assets/rightArrow.webp')}
+          style={{width: 12, height: 12}}
           resizeMode="contain"
         />
       </View>

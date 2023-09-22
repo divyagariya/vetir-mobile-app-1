@@ -1,6 +1,7 @@
 export const Colors = {
   grey1: '#F7F7F7',
   white: '#FFFFFF',
+  black: '#212427',
   black60: 'rgba(33, 36, 39, 0.6)',
   black30: 'rgba(33, 36, 39, 0.3)',
   greyBorder: 'rgba(33, 36, 39, 0.16)',
