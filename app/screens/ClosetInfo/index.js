@@ -222,7 +222,7 @@ const ClosetInfo = props => {
                 <Text style={styles.subitleStyle}>
                   {props.route?.params?.apiData?.brandName}
                 </Text>
-                {props.route?.params?.apiData?.season.length > 0 && (
+                {props.route?.params?.apiData?.season?.length > 0 && (
                   <>
                     <Text style={styles.titleStyle}>Season</Text>
                     <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -243,7 +243,7 @@ const ClosetInfo = props => {
 
                 <Text style={styles.titleStyle}>Color</Text>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                  {props.route?.params?.apiData?.colorCode.map(item => {
+                  {props.route?.params?.apiData?.colorCode?.map(item => {
                     return (
                       <View
                         style={{
