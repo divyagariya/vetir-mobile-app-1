@@ -64,7 +64,9 @@ const Header = ({
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 16,
+        paddingTop: 16,
+        paddingBottom: 8,
+        paddingHorizontal: 16,
         backgroundColor: 'white',
         alignItems: 'center',
       }}>
@@ -85,9 +87,10 @@ const Header = ({
             }
             style={{
               paddingLeft: !showBack || 16,
-              fontSize: FONTS_SIZES.s2,
-              fontWeight: '700',
+              fontSize: FONTS_SIZES.s3,
+              fontWeight: '900',
               color: '#212427',
+              textTransform: 'uppercase',
               // width: 200,
             }}
           />
@@ -125,7 +128,7 @@ const Header = ({
           <TouchableOpacity style={{marginRight: 16}} onPress={onWhatsappClick}>
             <Image
               resizeMode="contain"
-              source={require('../../assets/iWhatsapp.png')}
+              source={require('../../assets/iWhatsapp.webp')}
               style={{width: 24, height: 24}}
             />
           </TouchableOpacity>
@@ -136,7 +139,7 @@ const Header = ({
               <Image
                 resizeMode="contain"
                 source={require('../../assets/iRecommend.webp')}
-                style={{width: 32, height: 32}}
+                style={{width: 24, height: 24}}
               />
             </TouchableOpacity>
           </VView>
@@ -157,25 +160,25 @@ const Header = ({
             <Image
               resizeMode="stretch"
               source={require('../../assets/iFilter.webp')}
-              style={{width: 32, height: 32}}
+              style={{width: 24, height: 24}}
             />
           </TouchableOpacity>
         )}
         {showSort && (
-          <TouchableOpacity onPress={sortClicked} style={{paddingLeft: 8}}>
+          <TouchableOpacity onPress={sortClicked} style={{paddingLeft: 12}}>
             <Image
               resizeMode="contain"
-              source={require('../../assets/sort.png')}
-              style={{width: 32, height: 32}}
+              source={require('../../assets/sort.webp')}
+              style={{width: 24, height: 24}}
             />
           </TouchableOpacity>
         )}
         {showSwitch && (
-          <TouchableOpacity style={{paddingLeft: 8}} onPress={toggleSwitch}>
+          <TouchableOpacity style={{paddingLeft: 12}} onPress={toggleSwitch}>
             <Image
               resizeMode="contain"
               source={switchIcon ? Images.onIcon : Images.offIcon}
-              style={{width: 32, height: 32}}
+              style={{width: 33, height: 24}}
             />
           </TouchableOpacity>
         )}
@@ -195,7 +198,7 @@ const Header = ({
             <Image
               resizeMode="contain"
               source={Images.menuBar}
-              style={{width: 32, height: 32}}
+              style={{width: 24, height: 24}}
             />
           </TouchableOpacity>
         )}

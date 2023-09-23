@@ -46,18 +46,43 @@ export default ({
             marginTop: 8,
           }}>
           {isStylistUser ? (
-            <TouchableOpacity
-              onPress={recommentToClient}
-              style={{marginVertical: 8, marginRight: 8}}>
-              <Image
-                source={require('../../../assets/iRecommend.webp')}
-                style={{
-                  height: 24,
-                  width: 24,
-                }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={item.addedToCloset ? deletFromClost : addToCloset}
+                style={{marginVertical: 8, marginRight: 8}}>
+                {item.addedToCloset ? (
+                  <Image
+                    source={require('../../../assets/addedCloset.webp')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Image
+                    source={require('../../../assets/iAdd.webp')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
+                    resizeMode="contain"
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={recommentToClient}
+                style={{marginVertical: 8, marginRight: 8}}>
+                <Image
+                  source={require('../../../assets/iRecommend.webp')}
+                  style={{
+                    height: 24,
+                    width: 24,
+                  }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            </View>
           ) : (
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -110,7 +135,7 @@ export default ({
             numberOfLines={1}
             style={{
               fontSize: FONTS_SIZES.s4,
-              fontWeight: '600',
+              fontWeight: '700',
               marginBottom: 4,
             }}>
             {item.brandName}

@@ -192,7 +192,9 @@ const Outfits = props => {
           />
           <View
             style={{
-              padding: 16,
+              paddingTop: 16,
+              paddingBottom: 8,
+              paddingHorizontal: 16,
               backgroundColor: Colors.white,
             }}>
             <Buttons

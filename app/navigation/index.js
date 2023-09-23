@@ -1,8 +1,8 @@
 import Home from '../screens/Home';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, AppState} from 'react-native';
+import {Image, AppState, Text} from 'react-native';
 import React, {useEffect} from 'react';
-import {VText, VView} from '../components';
+import {VView} from '../components';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ViewProduct from '../screens/ViewProduct';
 import CategoryScreen from '../screens/CategoryScreen';
@@ -52,23 +52,20 @@ import OrderHistoryDetails from '../screens/OrderHistoryDetails';
 import ChatScreen from '../screens/ChatScreen';
 
 import VideoList from '../screens/Videos';
+import {Colors} from '../colors';
+import {normalize} from '../utils/normalise';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const renderTab = (route, imgSource) => {
+const renderTab = (route, imgSource, focused) => {
   return (
-    <VView
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}>
+    <VView>
       <Image
         source={imgSource}
         style={{width: 24, height: 24}}
         resizeMode="contain"
       />
-      <VText text={route.name} style={{paddingLeft: 8}} />
     </VView>
   );
 };
@@ -143,15 +140,33 @@ function TabData() {
               : require('../assets/selectedClientIcon.png');
           }
 
-          return renderTab(route, imgSource);
+          return renderTab(route, imgSource, focused);
         },
-        tabBarShowLabel: false,
+        tabBarLabel: ({focused}) => {
+          return (
+            <Text
+              style={{
+                fontSize: 9,
+                fontWeight: '400',
+                textTransform: 'uppercase',
+                letterSpacing: 1,
+                color: Colors.black,
+              }}>
+              {route.name}
+            </Text>
+          );
+        },
+
         headerShown: false,
       })}
       backBehavior="order">
       <Tab.Screen name="Shop" component={ShopStack} />
       {isStylistUser ? (
-        <Tab.Screen name="Clients" component={Clients} />
+        <>
+          <Tab.Screen name="Clients" component={Clients} />
+          <Tab.Screen name="Closet" component={ClosetStack} />
+          <Tab.Screen name="Outfits" component={OutfitStack} />
+        </>
       ) : (
         <>
           <Tab.Screen name="Closet" component={ClosetStack} />

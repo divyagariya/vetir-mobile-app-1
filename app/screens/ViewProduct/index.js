@@ -374,8 +374,8 @@ const ViewProduct = props => {
               numberOfLines={1}
               style={{
                 fontSize: FONTS_SIZES.s4,
-                fontWeight: '600',
-                marginBottom: 4,
+                fontWeight: '700',
+                marginBottom: 8,
               }}>
               {productData.brandName}
             </Text>
@@ -417,16 +417,21 @@ const ViewProduct = props => {
             </Text>
             <Text style={styles.titleStyle}>Brand</Text>
             <Text style={styles.subitleStyle}>{productData.brandName}</Text>
-            <Text style={styles.titleStyle}>Season</Text>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-              {productData.seasons.map(item => {
-                return (
-                  <Text style={[styles.subitleStyle, {marginRight: 4}]}>
-                    {item}
-                  </Text>
-                );
-              })}
-            </View>
+            {productData.seasons && productData.seasons.length > 0 && (
+              <>
+                <Text style={styles.titleStyle}>Season</Text>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  {productData.seasons.map(item => {
+                    return (
+                      <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                        {item}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </>
+            )}
+
             <Text style={styles.titleStyle}>Size</Text>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {productData.productSizes.map(item => {
@@ -475,7 +480,7 @@ const ViewProduct = props => {
           shadowOpacity: 0.16,
         }}>
         <Buttons text="Buy Now" onPress={openLink} />
-        {!isStylistUser && (
+        {isStylistUser && (
           <Buttons
             isInverse
             imageIcon={
