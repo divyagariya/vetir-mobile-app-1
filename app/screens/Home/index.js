@@ -39,7 +39,18 @@ const Home = props => {
   const userEmail = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.emailId,
   );
-  console.log('userEmail', userEmail);
+  const personalStylistId = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.personalStylistId,
+  );
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
+  personalStylistDetails;
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
   const [searchIcon, showSearchIcon] = useState(false);
@@ -163,7 +174,7 @@ const Home = props => {
     <VView style={styles.conatiner}>
       <VView style={styles.headingContainer}>
         <VText style={styles.headingText} text="Shop" />
-        <VView style={{flexDirection: 'row'}}>
+        <VView style={{flexDirection: 'row', alignItems: 'center'}}>
           {searchIcon && (
             <TouchableOpacity
               style={{paddingRight: 16}}
@@ -174,22 +185,24 @@ const Home = props => {
               />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('ChatScreen', {
-                receiverDetails: {
-                  emailId: 'rvinay032@gmail.com.com',
-                  name: 'Vinay',
-                  userId: 'OYeYAPDmXRhnjC0OqrEGoUqt9cV2',
-                },
-              });
-            }}>
-            <Image
-              source={require('../../assets/menu.webp')}
-              style={styles.menuIcons}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+          {!isStylistUser && (
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('ChatScreen', {
+                  receiverDetails: {
+                    emailId: emailId,
+                    name: name,
+                    userId: _id,
+                  },
+                });
+              }}>
+              <Image
+                source={require('../../assets/chat.webp')}
+                style={styles.chatIcons}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity onPress={() => props.navigation.navigate('Menu')}>
             <Image
@@ -389,6 +402,11 @@ const styles = StyleSheet.create({
   menuIcons: {
     height: 32,
     width: 32,
+  },
+  chatIcons: {
+    marginRight: 5,
+    height: 25,
+    width: 25,
   },
   search: {
     height: 24,

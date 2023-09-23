@@ -6,19 +6,31 @@ import {FONTS_SIZES} from '../../fonts';
 export const Styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
     backgroundColor: Colors.white,
-    padding: 16,
+  },
+  headerContainer: {
+    // paddingHorizontal: 16,
+    backgroundColor: 'red',
   },
   sendIcon: {
-    width: spH(40),
-    height: spV(40),
+    width: spH(30),
+    marginBottom: 10,
+    // alignSelf: 'center',
+    height: spV(30),
   },
   textInputStyle: {
-    backgroundColor: 'lightgrey',
     width: spH(150),
+    marginBottom: 10,
     height: spV(80),
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 10,
+  },
+  messageImage: {
+    margin: 3,
+    width: spH(200),
+    height: spV(200),
+    borderRadius: 13,
   },
 });

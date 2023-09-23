@@ -11,8 +11,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Header} from '../../components';
 import {getAllClients} from '../../redux/actions/stylistAction';
+import {Images} from '../../assets';
 
-const ClientList = ({item, index, onPress}) => {
+const ClientList = ({item, index, onPress, onPressChat}) => {
   return (
     <TouchableOpacity
       style={{
@@ -22,7 +23,7 @@ const ClientList = ({item, index, onPress}) => {
         marginBottom: 16,
       }}
       onPress={() => onPress(item)}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', width: '80%'}}>
         {item.profilePicUrl ? (
           <Image
             source={{uri: item.profilePicUrl}}
@@ -39,7 +40,17 @@ const ClientList = ({item, index, onPress}) => {
           <Text style={{color: Colors.black30}}>{item.emailId}</Text>
         </View>
       </View>
-
+      <TouchableOpacity
+        onPress={() => {
+          onPressChat(item);
+        }}
+        style={{paddingLeft: 10}}>
+        <Image
+          resizeMode="contain"
+          source={Images.chaticon}
+          style={{width: 32, height: 32}}
+        />
+      </TouchableOpacity>
       <View>
         <Image
           source={require('../../assets/rightArrow.png')}
@@ -104,6 +115,15 @@ const Clients = props => {
               <ClientList
                 item={item}
                 index={index}
+                onPressChat={item => {
+                  props.navigation.navigate('ChatScreen', {
+                    receiverDetails: {
+                      emailId: item?.emailId,
+                      name: item?.name,
+                      userId: item?.userId,
+                    },
+                  });
+                }}
                 onPress={item => {
                   dispatch({type: 'CLOSET_DATA', value: []});
                   dispatch({type: 'GET_OUTFIT', value: []});

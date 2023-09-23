@@ -1,48 +1,56 @@
-import React, {useState, useEffect, useCallback, useLayoutEffect} from 'react';
-import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+} from 'react';
+import {GiftedChat, InputToolbar} from 'react-native-gifted-chat';
 import {
   addDoc,
   collection,
   onSnapshot,
   query,
   orderBy,
-  initializeFirestore,
-  getFirestore,
   doc,
-  getDocs,
   setDoc,
 } from '@firebase/firestore';
-import {getAuth} from '@firebase/auth';
-import {initializeApp} from 'firebase/app';
 import {TouchableOpacity, View} from 'react-native';
 import DashboardHeader from '../../components/DashboardHeader';
 import {Styles} from './styles';
 import {db, auth} from '../../firebase';
 import {useSelector} from 'react-redux';
-import {signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
 import {Image} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+
 const ChatScreen = props => {
+  const giftedChatRef = useRef(null);
+
   const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
+
   const userEmail = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.emailId,
   );
   const userName = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.name,
   );
-
-  useEffect(() => {
-    signInWithEmailAndPassword(auth, userEmail, userEmail)
-      .then(resp => {
-        console.log('signInWithEmailAndPassword', resp);
-      })
-      .catch(error => {
-        console.log('Firebase error', error);
-      });
-  }, [userEmail]);
+  const profilePic = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.profilePicUrl,
+  );
+  const clientUserId = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.userId,
+  );
+  const personalStylistId = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.personalStylistId,
+  );
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
 
   useLayoutEffect(() => {
-    const chatId = generateChatId();
+    const chatId = generateChatId(
+      isStylistUser ? personalStylistId : clientUserId,
+      receiverDetails?.userId,
+    );
     const chatMessagesRef = query(collection(db, 'chats', chatId, 'messages'));
     const q = query(chatMessagesRef, orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -53,16 +61,19 @@ const ChatScreen = props => {
             createdAt: doc.data().createdAt.toDate(),
             text: doc.data().text,
             user: doc.data().user,
+            image: doc.data().image,
+            sent: doc.data().sent,
+            received: doc.data().received,
           };
         }),
       );
     });
     return () => unsubscribe();
-  }, []);
+  }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
 
   const generateChatId = (userId1, userId2) => {
-    // Sort the user IDs to ensure consistency
-    const sortedUserIds = [userId1, userId2].sort();
+    const sortedUserIds = [userId1, userId2];
+    sortedUserIds.sort((a, b) => a.localeCompare(b)); // Sort user IDs lexicographically
     return `${sortedUserIds[0]}-${sortedUserIds[1]}`;
   };
 
@@ -71,23 +82,47 @@ const ChatScreen = props => {
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
-      const {_id, createdAt, text, user} = messages[0];
-      // const chatID = generateChatId(
-      //   `${user?.name}_id`,
-      //   receiverDetails?.userId,
-      // );
+      const {_id, createdAt, text, user, image} = messages[0];
       try {
-        const chatId = generateChatId();
-        await addDoc(collection(db, 'chats', chatId, 'messages'), {
-          _id: _id,
-          createdAt: createdAt,
-          text: text,
-          receiverDetails: receiverDetails,
-          user: user,
-        });
+        const chatId = generateChatId(
+          isStylistUser ? personalStylistId : clientUserId,
+          receiverDetails?.userId,
+        );
+        // Iterate through the messages to handle text and image messages separately
+        for (const message of messages) {
+          if (message.text) {
+            // Handle text messages
+            await addDoc(collection(db, 'chats', chatId, 'messages'), {
+              _id: _id,
+              createdAt: createdAt,
+              text: text,
+              receiverDetails: receiverDetails,
+              user: user,
+              sent: true,
+              received: '',
+            });
+          } else if (message.image) {
+            // Handle image messages
+            await addDoc(collection(db, 'chats', chatId, 'messages'), {
+              _id: _id,
+              createdAt: createdAt,
+              image: image, // Store the image URL or data
+              receiverDetails: receiverDetails,
+              user: user,
+              sent: true,
+              received: '',
+            });
+          }
+        }
         // Create or update the chat in the inbox of both sender and receiver
         await setDoc(
-          doc(db, 'inbox', _id, 'chats', chatId),
+          doc(
+            db,
+            'inbox',
+            isStylistUser ? personalStylistId : clientUserId,
+            'chats',
+            chatId,
+          ),
           {
             lastMessage: 'messageData',
             receiverId: receiverDetails?.userId,
@@ -97,115 +132,74 @@ const ChatScreen = props => {
 
         await setDoc(
           doc(db, 'inbox', receiverDetails?.userId, 'chats', chatId),
-          {lastMessage: 'messageData', senderId: _id},
+          {
+            lastMessage: 'messageData',
+            senderId: isStylistUser ? personalStylistId : clientUserId,
+          },
           {merge: true},
         );
       } catch (error) {
         console.error('Error writing document: ', error);
       }
     },
-    [receiverDetails],
+    [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
-  // const onSend = async useCallback((messages = []) => {
-  //   setMessages(previousMessages =>
-  //     GiftedChat.append(previousMessages, messages),
-  //   );
-  //   const receiverUserId = 't08YcgmaxghavKpZCFX3lBqstjx1';
-  //   const {_id, createdAt, text, user} = messages[0];
-  //   // addDoc(collection(db, 'chats'), {
-  //   //   _id: _id,
-  //   //   createdAt: createdAt,
-  //   //   text: text,
-  //   //   user: user,
-  //   // });
-  //   try {
-  //     await addDoc(collection(db, 'chats'), {
-  //       _id: _id,
-  //       createdAt: createdAt,
-  //       text: text,
-  //       user: user,
-  //     });
-  //     console.log('Document successfully written!');
-  //   } catch (error) {
-  //     console.error('Error writing document: ', error);
-  //   }
-
-  // }, []);
-  // const renderSend = () => {
-  //   return (
-  //     <TouchableOpacity activeOpacity={1} onPress={() => console.warn('ff')}>
-  //       <Image
-  //         source={require('../../assets/chatSend.webp')}
-  //         resizeMethod="resize"
-  //         resizeMode="contain"
-  //         style={Styles.sendIcon}
-  //       />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
-  /**
-   * function to render input toolbar
-   */
-  const renderInputToolbar = props => {
+  const CustomInputToolbar = props => {
     return (
       <InputToolbar
         {...props}
-        containerStyle={{borderTopWidth: 0}}
-        // primaryStyle={styles.toolBarPrimaryStyle}
+        containerStyle={{
+          borderTopWidth: 1,
+          borderTopColor: '#E0E0E0',
+          height: 50,
+          marginBottom: 10,
+        }}
       />
     );
   };
 
-  // function renderSend(props) {
-  //   return (
-  //     <Send {...props}>
-  //       <TouchableOpacity
-  //         activeOpacity={1}
-  //         onPress={newMessages => onSend(newMessages)}>
-  //         <Image
-  //           source={require('../../assets/chatSend.webp')}
-  //           resizeMethod="resize"
-  //           resizeMode="contain"
-  //           style={Styles.sendIcon}
-  //         />
-  //       </TouchableOpacity>
-  //     </Send>
-  //   );
-  // }
-
-  // Custom InputToolbar component with a media button
-  const CustomInputToolbar = props => {
-    return (
-      <InputToolbar {...props}>
-        <TouchableOpacity onPress={() => {}}>
-          <Image
-            source={require('../../assets/chat.webp')}
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        </TouchableOpacity>
-      </InputToolbar>
-    );
-  };
-
-  const renderActions = () => {
+  const renderActions = ref => {
     return (
       <TouchableOpacity
         style={Styles.sendIcon}
         activeOpacity={1}
-        onPress={() => console.warn('fff')}>
+        onPress={() => {
+          ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true,
+            includeBase64: true,
+          }).then(img => {
+            if (ref) {
+              ref.onSend(
+                {
+                  image:
+                    'https://englishtribuneimages.blob.core.windows.net/gallary-content/2023/9/2023_9$largeimg_1308416977.jpg',
+                },
+                true,
+              );
+            }
+          });
+        }}>
         <Image
-          source={require('../../assets/emoji.webp')}
+          source={require('../../assets/gallery.webp')}
           resizeMethod="resize"
           resizeMode="contain"
-          style={{
-            width: 24,
-            height: 24,
-          }}
+          style={Styles.sendIcon}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderMessageImage = props => {
+    let {currentMessage} = props;
+    return (
+      <TouchableOpacity activeOpacity={1} onPress={this.showAllImages}>
+        <Image
+          style={Styles.messageImage}
+          source={{uri: currentMessage.image}}
+          resizeMode={'cover'}
         />
       </TouchableOpacity>
     );
@@ -213,36 +207,52 @@ const ChatScreen = props => {
 
   return (
     <View style={Styles.container}>
-      <DashboardHeader navigation={props.navigation} headerText={'Dashboard'} />
+      <View style={Styles.headerContainer}>
+        <DashboardHeader
+          navigation={props.navigation}
+          headerText={receiverDetails?.name}
+        />
+      </View>
       <GiftedChat
+        {...props}
+        textInputRef={giftedChatRef}
+        // shouldUpdateMessage={() => {
+        //   return true;
+        // }}
         messages={messages}
-        alwaysShowSend
         keyboardShouldPersistTaps={'handled'}
+        renderActions={ref => renderActions(ref)}
+        alwaysShowSend
+        // isTyping
         onSend={newMessages => onSend(newMessages)}
-        // renderInputToolbar={renderInputToolbar}
+        renderInputToolbar={props => <CustomInputToolbar {...props} />}
         // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-        // textInputStyle={Styles.textInputStyle}
+        textInputStyle={Styles.textInputStyle}
         minInputToolbarHeight={50}
+        renderMessageImage={renderMessageImage}
+        keyboardDismissMode="interactive"
+        renderUsernameOnMessage
         // renderActions={renderActions}
-        textInputProps={{
-          height: 40,
-          width: 208,
-        }}
-        renderSend={props => (
-          <Send {...props}>
-            <Image
-              source={require('../../assets/chatSend.webp')}
-              style={{
-                width: 40,
-                height: 40,
-              }}
-            />
-          </Send>
-        )}
+        // textInputProps={{
+        //   height: 40,
+        //   width: 208,
+        // }}
+        // renderSend={props => (
+        //   <Send {...props}>
+        //     <Image
+        //       source={require('../../assets/chatSend.webp')}
+        //       style={{
+        //         width: 40,
+        //         height: 40,
+        //       }}
+        //     />
+        //   </Send>
+        // )}
         user={{
-          _id: auth?.currentUser?.uid,
+          _id: isStylistUser ? personalStylistId : clientUserId,
           email: userEmail,
           name: userName,
+          avatar: profilePic || '',
         }}
       />
     </View>
