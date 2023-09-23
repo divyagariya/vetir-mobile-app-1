@@ -65,8 +65,7 @@ const AiChatScreen = props => {
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, aiResponseFormatted),
       );
-    } catch {
-
+    } catch (error) {
     } finally {
       setIsTyping(false)
     }
