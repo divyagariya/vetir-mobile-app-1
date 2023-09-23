@@ -5,21 +5,34 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import {GiftedChat, InputToolbar} from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
 import {
   addDoc,
   collection,
   onSnapshot,
   query,
   orderBy,
+  initializeFirestore,
+  getFirestore,
   doc,
+  getDocs,
   setDoc,
 } from '@firebase/firestore';
-import {TouchableOpacity, View} from 'react-native';
+import {getAuth} from '@firebase/auth';
+import {initializeApp} from 'firebase/app';
+import {
+  TouchableOpacity,
+  ActionSheetIOS,
+  View,
+  Keyboard,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import DashboardHeader from '../../components/DashboardHeader';
 import {Styles} from './styles';
 import {db, auth} from '../../firebase';
 import {useSelector} from 'react-redux';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -28,6 +41,7 @@ const ChatScreen = props => {
 
   const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
+  const [loadingMessages, setLoadingMessages] = useState(true);
 
   const userEmail = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.emailId,
@@ -45,6 +59,14 @@ const ChatScreen = props => {
     state => state.ProfileReducer?.userProfileResponse?.personalStylistId,
   );
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+
+  useEffect(() => {
+    signInWithEmailAndPassword(auth, userEmail, userEmail)
+      .then(resp => {})
+      .catch(error => {
+        console.log('Firebase error', error);
+      });
+  }, [userEmail]);
 
   useLayoutEffect(() => {
     const chatId = generateChatId(
@@ -67,6 +89,8 @@ const ChatScreen = props => {
           };
         }),
       );
+      // Set loadingMessages to false when messages are loaded
+      setLoadingMessages(false);
     });
     return () => unsubscribe();
   }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
@@ -205,6 +229,17 @@ const ChatScreen = props => {
     );
   };
 
+  const renderChatEmpty = () => (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text>No messages to display</Text>
+    </View>
+  );
+
   return (
     <View style={Styles.container}>
       <View style={Styles.headerContainer}>
@@ -213,48 +248,54 @@ const ChatScreen = props => {
           headerText={receiverDetails?.name}
         />
       </View>
-      <GiftedChat
-        {...props}
-        textInputRef={giftedChatRef}
-        // shouldUpdateMessage={() => {
-        //   return true;
-        // }}
-        messages={messages}
-        keyboardShouldPersistTaps={'handled'}
-        renderActions={ref => renderActions(ref)}
-        alwaysShowSend
-        // isTyping
-        onSend={newMessages => onSend(newMessages)}
-        renderInputToolbar={props => <CustomInputToolbar {...props} />}
-        // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-        textInputStyle={Styles.textInputStyle}
-        minInputToolbarHeight={50}
-        renderMessageImage={renderMessageImage}
-        keyboardDismissMode="interactive"
-        renderUsernameOnMessage
-        // renderActions={renderActions}
-        // textInputProps={{
-        //   height: 40,
-        //   width: 208,
-        // }}
-        // renderSend={props => (
-        //   <Send {...props}>
-        //     <Image
-        //       source={require('../../assets/chatSend.webp')}
-        //       style={{
-        //         width: 40,
-        //         height: 40,
-        //       }}
-        //     />
-        //   </Send>
-        // )}
-        user={{
-          _id: isStylistUser ? personalStylistId : clientUserId,
-          email: userEmail,
-          name: userName,
-          avatar: profilePic || '',
-        }}
-      />
+      {loadingMessages ? (
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+          <ActivityIndicator size="large" color="grey" />
+        </View>
+      ) : (
+        // Display a loader while messages are being fetched
+        <GiftedChat
+          {...props}
+          textInputRef={giftedChatRef}
+          // shouldUpdateMessage={() => {
+          //   return true;
+          // }}
+          messages={messages}
+          renderActions={ref => renderActions(ref)}
+          alwaysShowSend
+          // isTyping
+          onSend={newMessages => onSend(newMessages)}
+          // renderInputToolbar={props => <CustomInputToolbar {...props} />}
+          // renderInputToolbar={props => <CustomInputToolbar {...props} />}
+          textInputStyle={Styles.textInputStyle}
+          minInputToolbarHeight={50}
+          renderMessageImage={renderMessageImage}
+          renderUsernameOnMessage
+          // renderChatEmpty={renderChatEmpty}
+          // renderActions={renderActions}
+          // textInputProps={{
+          //   height: 40,
+          //   width: 208,
+          // }}
+          // renderSend={props => (
+          //   <Send {...props}>
+          //     <Image
+          //       source={require('../../assets/chatSend.webp')}
+          //       style={{
+          //         width: 40,
+          //         height: 40,
+          //       }}
+          //     />
+          //   </Send>
+          // )}
+          user={{
+            _id: isStylistUser ? personalStylistId : clientUserId,
+            email: userEmail,
+            name: userName,
+            avatar: profilePic || '',
+          }}
+        />
+      )}
     </View>
   );
 };
