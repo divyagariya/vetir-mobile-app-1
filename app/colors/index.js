@@ -10,4 +10,5 @@ export const Colors = {
   grey2: '#DBDBDB',
   blue: '#217AFF',
   greyText: '#21242799',
+  purple: '#5C0FD7'
 };

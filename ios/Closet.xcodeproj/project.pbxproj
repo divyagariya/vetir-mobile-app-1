@@ -510,6 +510,7 @@
 				DEVELOPMENT_TEAM = VLSMF7GA58;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Closet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -538,6 +539,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = VLSMF7GA58;
 				INFOPLIST_FILE = Closet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
