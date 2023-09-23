@@ -12,10 +12,11 @@ export const Styles = StyleSheet.create({
   headerContainer: {
     // paddingHorizontal: 16,
     backgroundColor: 'white',
-    // textAlign: 'center',
+    textAlign: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: spV(16),
-    marginLeft: spH(16)
+    marginLeft: spH(36)
   },
   sendIcon: {
     width: spH(30),
