@@ -149,7 +149,6 @@ const ClientDetails = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
-
   useEffect(() => {
     if (Object.keys(recommendedToClientsRes).length) {
       if (recommendedToClientsRes.statusCode === 200) {
@@ -185,7 +184,12 @@ const ClientDetails = props => {
         id: props?.route?.params?.item?.userId,
       });
     }
-  }, [dispatch, props.navigation, singleClosetReponse]);
+  }, [
+    dispatch,
+    props.navigation,
+    props?.route?.params?.item?.userId,
+    singleClosetReponse,
+  ]);
 
   const onPress = item => {
     setMenuSelected(item);
@@ -275,7 +279,14 @@ const ClientDetails = props => {
           </View>
           <TouchableOpacity
             style={Styles.dashboardBtn}
-            onPress={() => props.navigation.navigate('DashboardScreen')}>
+            onPress={() =>
+              props.navigation.navigate('DashboardScreen', {
+                profilePicUrl: clinetData?.profilePicUrl,
+                name: clinetData?.name,
+                emailId: clinetData?.emailId,
+                userId: clinetData?.userId,
+              })
+            }>
             <Image
               resizeMode="contain"
               style={{height: 24, width: 24}}

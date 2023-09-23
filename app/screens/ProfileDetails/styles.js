@@ -16,7 +16,7 @@ export const Styles = StyleSheet.create({
     marginTop: hp(5),
   },
   detailsContainer: {
-    marginTop: hp(20),
+    marginTop: hp(10),
   },
   heading: {
     fontWeight: '700',

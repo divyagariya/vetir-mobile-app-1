@@ -173,22 +173,43 @@ const ColorsArray = [
   },
 ];
 
+const data = [
+  {
+    Clothing: 1,
+  },
+  {
+    shoes: 2,
+  },
+];
+
+const brands = [
+  {
+    AERIN: 1,
+  },
+];
+
+const colorStats = [
+  {
+    '#ffffff': 1,
+  },
+];
+
 const ItemsByCategory = props => {
   const {navigation} = props;
   const {comingFromItemCat, headerText} = props.route.params || '';
   const {isColorComp} = props.route.params;
+  const {dataArray} = props.route.params || [];
 
   const getDataArray = () => {
     const updatedColorsArray = ColorsArray.map(item => ({
-      id: item._id,
       title: item.colorName,
       colorCode: item?.colorCode,
       count: item?.colorId,
     }));
     if (comingFromItemCat) {
-      return ItemsArray;
+      return data;
     } else if (!comingFromItemCat && !isColorComp) {
-      return BrandsArray;
+      return brands;
     } else {
       return updatedColorsArray;
     }
@@ -202,8 +223,8 @@ const ItemsByCategory = props => {
         showBorder={index === ItemsArray.length - 1 ? false : true}
         isColorComp={isColorComp}
         colorCode={isColorComp ? item?.colorCode : undefined}
-        title={item?.title}
-        count={item?.count}
+        title={Object.keys(item)}
+        count={item[Object.keys(item)]}
       />
     );
   };
@@ -217,7 +238,7 @@ const ItemsByCategory = props => {
           data={getDataArray()}
           contentContainerStyle={{paddingBottom: 100}}
           renderItem={renderItem}
-          keyExtractor={item => item?.id.toString()}
+          keyExtractor={item => Math.random().toString()}
         />
       </View>
     </View>

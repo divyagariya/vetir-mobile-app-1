@@ -60,8 +60,8 @@ const ProfileDetails = props => {
         <View style={Styles.detailsContainer}>
           <Text style={Styles.profileText}>{gender}</Text>
           <Text style={Styles.profileText}>{email}</Text>
-          <Text style={Styles.profileText}>{`Ph: ${phone}`}</Text>
-          <Text style={Styles.profileText}>{`Add: ${add}`}</Text>
+          {/* <Text style={Styles.profileText}>{`Ph: ${phone}`}</Text> */}
+          {/* <Text style={Styles.profileText}>{`Add: ${add}`}</Text> */}
         </View>
         <Text style={Styles.heading}>Measurements</Text>
         {MeasurementArray.map((item, index) => {

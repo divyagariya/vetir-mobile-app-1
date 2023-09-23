@@ -20,6 +20,7 @@ export const Styles = StyleSheet.create({
   profilePic: {
     height: wp(65),
     width: wp(65),
+    borderRadius: wp(32.5),
     marginBottom: hp(10),
   },
   firstRowView: {
