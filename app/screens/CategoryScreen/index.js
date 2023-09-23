@@ -299,7 +299,7 @@ const CategoryScreen = props => {
         }
       }
     }
-  }, [dislikeResp, dispatch]);
+  }, [dislikeResp, dispatch, filterParams]);
 
   useEffect(() => {
     if (Object.keys(recommendedToClientsRes).length) {
@@ -320,7 +320,7 @@ const CategoryScreen = props => {
         dispatch(getClosetData());
       }
     }
-  }, [deleteClosetResponse, dispatch]);
+  }, [deleteClosetResponse, dispatch, filterParams]);
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
@@ -331,7 +331,7 @@ const CategoryScreen = props => {
         Toast.show('Added to closet');
       }
     }
-  }, [addClosetResponse, dispatch]);
+  }, [addClosetResponse, dispatch, filterParams]);
 
   useEffect(() => {
     if (Object.keys(productDetailResponse).length) {
