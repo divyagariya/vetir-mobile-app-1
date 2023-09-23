@@ -156,7 +156,6 @@ function TabData() {
           return renderTab(route, imgSource, focused);
         },
         tabBarLabel: ({focused, children}) => {
-          console.log('children', children)
           return (
             <Text
               style={{
