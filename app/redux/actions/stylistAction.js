@@ -75,6 +75,7 @@ export function getClientDetails(clientId) {
       `getUserDetails?userId=${clientId}`,
       'GET',
     );
+    console.log('apiResponse', apiResponse);
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'CLIENT_DETAILS', value: apiResponse});
     }

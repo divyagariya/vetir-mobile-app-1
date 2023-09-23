@@ -99,7 +99,9 @@ const DashboardScreen = props => {
           />
           <View style={Styles.separatorView} />
           <BoldLightText
-            headerText={`$${clientData?.averageOrderValue}`}
+            headerText={`$${parseFloat(clientData?.averageOrderValue)
+              .toFixed(2)
+              .toString()}`}
             bodyText={'AVERAGE ORDER VALUE'}
           />
         </View>
@@ -110,7 +112,9 @@ const DashboardScreen = props => {
           />
           <View style={Styles.separatorView} />
           <BoldLightText
-            headerText={clientData?.closetDetails.length}
+            headerText={
+              clientData?.closetDetails && clientData?.closetDetails.length
+            }
             bodyText={'CLOSET ITEMS'}
           />
         </View>
