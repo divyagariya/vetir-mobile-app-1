@@ -35,9 +35,13 @@ import {useSelector} from 'react-redux';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import Modal from 'react-native-modal';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // To keep track of the currently displayed image
 
   const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
@@ -217,15 +221,62 @@ const ChatScreen = props => {
   };
 
   const renderMessageImage = props => {
-    let {currentMessage} = props;
+    let {currentMessage, index} = props;
     return (
-      <TouchableOpacity activeOpacity={1} onPress={this.showAllImages}>
+      <TouchableOpacity
+        onPress={() => {
+          // props.navigation.navigate('ImagePreview');
+          openImageModal(index);
+        }}>
         <Image
           style={Styles.messageImage}
           source={{uri: currentMessage.image}}
           resizeMode={'cover'}
         />
       </TouchableOpacity>
+    );
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const ImageModal = () => {
+    const images = messages
+      .filter(message => message.image) // Filter out messages without images
+      .map(message => ({
+        url: message.image,
+      }));
+    console.warn('images', images);
+    console.log('images', images);
+    return (
+      <Modal
+        style={
+          {
+            // flex: 1,
+            // backgroundColor: 'black',
+            // flex: 1, // Semi-transparent background
+            // justifyContent: 'center', // Center content vertically
+            // alignItems: 'center', // Center content horizontally
+          }
+        }
+        onBackdropPress={closeModal}
+        visible={isModalVisible}
+        // transparent={true}
+      >
+        <ImageViewer
+          enableImageZoom
+          useNativeDriver
+          saveToLocalByLongPress
+          // menuContext={{saveToLocal: '保存到本地相册', cancel: '取消'}}
+          style={{flex: 1, width: '100%', borderRadius: 10}}
+          imageUrls={images}
+          index={selectedImageIndex}
+          backgroundColor={'transparent'}
+          enableSwipeDown={true}
+          onSwipeDown={() => setModalVisible(false)}
+          renderIndicator={() => null} // Hide the indicator (optional)
+        />
+      </Modal>
     );
   };
 
@@ -239,6 +290,11 @@ const ChatScreen = props => {
       <Text>No messages to display</Text>
     </View>
   );
+
+  const openImageModal = index => {
+    setSelectedImageIndex(index);
+    setModalVisible(true);
+  };
 
   return (
     <View style={Styles.container}>
@@ -254,47 +310,50 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <GiftedChat
-          {...props}
-          textInputRef={giftedChatRef}
-          // shouldUpdateMessage={() => {
-          //   return true;
-          // }}
-          messages={messages}
-          renderActions={ref => renderActions(ref)}
-          alwaysShowSend
-          // isTyping
-          onSend={newMessages => onSend(newMessages)}
-          // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-          // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-          textInputStyle={Styles.textInputStyle}
-          minInputToolbarHeight={50}
-          renderMessageImage={renderMessageImage}
-          renderUsernameOnMessage
-          // renderChatEmpty={renderChatEmpty}
-          // renderActions={renderActions}
-          // textInputProps={{
-          //   height: 40,
-          //   width: 208,
-          // }}
-          // renderSend={props => (
-          //   <Send {...props}>
-          //     <Image
-          //       source={require('../../assets/chatSend.webp')}
-          //       style={{
-          //         width: 40,
-          //         height: 40,
-          //       }}
-          //     />
-          //   </Send>
-          // )}
-          user={{
-            _id: isStylistUser ? personalStylistId : clientUserId,
-            email: userEmail,
-            name: userName,
-            avatar: profilePic || '',
-          }}
-        />
+        <>
+          <GiftedChat
+            {...props}
+            textInputRef={giftedChatRef}
+            // shouldUpdateMessage={() => {
+            //   return true;
+            // }}
+            messages={messages}
+            renderActions={ref => renderActions(ref)}
+            alwaysShowSend
+            // isTyping
+            onSend={newMessages => onSend(newMessages)}
+            // renderInputToolbar={props => <CustomInputToolbar {...props} />}
+            // renderInputToolbar={props => <CustomInputToolbar {...props} />}
+            textInputStyle={Styles.textInputStyle}
+            minInputToolbarHeight={50}
+            renderMessageImage={renderMessageImage}
+            renderUsernameOnMessage
+            // renderChatEmpty={renderChatEmpty}
+            // renderActions={renderActions}
+            // textInputProps={{
+            //   height: 40,
+            //   width: 208,
+            // }}
+            // renderSend={props => (
+            //   <Send {...props}>
+            //     <Image
+            //       source={require('../../assets/chatSend.webp')}
+            //       style={{
+            //         width: 40,
+            //         height: 40,
+            //       }}
+            //     />
+            //   </Send>
+            // )}
+            user={{
+              _id: isStylistUser ? personalStylistId : clientUserId,
+              email: userEmail,
+              name: userName,
+              avatar: profilePic || '',
+            }}
+          />
+          <ImageModal />
+        </>
       )}
     </View>
   );

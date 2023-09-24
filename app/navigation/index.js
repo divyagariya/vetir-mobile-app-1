@@ -50,10 +50,12 @@ import ItemsByCategory from '../screens/ItemsByCategory';
 import OrderHistory from '../screens/OrderHistory';
 import OrderHistoryDetails from '../screens/OrderHistoryDetails';
 import ChatScreen from '../screens/ChatScreen';
+import ImagePreview from '../screens/ImagePreview';
 
 import VideoList from '../screens/Videos';
 import {Colors} from '../colors';
 import {normalize} from '../utils/normalise';
+import {NavigationContainer} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -235,6 +237,17 @@ function AppNavigation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
+
+  // function ModalStackScreen() {
+  //   return (
+  //     <ModalStack.Navigator mode="modal" screenOptions={{headerShown: false}}>
+  //       {/* Define your modal screens here */}
+  //       {/* For example, if you have a modal called "ModalScreen", you can add it like this: */}
+  //       {/* <ModalStack.Screen name="ModalScreen" component={ModalScreen} /> */}
+  //     </ModalStack.Navigator>
+  //   );
+  // }
+
   return !userId ? (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="LandingPage" component={LandingPage} />
@@ -275,10 +288,14 @@ function AppNavigation() {
           <Stack.Screen name="ItemsByCategory" component={ItemsByCategory} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
-
           <Stack.Screen
             name="OrderHistoryDetails"
             component={OrderHistoryDetails}
+          />
+          <Stack.Screen
+            name="ImagePreview"
+            component={ImagePreview}
+            options={{presentation: 'modal'}}
           />
         </>
       )}
