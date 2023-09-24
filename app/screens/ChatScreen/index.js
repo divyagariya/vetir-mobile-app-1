@@ -16,8 +16,17 @@ import {
   getFirestore,
   doc,
   getDocs,
+  update,
   setDoc,
 } from '@firebase/firestore';
+import {
+  getDatabase,
+  ref,
+  orderByChild,
+  onValue,
+  child,
+  get,
+} from 'firebase/database';
 import {getAuth} from '@firebase/auth';
 import {initializeApp} from 'firebase/app';
 import {
@@ -38,6 +47,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Toast from 'react-native-simple-toast';
+import {normalize} from '../../utils/normalise';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -99,6 +109,73 @@ const ChatScreen = props => {
     });
     return () => unsubscribe();
   }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
+
+  // useLayoutEffect(() => {
+  //   const chatId = generateChatId(
+  //     isStylistUser ? personalStylistId : clientUserId,
+  //     receiverDetails?.userId,
+  //   );
+
+  //   const firebaseConfig = {
+  //     apiKey: 'AIzaSyA0mcU5B7BIJ4_XNfv5Gc7Q8ra7TULZmoU',
+  //     authDomain: 'vetir-112233.firebaseapp.com',
+  //     projectId: 'vetir-112233',
+  //     storageBucket: 'vetir-112233.appspot.com',
+  //     messagingSenderId: '185367964920',
+  //     appId: '1:185367964920:ios:d4bf19861684b03d795f0d',
+  //     measurementId: 'G-NZ8K8PP3KD"', // optional
+  //   };
+
+  //   const app = initializeApp(firebaseConfig);
+  //   const dbase = getDatabase(app);
+  //   const chatMessagesRef = ref(dbase, `chats/${chatId}/messages`);
+
+  //   const loadData = async () => {
+  //     try {
+  //       const snapshot = await get(
+  //         query(chatMessagesRef, orderByChild('createdAt')),
+  //       );
+  //       if (snapshot.exists()) {
+  //         const updatedMessages = [];
+  //         snapshot.forEach(childSnapshot => {
+  //           const messageData = {
+  //             _id: childSnapshot.key, // Assuming the message ID is the key
+  //             createdAt: new Date(childSnapshot.child('createdAt').val()), // Convert createdAt to Date
+  //             text: childSnapshot.child('text').val(),
+  //             user: childSnapshot.child('user').val(),
+  //             image: childSnapshot.child('image').val(),
+  //             sent: childSnapshot.child('sent').val(),
+  //             received: childSnapshot.child('received').val(),
+  //           };
+
+  //           // Update the 'received' status if it's the recipient's message
+  //           if (
+  //             messageData.user._id !== clientUserId &&
+  //             !messageData.received
+  //           ) {
+  //             update(ref(chatMessagesRef, `${messageData._id}/received`), true);
+  //             messageData.received = true; // Update the local message data
+  //           }
+
+  //           updatedMessages.push(messageData);
+  //         });
+
+  //         // Set the updated messages
+  //         setMessages(updatedMessages);
+  //         // Set loadingMessages to false when messages are loaded
+  //         setLoadingMessages(false);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error loading data:', error);
+  //     }
+  //   };
+
+  //   loadData();
+
+  //   return () => {
+  //     // Clean up resources if needed
+  //   };
+  // }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
 
   const generateChatId = (userId1, userId2) => {
     const sortedUserIds = [userId1, userId2];
@@ -254,13 +331,13 @@ const ChatScreen = props => {
     );
   };
 
-  const renderMessageImage = props => {
-    let {currentMessage, index} = props;
+  const renderMessageImage = (props, index) => {
+    let {currentMessage} = props;
+    console.log('index', index);
     return (
       <TouchableOpacity
         onPress={() => {
-          // props.navigation.navigate('ImagePreview');
-          openImageModal(index);
+          openImageModal(index - 1);
         }}>
         <Image
           style={Styles.messageImage}
@@ -274,6 +351,10 @@ const ChatScreen = props => {
     setModalVisible(false);
   };
 
+  const onImageIndexChange = index => {
+    setSelectedImageIndex(index);
+  };
+
   const ImageModal = () => {
     const images = messages
       .filter(message => message.image) // Filter out messages without images
@@ -282,32 +363,38 @@ const ChatScreen = props => {
       }));
     return (
       <Modal
-        style={
-          {
-            // flex: 1,
-            // backgroundColor: 'black',
-            // flex: 1, // Semi-transparent background
-            // justifyContent: 'center', // Center content vertically
-            // alignItems: 'center', // Center content horizontally
-          }
-        }
+        avoidKeyboard
+        animationInTiming={500}
+        animationOutTiming={600}
+        style={Styles.modalView}
         onBackdropPress={closeModal}
-        visible={isModalVisible}
-        // transparent={true}
-      >
-        <ImageViewer
-          enableImageZoom
-          useNativeDriver
-          saveToLocalByLongPress
-          // menuContext={{saveToLocal: '保存到本地相册', cancel: '取消'}}
-          style={{flex: 1, width: '100%', borderRadius: 10}}
-          imageUrls={images}
-          index={selectedImageIndex}
-          backgroundColor={'transparent'}
-          enableSwipeDown={true}
-          onSwipeDown={() => setModalVisible(false)}
-          renderIndicator={() => null} // Hide the indicator (optional)
-        />
+        visible={isModalVisible}>
+        <View style={{flex: 1}}>
+          <TouchableOpacity
+            style={Styles.crossBtn}
+            onPress={() => setModalVisible(false)}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={Styles.crossIcon}
+            />
+          </TouchableOpacity>
+          <Text style={Styles.previewCountText}>{`${selectedImageIndex + 1}/${
+            images.length
+          }`}</Text>
+          <ImageViewer
+            enableImageZoom
+            useNativeDriver
+            saveToLocalByLongPress
+            // menuContext={{saveToLocal: '保存到本地相册', cancel: '取消'}}
+            imageUrls={images}
+            index={selectedImageIndex}
+            backgroundColor={'transparent'}
+            enableSwipeDown={true}
+            onSwipeDown={() => setModalVisible(false)}
+            onChange={onImageIndexChange}
+            renderIndicator={() => null} // Hide the indicator (optional)
+          />
+        </View>
       </Modal>
     );
   };
@@ -324,9 +411,12 @@ const ChatScreen = props => {
   );
 
   const openImageModal = index => {
+    console.warn('index', index);
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
+
+  const renderCustomView = () => {};
 
   return (
     <View style={Styles.container}>
@@ -358,9 +448,11 @@ const ChatScreen = props => {
             // renderInputToolbar={props => <CustomInputToolbar {...props} />}
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
-            renderMessageImage={renderMessageImage}
+            renderMessageImage={props =>
+              renderMessageImage(props, messages.indexOf(props.currentMessage))
+            }
             renderUsernameOnMessage
-            // renderChatEmpty={renderChatEmpty}
+            renderChatEmpty={renderChatEmpty}
             // renderActions={renderActions}
             // textInputProps={{
             //   height: 40,
