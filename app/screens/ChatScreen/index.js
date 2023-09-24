@@ -200,7 +200,9 @@ const ChatScreen = props => {
       const imagePath = `data:image/jpeg;base64,${image.data}`;
       const dataToSend = {
         base64MediaString: imagePath,
-        userId: isStylistUser ? personalStylistId : clientUserId,
+        ...(isStylistUser
+          ? {personalStylistId: personalStylistId}
+          : {userId: clientUserId}),
       };
       fetch(
         'https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatMedia',
@@ -278,8 +280,6 @@ const ChatScreen = props => {
       .map(message => ({
         url: message.image,
       }));
-    console.warn('images', images);
-    console.log('images', images);
     return (
       <Modal
         style={
@@ -371,8 +371,9 @@ const ChatScreen = props => {
             //     <Image
             //       source={require('../../assets/chatSend.webp')}
             //       style={{
-            //         width: 40,
-            //         height: 40,
+            //         marginBottom: 5,
+            //         width: 30,
+            //         height: 30,
             //       }}
             //     />
             //   </Send>
