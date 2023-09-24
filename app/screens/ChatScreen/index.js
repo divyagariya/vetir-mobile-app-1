@@ -434,7 +434,7 @@ const ChatScreen = props => {
       </View>
       {loadingMessages ? (
         <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-          <ActivityIndicator size="large" color="grey" />
+          <ActivityIndicator size="small" color="grey" />
         </View>
       ) : (
         // Display a loader while messages are being fetched
@@ -447,13 +447,11 @@ const ChatScreen = props => {
             // }}
             messages={messages}
             renderActions={ref => renderActions(ref)}
-            alwaysShowSend
             // isTyping
             onSend={newMessages => onSend(newMessages)}
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
             renderMessageImage={props => renderMessageImage(props)}
-            renderUsernameOnMessage
             renderChatEmpty={renderChatEmpty}
             user={{
               _id: isStylistUser ? personalStylistId : clientUserId,
