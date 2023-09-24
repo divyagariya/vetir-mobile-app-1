@@ -37,7 +37,7 @@ const ProfileSetup = props => {
     name: userProfileResponse?.name,
     fromLocal: false,
   });
-
+  console.log('userProfileResponse', userProfileResponse);
   useEffect(() => {
     return () => {
       setState({

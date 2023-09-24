@@ -13,6 +13,11 @@ import {sendOtp, verifyOtp} from '../../redux/actions/sendOtpAction';
 import Toast from 'react-native-simple-toast';
 import {Colors} from '../../colors';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import {auth} from '../../firebase';
 
 const VerifyEmail = propsData => {
   const dispatch = useDispatch();
@@ -70,12 +75,39 @@ const VerifyEmail = propsData => {
             value: true,
           });
         }
+
+        signInWithEmailAndPassword(
+          auth,
+          propsData?.route?.params?.email,
+          propsData?.route?.params?.email,
+        )
+          .then(resp => {
+            console.log('signInWithEmailAndPassword', resp);
+          })
+          .catch(error => {
+            createUserWithEmailAndPassword(
+              auth,
+              propsData?.route?.params?.email,
+              propsData?.route?.params?.email,
+            )
+              .then(resp => {
+                console.log('createUserWithEmailAndPassword', resp);
+              })
+              .catch(function (error) {
+                console.log('firebase', error);
+              });
+          });
       } else if (verifyOtpResponse.statusCode === 401) {
         setValue(null);
         setErrorText(true);
       }
     }
-  }, [dispatch, verifyOtpResponse]);
+  }, [
+    dispatch,
+    propsData?.route?.params?.email,
+    propsData?.route?.params?.type,
+    verifyOtpResponse,
+  ]);
 
   useEffect(() => {
     if (Object.keys(otpResponse).length) {
@@ -115,7 +147,9 @@ const VerifyEmail = propsData => {
   useEffect(() => {
     let interval = setInterval(() => {
       setCount(prev => {
-        if (prev < 0) clearInterval(interval);
+        if (prev < 0) {
+          clearInterval(interval);
+        }
         return prev - 1;
       });
     }, 1000);

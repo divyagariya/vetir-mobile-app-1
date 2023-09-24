@@ -194,6 +194,7 @@ const ClosetDetailsFrom = props => {
       season: selectedSeason,
       colorCode: colorsFilter,
       price: priceText,
+      notes: notesText,
       isImageBase64: isImageEdit,
       itemImageUrl: isImageEdit
         ? `data:image/jpeg;base64,${newImage?.data}`

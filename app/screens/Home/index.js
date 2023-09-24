@@ -25,12 +25,32 @@ import {
 } from '../../redux/actions/homeActions';
 import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 import Videos from '../Videos/components/Videos';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import {auth} from '../../firebase';
 
 const Home = props => {
   const [videoList] = [1, 2, 3, 4, 5, 6, 7, 8];
   const dispatch = useDispatch();
   const [videoPlayer, setVideoPlayer] = useState(false);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const userEmail = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.emailId,
+  );
+  const personalStylistId = useSelector(
+    state => state.ProfileReducer?.userProfileResponse?.personalStylistId,
+  );
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
+  personalStylistDetails;
   const [refreshing, setRefreshing] = useState(false);
   const [showBambuser, setShowBambuser] = useState(false);
   const [searchIcon, showSearchIcon] = useState(false);
@@ -154,7 +174,7 @@ const Home = props => {
     <VView style={styles.conatiner}>
       <VView style={styles.headingContainer}>
         <VText style={styles.headingText} text="Shop" />
-        <VView style={{flexDirection: 'row'}}>
+        <VView style={{flexDirection: 'row', alignItems: 'center'}}>
           {searchIcon && (
             <TouchableOpacity
               style={{paddingRight: 16}}
@@ -165,6 +185,25 @@ const Home = props => {
               />
             </TouchableOpacity>
           )}
+          {!isStylistUser && (
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('ChatScreen', {
+                  receiverDetails: {
+                    emailId: emailId,
+                    name: name,
+                    userId: _id,
+                  },
+                });
+              }}>
+              <Image
+                source={require('../../assets/chat.webp')}
+                style={styles.chatIcons}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity onPress={() => props.navigation.navigate('Menu')}>
             <Image
               source={require('../../assets/menu.webp')}
@@ -367,6 +406,11 @@ const styles = StyleSheet.create({
   menuIcons: {
     height: 24,
     width: 24,
+  },
+  chatIcons: {
+    marginRight: 5,
+    height: 25,
+    width: 25,
   },
   search: {
     height: 24,
