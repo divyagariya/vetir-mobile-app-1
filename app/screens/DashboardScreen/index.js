@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Styles} from './styles';
 import DashboardHeader from '../../components/DashboardHeader';
@@ -32,7 +32,8 @@ const purchaseInsightsArray = [
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
-  const clientData = useSelector(state => state.StylistReducer.clientData);
+  const clientRes = useSelector(state => state.StylistReducer.clientData);
+  const [clientData, setClientData] = useState({});
   const {navigation} = props;
   const {
     profilePicUrl = '',
@@ -44,6 +45,11 @@ const DashboardScreen = props => {
     dispatch(getClientDetails(userId));
   }, [dispatch, userId]);
 
+  useEffect(() => {
+    setClientData(clientRes);
+  }, [clientRes]);
+
+  console.log('clientData', clientData);
   const onPressCard = id => {
     switch (id) {
       case 1:

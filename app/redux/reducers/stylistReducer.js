@@ -66,12 +66,12 @@ const StylistReducer = (state = initialState, action) => {
       };
     }
 
-    // case 'CLIENT_DETAILS': {
-    //   return {
-    //     ...state,
-    //     clientData: action.value,
-    //   };
-    // }
+    case 'CLIENT_DETAILS': {
+      return {
+        ...state,
+        clientData: action.value,
+      };
+    }
 
     default:
       return state;
