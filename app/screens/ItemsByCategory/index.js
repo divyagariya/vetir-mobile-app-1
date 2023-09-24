@@ -12,10 +12,28 @@ const ItemsByCategory = props => {
 
   const getDataArray = () => {
     if (comingFromItemCat) {
+      dataArray &&
+        dataArray.sort((a, b) => {
+          const valueA = Object.values(a)[0]; // Extract the sorting value from the first object
+          const valueB = Object.values(b)[0]; // Extract the sorting value from the second object
+          return valueB - valueA; // Compare the sorting values
+        });
       return dataArray;
     } else if (!comingFromItemCat && !isColorComp) {
+      dataArray &&
+        dataArray.sort((a, b) => {
+          const valueA = Object.values(a)[0]; // Extract the sorting value from the first object
+          const valueB = Object.values(b)[0]; // Extract the sorting value from the second object
+          return valueB - valueA; // Compare the sorting values
+        });
       return dataArray;
     } else {
+      dataArray &&
+        dataArray.sort((a, b) => {
+          const valueA = Object.values(a)[0]; // Extract the sorting value from the first object
+          const valueB = Object.values(b)[0]; // Extract the sorting value from the second object
+          return valueB - valueA; // Compare the sorting values
+        });
       return dataArray;
     }
   };
