@@ -99,7 +99,7 @@ const DashboardScreen = props => {
 
           <Text style={Styles.nameText}>{name}</Text>
         </View>
-        <View style={[Styles.firstRowView, {marginTop: 10}]}>
+        <View style={[Styles.firstRowView, {marginTop: 16}]}>
           <BoldLightText
             headerText={`$${clientData?.totalProductValue}`}
             bodyText={'TOTAL PRODUCT VALUE'}
@@ -140,16 +140,18 @@ const DashboardScreen = props => {
         </TouchableOpacity>
       </View>
       <Text style={Styles.purchaseHeader}>Purchase Insights</Text>
-      {purchaseInsightsArray.map(item => {
-        return (
-          <PurchaseInsightsCard
-            navigation={navigation}
-            title={item.title}
-            onPress={() => onPressCard(item.id)}
-            icon={item.icon}
-          />
-        );
-      })}
+      <View style={{marginTop: 8}}>
+        {purchaseInsightsArray.map(item => {
+          return (
+            <PurchaseInsightsCard
+              navigation={navigation}
+              title={item.title}
+              onPress={() => onPressCard(item.id)}
+              icon={item.icon}
+            />
+          );
+        })}
+      </View>
     </ScrollView>
   );
 };

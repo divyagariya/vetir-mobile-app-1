@@ -18,16 +18,18 @@ const Styles = StyleSheet.create({
   textContainer: {
     width: '45%',
     alignItems: 'center',
-    marginVertical: hp(15),
+    marginBottom: hp(16),
   },
   headerText: {
     fontSize: FONTS_SIZES.s4,
     fontWeight: '400',
     lineHeight: 24,
+    marginBottom: 4,
   },
   bodyText: {
     fontSize: fp(9),
     fontWeight: '300',
     lineHeight: 12,
+    letterSpacing: 1,
   },
 });
