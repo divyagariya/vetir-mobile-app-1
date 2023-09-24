@@ -331,13 +331,19 @@ const ChatScreen = props => {
     );
   };
 
-  const renderMessageImage = (props, index) => {
+  const renderMessageImage = props => {
     let {currentMessage} = props;
-    console.log('index', index);
+    const imageUrl = currentMessage.image;
+    const images = messages
+      .filter(message => message.image) // Filter out messages without images
+      .map(message => ({
+        url: message.image,
+      }));
+    const imageIndex = images.findIndex(image => image.url === imageUrl);
     return (
       <TouchableOpacity
         onPress={() => {
-          openImageModal(index - 1);
+          openImageModal(imageIndex);
         }}>
         <Image
           style={Styles.messageImage}
@@ -444,32 +450,11 @@ const ChatScreen = props => {
             alwaysShowSend
             // isTyping
             onSend={newMessages => onSend(newMessages)}
-            // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-            // renderInputToolbar={props => <CustomInputToolbar {...props} />}
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
-            renderMessageImage={props =>
-              renderMessageImage(props, messages.indexOf(props.currentMessage))
-            }
+            renderMessageImage={props => renderMessageImage(props)}
             renderUsernameOnMessage
             renderChatEmpty={renderChatEmpty}
-            // renderActions={renderActions}
-            // textInputProps={{
-            //   height: 40,
-            //   width: 208,
-            // }}
-            // renderSend={props => (
-            //   <Send {...props}>
-            //     <Image
-            //       source={require('../../assets/chatSend.webp')}
-            //       style={{
-            //         marginBottom: 5,
-            //         width: 30,
-            //         height: 30,
-            //       }}
-            //     />
-            //   </Send>
-            // )}
             user={{
               _id: isStylistUser ? personalStylistId : clientUserId,
               email: userEmail,
