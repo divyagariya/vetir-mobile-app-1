@@ -417,7 +417,6 @@ const ChatScreen = props => {
   );
 
   const openImageModal = index => {
-    console.warn('index', index);
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
@@ -453,7 +452,7 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{flex: 0.95}}>
+        <View style={{flex: 0.97}}>
           <GiftedChat
             {...props}
             textInputRef={giftedChatRef}
@@ -461,6 +460,7 @@ const ChatScreen = props => {
             //   return true;
             // }}
             messages={messages}
+            alwaysShowSend
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
             // isTyping
