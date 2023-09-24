@@ -37,6 +37,7 @@ import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import Toast from 'react-native-simple-toast';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -187,29 +188,60 @@ const ChatScreen = props => {
     );
   };
 
+  const onSendImage = ref => {
+    let imageURL = {};
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+    }).then(image => {
+      console.log('prag', image);
+      const imagePath = `data:image/jpeg;base64,${image.data}`;
+      const dataToSend = {
+        base64MediaString: imagePath,
+        userId: isStylistUser ? personalStylistId : clientUserId,
+      };
+      fetch(
+        'https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatMedia',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        },
+      )
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(responseData => {
+          imageURL = responseData?.data?.imageUrl;
+          if (ref) {
+            ref.onSend(
+              {
+                image: imageURL,
+              },
+              true,
+            );
+          }
+        })
+        .catch(error => {
+          Toast.show('There is some error in image upload');
+          console.error('API error:', error);
+        });
+    });
+  };
+
   const renderActions = ref => {
     return (
       <TouchableOpacity
         style={Styles.sendIcon}
         activeOpacity={1}
-        onPress={() => {
-          ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true,
-            includeBase64: true,
-          }).then(img => {
-            if (ref) {
-              ref.onSend(
-                {
-                  image:
-                    'https://englishtribuneimages.blob.core.windows.net/gallary-content/2023/9/2023_9$largeimg_1308416977.jpg',
-                },
-                true,
-              );
-            }
-          });
-        }}>
+        onPress={() => onSendImage(ref)}>
         <Image
           source={require('../../assets/gallery.webp')}
           resizeMethod="resize"
