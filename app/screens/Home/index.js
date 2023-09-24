@@ -30,6 +30,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import {auth} from '../../firebase';
+import {Images} from '../../assets';
 
 const Home = props => {
   const [videoList] = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -197,7 +198,7 @@ const Home = props => {
                 });
               }}>
               <Image
-                source={require('../../assets/chat.webp')}
+                source={Images.chaticon}
                 style={styles.chatIcons}
                 resizeMode="contain"
               />
@@ -408,9 +409,9 @@ const styles = StyleSheet.create({
     width: 24,
   },
   chatIcons: {
-    marginRight: 5,
-    height: 25,
-    width: 25,
+    marginRight: 16,
+    height: 24,
+    width: 24,
   },
   search: {
     height: 24,
