@@ -15,8 +15,7 @@ export const Styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spV(16),
-    marginLeft: spH(36)
+    marginVertical: spV(16),
   },
   sendIcon: {
     width: spH(30),
@@ -30,7 +29,6 @@ export const Styles = StyleSheet.create({
     height: spV(80),
     borderRadius: 8,
     paddingVertical: 10,
-    paddingHorizontal: 10,
   },
   messageImage: {
     margin: 3,
@@ -39,8 +37,8 @@ export const Styles = StyleSheet.create({
     borderRadius: 13,
   },
   headerText: {
-    marginLeft: wp(20),
     fontWeight: 'bold',
+    textAlign: 'center',
     width: '55%',
     fontSize: FONTS_SIZES.s3,
   },

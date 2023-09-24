@@ -1,29 +1,21 @@
-import React, {
-  useState,
-  useRef,
-} from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {GiftedChat} from 'react-native-gifted-chat';
+import {View, ActivityIndicator, Text} from 'react-native';
 import uuid from 'react-native-uuid';
-import { Styles } from './styles';
-import { useSelector } from 'react-redux';
-import { Image } from 'react-native';
-import { useChat } from '../../hooks/useChat';
+import {Styles} from './styles';
+import {useSelector} from 'react-redux';
+import {Image} from 'react-native';
+import {useChat} from '../../hooks/useChat';
 import ChatBotPNG from '../../assets/aiBot.png';
-
 
 const AiChatScreen = props => {
   const giftedChatRef = useRef(null);
-  const { sendMessage } = useChat()
+  const {sendMessage} = useChat();
 
-  const { receiverDetails } = props?.route?.params || {};
+  const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
-  const [isTyping, setIsTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false);
 
   const userEmail = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.emailId,
@@ -46,40 +38,40 @@ const AiChatScreen = props => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
     );
-    let messageText = messages[0]?.text
-    setIsTyping(true)
+    let messageText = messages[0]?.text;
+    setIsTyping(true);
     try {
-      let aiResponse = await sendMessage(messageText)
+      let aiResponse = await sendMessage(messageText);
       let aiResponseFormatted = [
         {
-          "_id": uuid.v4(),
-          "createdAt": new Date(),
-          "text": aiResponse.message,
+          _id: uuid.v4(),
+          createdAt: new Date(),
+          text: aiResponse.message,
           user: {
             _id: 2,
             name: 'Vetir bot',
             avatar: ChatBotPNG,
           },
-        }
-      ]
+        },
+      ];
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, aiResponseFormatted),
       );
     } catch (error) {
     } finally {
-      setIsTyping(false)
+      setIsTyping(false);
     }
-    
+
     // let res = await sendMessage(message)
-  }
+  };
 
   return (
     <View style={Styles.container}>
       <View style={Styles.headerContainer}>
-        <Text style={Styles.headerText}>Chat with AI</Text>
+        <Text style={Styles.headerText}>AI Stylist</Text>
       </View>
       {loadingMessages ? (
-        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
           <ActivityIndicator size="large" color="grey" />
         </View>
       ) : (
