@@ -409,9 +409,9 @@ const styles = StyleSheet.create({
     width: 24,
   },
   chatIcons: {
-    marginRight: 5,
-    height: 25,
-    width: 25,
+    marginRight: 16,
+    height: 24,
+    width: 24,
   },
   search: {
     height: 24,

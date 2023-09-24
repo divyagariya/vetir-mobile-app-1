@@ -53,7 +53,7 @@ const ClientList = ({item, index, onPress, onPressChat}) => {
         <Image
           resizeMode="contain"
           source={Images.chaticon}
-          style={{width: 32, height: 32}}
+          style={{width: 24, height: 24, marginRight: 8}}
         />
       </TouchableOpacity>
       <View>
