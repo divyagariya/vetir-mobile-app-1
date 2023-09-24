@@ -69,6 +69,7 @@ const DashboardScreen = props => {
         props.navigation.navigate('ItemsByCategory', {
           comingFromItemCat: false,
           isColorComp: true,
+          dataArray: clientData?.colorStats,
           headerText: 'Favorite Colors',
         });
         break;
