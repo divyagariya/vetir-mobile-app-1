@@ -13,6 +13,7 @@ const Header = ({
   showFilter = false,
   showBack = false,
   showMenu = false,
+  showChat = false,
   showSwitch = false,
   switchValue = () => {},
   showVerticalMenu = false,
@@ -32,6 +33,7 @@ const Header = ({
   recommendClients = () => {},
   showWhatsapp = false,
   onWhatsappClick = () => {},
+  onPressChat,
 }) => {
   const [switchIcon, setSwitch] = useState(false);
   const dispatch = useDispatch();
@@ -177,6 +179,15 @@ const Header = ({
               resizeMode="contain"
               source={switchIcon ? Images.onIcon : Images.offIcon}
               style={{width: 33, height: 24}}
+            />
+          </TouchableOpacity>
+        )}
+        {showChat && (
+          <TouchableOpacity onPress={onPressChat} style={{paddingLeft: 10}}>
+            <Image
+              resizeMode="contain"
+              source={Images.chaticon}
+              style={{width: 32, height: 32}}
             />
           </TouchableOpacity>
         )}

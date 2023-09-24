@@ -189,6 +189,7 @@ const ClosetDetailsFrom = props => {
       brandId: state.brandSelected?.id,
       season: selectedSeason,
       colorCode: colorsFilter,
+      notes: notesText,
       isImageBase64: isImageEdit,
       itemImageUrl: isImageEdit
         ? `data:image/jpeg;base64,${newImage?.data}`

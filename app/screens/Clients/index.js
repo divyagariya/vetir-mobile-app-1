@@ -11,9 +11,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
 import {Header} from '../../components';
 import {getAllClients} from '../../redux/actions/stylistAction';
+import {Images} from '../../assets';
 import {FONTS_SIZES} from '../../fonts';
 
-const ClientList = ({item, index, onPress}) => {
+const ClientList = ({item, index, onPress, onPressChat}) => {
   return (
     <TouchableOpacity
       style={{
@@ -23,7 +24,7 @@ const ClientList = ({item, index, onPress}) => {
         marginBottom: 16,
       }}
       onPress={() => onPress(item)}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: 'row', width: '80%', alignItems: 'center'}}>
         {item.profilePicUrl ? (
           <Image
             source={{uri: item.profilePicUrl}}
@@ -44,7 +45,17 @@ const ClientList = ({item, index, onPress}) => {
           </Text>
         </View>
       </View>
-
+      <TouchableOpacity
+        onPress={() => {
+          onPressChat(item);
+        }}
+        style={{paddingLeft: 10}}>
+        <Image
+          resizeMode="contain"
+          source={Images.chaticon}
+          style={{width: 32, height: 32}}
+        />
+      </TouchableOpacity>
       <View>
         <Image
           source={require('../../assets/rightArrow.webp')}
@@ -80,7 +91,21 @@ const Clients = props => {
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white', paddingTop: 16}}>
-      <Header title="Clients" showMenu {...props} />
+      <Header
+        onPressChat={() => {
+          props.navigation.navigate('ChatScreen', {
+            receiverDetails: {
+              emailId: 'vetest@yopmail.com',
+              name: 'Test',
+              userId: '0d8688d4-e3f1-4559-82e3-589233997dcf',
+            },
+          });
+        }}
+        title="Clients"
+        showMenu
+        showChat
+        {...props}
+      />
       <View style={{flex: 1, padding: 16}}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -95,9 +120,19 @@ const Clients = props => {
               <ClientList
                 item={item}
                 index={index}
+                onPressChat={item => {
+                  props.navigation.navigate('ChatScreen', {
+                    receiverDetails: {
+                      emailId: item?.emailId,
+                      name: item?.name,
+                      userId: item?.userId,
+                    },
+                  });
+                }}
                 onPress={item => {
                   dispatch({type: 'CLOSET_DATA', value: []});
                   dispatch({type: 'GET_OUTFIT', value: []});
+                  console.log('item', item);
                   props.navigation.navigate('ClientDetails', {
                     item,
                   });
