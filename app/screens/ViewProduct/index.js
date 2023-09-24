@@ -313,7 +313,7 @@ const ViewProduct = props => {
         <Header
           showWhatsapp={productData.vendorWhatsappNumber}
           onWhatsappClick={onWhatsappClick}
-          //showAdd={!isStylistUser}
+          // showAdd={!isStylistUser}
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
           showLike={!isStylistUser}
@@ -467,9 +467,10 @@ const ViewProduct = props => {
         style={{
           position: 'absolute',
           bottom: 0,
-          padding: 16,
-          width: '100%',
           paddingHorizontal: 16,
+          paddingTop: 16,
+          paddingBottom: 12,
+          width: '100%',
           backgroundColor: '#fff',
           shadowColor: '#000000',
           shadowOffset: {
@@ -480,20 +481,16 @@ const ViewProduct = props => {
           shadowOpacity: 0.16,
         }}>
         <Buttons text="Buy Now" onPress={openLink} />
-        {isStylistUser && (
-          <Buttons
-            isInverse
-            imageIcon={
-              productData.addedToCloset
-                ? require('../../assets/addedCloset.webp')
-                : require('../../assets/iAdd.webp')
-            }
-            onPress={addToCloset}
-            text={
-              productData.addedToCloset ? 'Added to closet' : 'Add to closet'
-            }
-          />
-        )}
+        <Buttons
+          isInverse
+          imageIcon={
+            productData.addedToCloset
+              ? require('../../assets/addedCloset.webp')
+              : require('../../assets/iAdd.webp')
+          }
+          onPress={addToCloset}
+          text={productData.addedToCloset ? 'Added to closet' : 'Add to closet'}
+        />
       </View>
       {showClientModal && (
         <OverlayModal
