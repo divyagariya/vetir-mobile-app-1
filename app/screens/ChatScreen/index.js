@@ -251,19 +251,19 @@ const ChatScreen = props => {
     [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
-  const CustomInputToolbar = props => {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={{
-          borderTopWidth: 1,
-          borderTopColor: '#E0E0E0',
-          height: 50,
-          marginBottom: 10,
-        }}
-      />
-    );
-  };
+  // const CustomInputToolbar = props => {
+  //   return (
+  //     <InputToolbar
+  //       {...props}
+  //       containerStyle={{
+  //         borderTopWidth: 1,
+  //         borderTopColor: '#E0E0E0',
+  //         height: 50,
+  //         marginBottom: 10,
+  //       }}
+  //     />
+  //   );
+  // };
 
   const onSendImage = ref => {
     let imageURL = {};
@@ -424,6 +424,21 @@ const ChatScreen = props => {
 
   const renderCustomView = () => {};
 
+  const CustomInputToolbar = props => {
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          borderTopWidth: 1,
+          borderTopColor: '#E0E0E0',
+          height: 60, // Set the desired input height here
+          marginBottom: 10, // Add margin to the bottom
+          paddingBottom: 10, // Optional padding to adjust the space between the input and actions
+        }}
+      />
+    );
+  };
+
   return (
     <View style={Styles.container}>
       <View style={Styles.headerContainer}>
@@ -438,7 +453,7 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <>
+        <View style={{flex: 0.95}}>
           <GiftedChat
             {...props}
             textInputRef={giftedChatRef}
@@ -448,6 +463,7 @@ const ChatScreen = props => {
             messages={messages}
             renderActions={ref => renderActions(ref)}
             alwaysShowSend
+            // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
             // isTyping
             onSend={newMessages => onSend(newMessages)}
             textInputStyle={Styles.textInputStyle}
@@ -455,6 +471,17 @@ const ChatScreen = props => {
             renderMessageImage={props => renderMessageImage(props)}
             renderUsernameOnMessage
             renderChatEmpty={renderChatEmpty}
+            renderSend={props => (
+              <Send {...props}>
+                <Image
+                  source={require('../../assets/chatSend.webp')}
+                  style={{
+                    width: 30,
+                    height: 30,
+                  }}
+                />
+              </Send>
+            )}
             user={{
               _id: isStylistUser ? personalStylistId : clientUserId,
               email: userEmail,
@@ -463,7 +490,7 @@ const ChatScreen = props => {
             }}
           />
           <ImageModal />
-        </>
+        </View>
       )}
     </View>
   );

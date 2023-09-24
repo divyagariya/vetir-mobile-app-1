@@ -15,17 +15,15 @@ export const Styles = StyleSheet.create({
   },
   sendIcon: {
     width: spH(30),
-    marginBottom: 10,
+    // marginBottom: 10,
     // alignSelf: 'center',
     height: spV(30),
   },
   textInputStyle: {
-    width: spH(150),
-    marginBottom: 10,
-    height: spV(80),
+    // marginBottom: 10,
     borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    alignItems: 'center',
+    paddingHorizontal: 15,
   },
   messageImage: {
     margin: 3,
