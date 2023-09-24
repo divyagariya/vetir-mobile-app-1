@@ -469,7 +469,7 @@ const ChatScreen = props => {
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
             renderMessageImage={props => renderMessageImage(props)}
-            renderChatEmpty={renderChatEmpty}
+            // renderChatEmpty={renderChatEmpty}
             renderSend={props => (
               <Send {...props}>
                 <Image
