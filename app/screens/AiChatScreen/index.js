@@ -6,7 +6,8 @@ import { Styles } from './styles';
 import { useSelector } from 'react-redux';
 import { Image } from 'react-native';
 import { useChat } from '../../hooks/useChat';
-import ChatBotPNG from '../../assets/aiBot.png';
+import ChatBotPNG from '../../assets/aiBotSmall.png';
+import { spH, spV } from '../../utils/normalise';
 
 const AiChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -124,6 +125,12 @@ const AiChatScreen = props => {
             email: userEmail,
             name: userName,
             avatar: profilePic || '',
+          }}
+          renderAvatar={(props) => {
+            return <Image source={props.currentMessage?.user?.avatar} style={{
+              width: spH(24),
+              height: spV(24)
+            }} />
           }}
         />
       )}
