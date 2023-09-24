@@ -3,16 +3,11 @@ import Toast from 'react-native-simple-toast';
 
 export const useChat = () => {
   let baseUrl = 'http://13.232.232.32:9090/v1/'
-  const sendMessage = async (message) => {
-    if (!message) return
+  const sendMessage = async (apiBody) => {
+    if (!apiBody) return
     return await fetch(baseUrl + 'chat', {
       method: 'POST',
-      body: JSON.stringify([
-        {
-          "by": "user",
-          "message": message
-        }
-      ]),
+      body: JSON.stringify(apiBody),
       headers: {
         'Content-Type': 'application/json',
       },

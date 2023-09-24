@@ -11,6 +11,7 @@ import ChatBotPNG from '../../assets/aiBot.png';
 const AiChatScreen = props => {
   const giftedChatRef = useRef(null);
   const {sendMessage} = useChat();
+  let chatbotUUID = useRef(uuid.v4()).current
 
   const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
@@ -34,26 +35,36 @@ const AiChatScreen = props => {
   );
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
 
-  const onSend = async (messages = []) => {
+  const onSend = async (message = []) => {
     setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
+      GiftedChat.append(previousMessages, message),
     );
-    let messageText = messages[0]?.text;
+    let apiBody = messages.map(msg => {
+      return {
+        by: msg.user.name === "Ai Stylist" ? 'assistant' : 'user',
+        message: msg.text ?? ''
+      }
+    })
+    let messageText = {
+      by: 'user',
+      message: message[0]?.text,
+    }
     setIsTyping(true);
     try {
-      let aiResponse = await sendMessage(messageText);
+      let aiResponse = await sendMessage([...apiBody, messageText]);
       let aiResponseFormatted = [
         {
           _id: uuid.v4(),
           createdAt: new Date(),
           text: aiResponse.message,
           user: {
-            _id: 2,
-            name: 'Vetir bot',
+            _id: chatbotUUID,
+            name: 'Ai Stylist',
             avatar: ChatBotPNG,
+            email: 'assistant@vetir.com'
           },
         },
-      ];
+      ]
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, aiResponseFormatted),
       );
