@@ -20,11 +20,10 @@ export default PurchaseInsightsCard;
 
 const Styles = StyleSheet.create({
   cardContainer: {
-    marginTop: hp(8),
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    height: hp(40),
+    paddingVertical: hp(8),
   },
   backIcon: {
     backgroundColor: '#F7F7F7',
@@ -33,7 +32,7 @@ const Styles = StyleSheet.create({
     width: 36,
   },
   headerText: {
-    marginLeft: wp(20),
+    marginLeft: wp(16),
     fontWeight: '400',
     width: '82%',
     fontSize: FONTS_SIZES.s4,

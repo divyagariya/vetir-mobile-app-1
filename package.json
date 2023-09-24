@@ -53,6 +53,7 @@
     "react-native-simple-toast": "^1.1.4",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-splash-screen": "^3.3.0",
+    "react-native-uuid": "^2.0.1",
     "react-native-view-shot": "^3.5.0",
     "react-native-webview": "^11.23.1",
     "react-native-wheel-color-picker": "^1.2.0",

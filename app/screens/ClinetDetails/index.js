@@ -149,7 +149,6 @@ const ClientDetails = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
-
   useEffect(() => {
     if (Object.keys(recommendedToClientsRes).length) {
       if (recommendedToClientsRes.statusCode === 200) {
@@ -185,7 +184,12 @@ const ClientDetails = props => {
         id: props?.route?.params?.item?.userId,
       });
     }
-  }, [dispatch, props.navigation, singleClosetReponse]);
+  }, [
+    dispatch,
+    props.navigation,
+    props?.route?.params?.item?.userId,
+    singleClosetReponse,
+  ]);
 
   const onPress = item => {
     setMenuSelected(item);
@@ -239,136 +243,146 @@ const ClientDetails = props => {
   };
 
   return (
-    <View style={{flex: 1, padding: 20, backgroundColor: 'white'}}>
+    <View style={{backgroundColor: 'white', flex: 2}}>
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          style={{padding: 5}}
-          onPress={() => props.navigation.goBack()}>
-          <Image
-            resizeMode="contain"
-            source={require('../../assets/iBack.webp')}
-            style={{width: 24, height: 18}}
-          />
-        </TouchableOpacity>
+        style={{flex: 1, padding: 16, backgroundColor: 'white', marginTop: 8}}>
         <View
           style={{
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          {clinetData.profilePicUrl ? (
-            <Image
-              source={{uri: clinetData.profilePicUrl}}
-              style={{width: 40, height: 40, borderRadius: 20}}
-            />
-          ) : (
-            <Image
-              source={require('../../assets/iProfile.png')}
-              style={{width: 40, height: 40}}
-            />
-          )}
-          <View style={{marginLeft: 8, width: '68%'}}>
-            <Text>{clinetData.name}</Text>
-            <Text style={{color: Colors.black30}}>{clinetData.emailId}</Text>
-          </View>
-          <TouchableOpacity
-            style={Styles.dashboardBtn}
-            onPress={() => props.navigation.navigate('DashboardScreen')}>
+          <TouchableOpacity onPress={() => props.navigation.goBack()}>
             <Image
               resizeMode="contain"
-              style={{height: 24, width: 24}}
-              source={require('../../assets/dashboardicon.webp')}
+              source={require('../../assets/iBack.webp')}
+              style={{width: 32, height: 32, marginRight: 8}}
             />
           </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            {clinetData.profilePicUrl ? (
+              <Image
+                source={{uri: clinetData.profilePicUrl}}
+                style={{width: 32, height: 32, borderRadius: 20}}
+              />
+            ) : (
+              <Image
+                source={require('../../assets/iProfile.png')}
+                style={{width: 32, height: 32}}
+              />
+            )}
+            <View style={{marginLeft: 8, width: '68%'}}>
+              <Text>{clinetData.name}</Text>
+              <Text style={{color: Colors.black30}}>{clinetData.emailId}</Text>
+            </View>
+            <TouchableOpacity
+              style={Styles.dashboardBtn}
+              onPress={() =>
+                props.navigation.navigate('DashboardScreen', {
+                  profilePicUrl: clinetData?.profilePicUrl,
+                  name: clinetData?.name,
+                  emailId: clinetData?.emailId,
+                  userId: clinetData?.userId,
+                })
+              }>
+              <Image
+                resizeMode="contain"
+                style={{height: 24, width: 24}}
+                source={require('../../assets/dashboardicon.webp')}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <View style={{marginTop: 12, flex: 1}}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <ScrollView
-            bounces={false}
-            horizontal
-            showsHorizontalScrollIndicator={false}>
-            <View style={{flexDirection: 'row'}}>
-              {menu.map(item => {
-                return (
-                  <TouchableOpacity
-                    style={{
-                      padding: 8,
-                      borderBottomWidth: 1,
-                      borderBottomColor:
-                        item === menuSelected ? 'black' : 'transparent',
-                    }}
-                    onPress={() => onPress(item)}>
-                    <Text
+        <View style={{marginVertical: 16, flex: 1}}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              bounces={false}
+              horizontal
+              showsHorizontalScrollIndicator={false}>
+              <View style={{flexDirection: 'row'}}>
+                {menu.map(item => {
+                  return (
+                    <TouchableOpacity
                       style={{
-                        color: menuSelected === item ? 'black' : Colors.black60,
-                      }}>
-                      {item}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+                        paddingHorizontal: 8,
+                        paddingBottom: 4,
+                        borderBottomWidth: 1,
+                        borderBottomColor:
+                          item === menuSelected ? 'black' : 'transparent',
+                      }}
+                      onPress={() => onPress(item)}>
+                      <Text
+                        style={{
+                          color:
+                            menuSelected === item ? 'black' : Colors.black60,
+                        }}>
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </ScrollView>
+
+            <View style={{flex: 1, marginTop: 12}}>
+              <FlatList
+                data={
+                  menuSelected === 'Closet'
+                    ? getcloset
+                    : menuSelected === 'Outfits'
+                    ? getOutfitData
+                    : recommendedProductsClientsRes
+                }
+                showsVerticalScrollIndicator={false}
+                numColumns={2}
+                ListEmptyComponent={() => (
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      paddingTop: 150,
+                    }}>
+                    <Text style={{color: Colors.black60}}>No Data Found</Text>
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item, index}) => (
+                  <RenderItem
+                    item={item}
+                    openCloset={() => openClosetInfo(item.closetItemId)}
+                    menuSelected={menuSelected}
+                    recommendToClients={() => recommentToClient(item)}
+                    openProduct={() => getProductDetails(item.productId)}
+                    openOutfit={() =>
+                      props.navigation.navigate('OutfitDetail', {
+                        outfitId: item.outfitId,
+                        id: props?.route?.params?.item?.userId,
+                      })
+                    }
+                  />
+                )}
+              />
             </View>
           </ScrollView>
-
-          <View style={{flex: 1}}>
-            <FlatList
-              data={
-                menuSelected === 'Closet'
-                  ? getcloset
-                  : menuSelected === 'Outfits'
-                  ? getOutfitData
-                  : recommendedProductsClientsRes
-              }
-              showsVerticalScrollIndicator={false}
-              numColumns={2}
-              ListEmptyComponent={() => (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    paddingTop: 150,
-                  }}>
-                  <Text style={{color: Colors.black60}}>No Data Found</Text>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <RenderItem
-                  item={item}
-                  openCloset={() => openClosetInfo(item.closetItemId)}
-                  menuSelected={menuSelected}
-                  recommendToClients={() => recommentToClient(item)}
-                  openProduct={() => getProductDetails(item.productId)}
-                  openOutfit={() =>
-                    props.navigation.navigate('OutfitDetail', {
-                      outfitId: item.outfitId,
-                      id: props?.route?.params?.item?.userId,
-                    })
-                  }
-                />
-              )}
-            />
-          </View>
-        </ScrollView>
+        </View>
+        {showClientModal && (
+          <OverlayModal
+            isScrollEnabled={false}
+            showModal={showClientModal}
+            component={
+              <RenderClients
+                setShowClientModal={setShowClientModal}
+                selectClient={selectClient}
+                selectedClients={selectedClients}
+                recommendToClients={recommendToClients}
+                selectedProductImg={selectedProductImg}
+              />
+            }
+          />
+        )}
       </View>
-      {showClientModal && (
-        <OverlayModal
-          isScrollEnabled={false}
-          showModal={showClientModal}
-          component={
-            <RenderClients
-              setShowClientModal={setShowClientModal}
-              selectClient={selectClient}
-              selectedClients={selectedClients}
-              recommendToClients={recommendToClients}
-              selectedProductImg={selectedProductImg}
-            />
-          }
-        />
-      )}
     </View>
   );
 };

@@ -56,7 +56,7 @@ import VideoList from '../screens/Videos';
 import {Colors} from '../colors';
 import {normalize} from '../utils/normalise';
 import {NavigationContainer} from '@react-navigation/native';
-
+import AiChatScreen from '../screens/AiChatScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -115,6 +115,14 @@ const OutfitStack = () => {
   );
 };
 
+const AiChatStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="AiChat" component={AiChatScreen} />
+    </Stack.Navigator>
+  );
+};
+
 function TabData() {
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   return (
@@ -126,6 +134,11 @@ function TabData() {
             imgSource = focused
               ? require('../assets/iLockSelected.webp')
               : require('../assets/iLock.webp');
+          }
+          if (route.name === 'AiChat') {
+            imgSource = focused
+              ? require('../assets/aiBotSelected.png')
+              : require('../assets/aiBot.png');
           } else if (route.name === 'Closet') {
             imgSource = focused
               ? require('../assets/iClosetSelected.webp')
@@ -144,7 +157,7 @@ function TabData() {
 
           return renderTab(route, imgSource, focused);
         },
-        tabBarLabel: ({focused}) => {
+        tabBarLabel: ({focused, children}) => {
           return (
             <Text
               style={{
@@ -152,9 +165,9 @@ function TabData() {
                 fontWeight: '400',
                 textTransform: 'uppercase',
                 letterSpacing: 1,
-                color: Colors.black,
+                color: children === 'AiChat' ? Colors.purple : Colors.black,
               }}>
-              {route.name}
+              {children === 'AiChat' ? 'AI Stylist' : route.name}
             </Text>
           );
         },
@@ -171,6 +184,7 @@ function TabData() {
         </>
       ) : (
         <>
+          <Tab.Screen name="AiChat" component={AiChatStack} />
           <Tab.Screen name="Closet" component={ClosetStack} />
           <Tab.Screen name="Outfits" component={OutfitStack} />
         </>

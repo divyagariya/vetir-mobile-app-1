@@ -10,7 +10,6 @@ export const Styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   profileDetailsContainer: {
-    marginTop: hp(20),
     alignItems: 'center',
   },
   profileImageContainer: {
@@ -18,19 +17,20 @@ export const Styles = StyleSheet.create({
     justifyContent: 'center',
   },
   profilePic: {
-    height: wp(65),
-    width: wp(65),
-    marginBottom: hp(10),
+    height: wp(64),
+    width: wp(64),
+    borderRadius: wp(32.5),
+    marginBottom: hp(8),
   },
   firstRowView: {
-    paddingHorizontal: wp(20),
+    paddingHorizontal: wp(16),
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
   separatorView: {
-    height: hp(16),
+    height: '50%',
     width: wp(1),
     backgroundColor: Colors.grey2,
   },

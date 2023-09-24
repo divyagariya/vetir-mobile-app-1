@@ -9,6 +9,6 @@ export const Styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   flatListContainer: {
-    marginTop: hp(10),
+    marginTop: hp(0),
   },
 });
