@@ -6,6 +6,7 @@ const initialState = {
   recommendedProductsClientsRes: [],
   dislikeResp: {},
   refreshClients: false,
+  clientData: {},
 };
 
 const StylistReducer = (state = initialState, action) => {
@@ -55,6 +56,20 @@ const StylistReducer = (state = initialState, action) => {
       return {
         ...state,
         refreshClients: action.value,
+      };
+    }
+
+    case 'CLIENT_DETAILS': {
+      return {
+        ...state,
+        clientData: action.value,
+      };
+    }
+
+    case 'CLIENT_DETAILS': {
+      return {
+        ...state,
+        clientData: action.value,
       };
     }
 

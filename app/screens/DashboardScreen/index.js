@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Styles} from './styles';
 import DashboardHeader from '../../components/DashboardHeader';
 import BoldLightText from '../../components/BoldLightText';
 import PurchaseInsightsCard from '../../components/PurchaseInsightsCard';
+import {useDispatch, useSelector} from 'react-redux';
+import {getClientDetails} from '../../redux/actions/stylistAction';
 
 const purchaseInsightsArray = [
   {
@@ -29,8 +31,25 @@ const purchaseInsightsArray = [
 ];
 
 const DashboardScreen = props => {
+  const dispatch = useDispatch();
+  const clientRes = useSelector(state => state.StylistReducer.clientData);
+  const [clientData, setClientData] = useState({});
   const {navigation} = props;
+  const {
+    profilePicUrl = '',
+    name = '',
+    emailId = '',
+    userId,
+  } = props?.route?.params || '';
+  useEffect(() => {
+    dispatch(getClientDetails(userId));
+  }, [dispatch, userId]);
 
+  useEffect(() => {
+    setClientData(clientRes);
+  }, [clientRes]);
+
+  console.log('clientData', clientData);
   const onPressCard = id => {
     switch (id) {
       case 1:
@@ -41,6 +60,7 @@ const DashboardScreen = props => {
           comingFromItemCat: true,
           isColorComp: false,
           headerText: 'Items by category',
+          dataArray: clientData?.categoryStats,
         });
         break;
       case 3:
@@ -48,12 +68,14 @@ const DashboardScreen = props => {
           comingFromItemCat: false,
           isColorComp: false,
           headerText: 'Top Brands',
+          dataArray: clientData?.brandStats,
         });
         break;
       case 4:
         props.navigation.navigate('ItemsByCategory', {
           comingFromItemCat: false,
           isColorComp: true,
+          dataArray: clientData?.colorStats,
           headerText: 'Favorite Colors',
         });
         break;
@@ -61,42 +83,56 @@ const DashboardScreen = props => {
         break;
     }
   };
-
   return (
     <ScrollView bounces={false} style={Styles.container}>
       <DashboardHeader navigation={navigation} headerText={'Dashboard'} />
       <View style={Styles.profileDetailsContainer}>
         <View style={Styles.profileImageContainer}>
           <Image
-            source={require('../../assets/iProfile.png')}
+            source={
+              profilePicUrl
+                ? {uri: profilePicUrl}
+                : require('../../assets/iProfile.png')
+            }
             style={Styles.profilePic}
           />
-          <Text style={Styles.nameText}>Paula Lee</Text>
+
+          <Text style={Styles.nameText}>{name}</Text>
         </View>
-        <View style={[Styles.firstRowView, {marginTop: 10}]}>
+        <View style={[Styles.firstRowView, {marginTop: 16}]}>
           <BoldLightText
-            headerText={'$5678'}
+            headerText={`$${clientData?.totalProductValue}`}
             bodyText={'TOTAL PRODUCT VALUE'}
           />
           <View style={Styles.separatorView} />
           <BoldLightText
-            headerText={'$5678'}
+            headerText={`$${parseFloat(clientData?.averageOrderValue)
+              .toFixed(2)
+              .toString()}`}
             bodyText={'AVERAGE ORDER VALUE'}
           />
         </View>
         <View style={Styles.firstRowView}>
-          <BoldLightText headerText={'$5678'} bodyText={'OUTFITS'} />
+          <BoldLightText
+            headerText={clientData?.totalOutfits}
+            bodyText={'OUTFITS'}
+          />
           <View style={Styles.separatorView} />
-          <BoldLightText headerText={'$5678'} bodyText={'CLOSET ITEMS'} />
+          <BoldLightText
+            headerText={
+              clientData?.closetDetails && clientData?.closetDetails.length
+            }
+            bodyText={'CLOSET ITEMS'}
+          />
         </View>
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate('ProfileDetails', {
-              userName: 'Paula Lee',
-              gender: 'Female',
-              email: 'paula.lee008@gmail.com',
-              phone: '+1122342434',
-              add: '264 Orphan road, Buffalo',
+              userName: clientData?.name,
+              gender: clientData?.gender,
+              email: clientData?.emailId,
+              // phone: '+1122342434',
+              // add: '264 Orphan road, Buffalo',
             });
           }}
           style={Styles.viewProfileBtn}>
@@ -104,16 +140,18 @@ const DashboardScreen = props => {
         </TouchableOpacity>
       </View>
       <Text style={Styles.purchaseHeader}>Purchase Insights</Text>
-      {purchaseInsightsArray.map(item => {
-        return (
-          <PurchaseInsightsCard
-            navigation={navigation}
-            title={item.title}
-            onPress={() => onPressCard(item.id)}
-            icon={item.icon}
-          />
-        );
-      })}
+      <View style={{marginTop: 8}}>
+        {purchaseInsightsArray.map(item => {
+          return (
+            <PurchaseInsightsCard
+              navigation={navigation}
+              title={item.title}
+              onPress={() => onPressCard(item.id)}
+              icon={item.icon}
+            />
+          );
+        })}
+      </View>
     </ScrollView>
   );
 };

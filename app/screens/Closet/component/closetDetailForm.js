@@ -164,6 +164,10 @@ const ClosetDetailsFrom = props => {
       Toast.show('Please select Category from given options');
       return;
     }
+    if (!priceText) {
+      Toast.show('Please add price');
+      return;
+    }
     // if (!selectedSeason.length) {
     //   Toast.show('Please select seasons');
     //   return;
@@ -189,6 +193,7 @@ const ClosetDetailsFrom = props => {
       brandId: state.brandSelected?.id,
       season: selectedSeason,
       colorCode: colorsFilter,
+      price: priceText,
       notes: notesText,
       isImageBase64: isImageEdit,
       itemImageUrl: isImageEdit
@@ -414,7 +419,7 @@ const ClosetDetailsFrom = props => {
   );
 };
 
-export default ClosetDetailsFrom;
+export default React.memo(ClosetDetailsFrom);
 
 const styles = StyleSheet.create({
   seasonContainer: {

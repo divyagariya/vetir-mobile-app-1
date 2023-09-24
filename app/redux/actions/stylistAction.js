@@ -68,3 +68,16 @@ export function dislikeProductAction(data) {
     }
   };
 }
+
+export function getClientDetails(clientId) {
+  return async dispatch => {
+    const apiResponse = await NoAuthAPI(
+      `getUserDetails?userId=${clientId}`,
+      'GET',
+    );
+    console.log('apiResponse', apiResponse);
+    if (Object.keys(apiResponse).length) {
+      dispatch({type: 'CLIENT_DETAILS', value: apiResponse});
+    }
+  };
+}
