@@ -462,7 +462,6 @@ const ChatScreen = props => {
             // }}
             messages={messages}
             renderActions={ref => renderActions(ref)}
-            alwaysShowSend
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
             // isTyping
             onSend={newMessages => onSend(newMessages)}
