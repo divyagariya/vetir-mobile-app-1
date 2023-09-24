@@ -1,19 +1,19 @@
-import React, {useState, useRef} from 'react';
-import {GiftedChat} from 'react-native-gifted-chat';
-import {View, ActivityIndicator, Text} from 'react-native';
+import React, { useState, useRef } from 'react';
+import { GiftedChat } from 'react-native-gifted-chat';
+import { View, ActivityIndicator, Text } from 'react-native';
 import uuid from 'react-native-uuid';
-import {Styles} from './styles';
-import {useSelector} from 'react-redux';
-import {Image} from 'react-native';
-import {useChat} from '../../hooks/useChat';
+import { Styles } from './styles';
+import { useSelector } from 'react-redux';
+import { Image } from 'react-native';
+import { useChat } from '../../hooks/useChat';
 import ChatBotPNG from '../../assets/aiBot.png';
 
 const AiChatScreen = props => {
   const giftedChatRef = useRef(null);
-  const {sendMessage} = useChat();
+  const { sendMessage } = useChat();
   let chatbotUUID = useRef(uuid.v4()).current
 
-  const {receiverDetails} = props?.route?.params || {};
+  const { receiverDetails } = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -82,7 +82,7 @@ const AiChatScreen = props => {
         <Text style={Styles.headerText}>AI Stylist</Text>
       </View>
       {loadingMessages ? (
-        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
           <ActivityIndicator size="large" color="grey" />
         </View>
       ) : (
@@ -95,20 +95,19 @@ const AiChatScreen = props => {
           // }}
           messages={messages}
           // renderActions={ref => renderActions(ref)}
-          alwaysShowSend
+          // alwaysShowSend
           isTyping={isTyping}
           onSend={newMessages => onSend(newMessages)}
           // renderInputToolbar={props => <CustomInputToolbar {...props} />}
           // renderInputToolbar={props => <CustomInputToolbar {...props} />}
-          textInputStyle={Styles.textInputStyle}
-          minInputToolbarHeight={50}
+          // textInputStyle={Styles.textInputStyle}
+          // minInputToolbarHeight={50}
           renderUsernameOnMessage
           // renderChatEmpty={renderChatEmpty}
           // renderActions={renderActions}
-          // textInputProps={{
-          //   height: 40,
-          //   width: 208,
-          // }}
+          textInputProps={{
+            height: 30,
+          }}
           // renderSend={props => (
           //   <Send {...props}>
           //     <Image
