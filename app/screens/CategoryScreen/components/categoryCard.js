@@ -3,6 +3,11 @@ import {TouchableOpacity, Image, Text, View} from 'react-native';
 import {Colors} from '../../../colors';
 import {VView, VText} from '../../../components';
 import {FONTS_SIZES} from '../../../fonts';
+import {Dimensions} from 'react-native';
+
+const screenWidth = Dimensions.get('window').width / 2;
+
+const cardHeight = (4 / 3) * screenWidth;
 
 export default ({
   item,
@@ -16,148 +21,148 @@ export default ({
 }) => {
   return (
     <>
-      <VView
-        style={{
-          marginBottom: 32,
-          alignSelf: 'center',
-          flex: 0.5,
-          marginHorizontal: 8,
-        }}>
-        <TouchableOpacity
-          onPress={getProductDetails}
-          activeOpacity={0.7}
+      <VView style={{flex: 0.5, alignSelf: 'center'}}>
+        <View
           style={{
-            width: '100%',
-            height: 218.67,
-            alignSelf: 'center',
-            backgroundColor: Colors.grey1,
+            borderWidth: 1,
+            borderColor: Colors.grey1,
           }}>
-          <Image
-            source={{uri: item?.imageUrls[0]}}
-            resizeMode="contain"
+          <TouchableOpacity
+            onPress={getProductDetails}
+            activeOpacity={0.7}
             style={{
-              height: 192,
-              flex: 1,
-            }}
-          />
-        </TouchableOpacity>
-        <VView
-          style={{
-            marginTop: 8,
-          }}>
-          {isStylistUser ? (
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={item.addedToCloset ? deletFromClost : addToCloset}
-                style={{marginVertical: 8, marginRight: 8}}>
-                {item.addedToCloset ? (
-                  <Image
-                    source={require('../../../assets/addedCloset.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <Image
-                    source={require('../../../assets/iAdd.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={recommentToClient}
-                style={{marginVertical: 8, marginRight: 8}}>
-                <Image
-                  source={require('../../../assets/iRecommend.webp')}
+              width: '100%',
+              height: cardHeight,
+              alignSelf: 'center',
+            }}>
+            <Image
+              source={{uri: item?.imageUrls[0]}}
+              resizeMode="contain" // Use "cover" to fill the container while maintaining the aspect ratio
+              style={{
+                flex: 1,
+              }}
+            />
+          </TouchableOpacity>
+          <VView style={{padding: 8}}>
+            {isStylistUser ? (
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={item.addedToCloset ? deletFromClost : addToCloset}
                   style={{
-                    height: 24,
-                    width: 24,
-                  }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                onPress={item.addedToCloset ? deletFromClost : addToCloset}
-                style={{marginVertical: 8, marginRight: 8}}>
-                {item.addedToCloset ? (
+                    padding: 8,
+                  }}>
+                  {item.addedToCloset ? (
+                    <Image
+                      source={require('../../../assets/addedCloset.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <Image
+                      source={require('../../../assets/iAdd.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={recommentToClient}
+                  style={{padding: 8}}>
                   <Image
-                    source={require('../../../assets/addedCloset.webp')}
+                    source={require('../../../assets/iRecommend.webp')}
                     style={{
                       height: 24,
                       width: 24,
                     }}
                     resizeMode="contain"
                   />
-                ) : (
-                  <Image
-                    source={require('../../../assets/iAdd.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity style={{margin: 8}} onPress={dislikeProducts}>
-                {item.isDisliked ? (
-                  <Image
-                    source={require('../../../assets/iDisliked.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                ) : item.isDisliked != undefined ? (
-                  <Image
-                    source={require('../../../assets/iDislike.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
-                    resizeMode="contain"
-                  />
-                ) : null}
-              </TouchableOpacity>
-            </View>
-          )}
-          <Text
-            numberOfLines={1}
-            style={{
-              fontSize: FONTS_SIZES.s4,
-              fontWeight: '700',
-              marginBottom: 4,
-            }}>
-            {item.brandName}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={{
-              fontSize: FONTS_SIZES.s4,
-              fontWeight: '400',
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={item.addedToCloset ? deletFromClost : addToCloset}
+                  style={{padding: 8}}>
+                  {item.addedToCloset ? (
+                    <Image
+                      source={require('../../../assets/addedCloset.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <Image
+                      source={require('../../../assets/iAdd.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{padding: 8}}
+                  onPress={dislikeProducts}>
+                  {item.isDisliked ? (
+                    <Image
+                      source={require('../../../assets/iDisliked.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  ) : item.isDisliked != undefined ? (
+                    <Image
+                      source={require('../../../assets/iDislike.webp')}
+                      style={{
+                        height: 24,
+                        width: 24,
+                      }}
+                      resizeMode="contain"
+                    />
+                  ) : null}
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={{padding: 8, paddingTop: 4}}>
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontSize: FONTS_SIZES.s4,
+                  fontWeight: '700',
+                  marginBottom: 4,
+                }}>
+                {item.brandName}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontSize: FONTS_SIZES.s4,
+                  fontWeight: '400',
+                  marginBottom: 4,
+                }}>
+                {item.productName}
+              </Text>
 
-              marginBottom: 4,
-            }}>
-            {item.productName}
-          </Text>
-
-          <VText
-            text={`$${item.productPrice}`}
-            style={{
-              fontSize: FONTS_SIZES.s4,
-            }}
-          />
-        </VView>
+              <VText
+                text={`$${item.productPrice}`}
+                style={{
+                  fontSize: FONTS_SIZES.s4,
+                }}
+              />
+            </View>
+          </VView>
+        </View>
       </VView>
     </>
   );
