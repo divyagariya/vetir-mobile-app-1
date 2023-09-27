@@ -61,14 +61,17 @@ export function viewVideo(data) {
   };
 }
 
-export function getFilteredProducts(data) {
+export function getFilteredProducts(data, isFromPagination) {
   return async (dispatch, getState) => {
     const data1 = data;
     data1.userId = getState().AuthReducer.userId;
     let url = 'get/allProducts/v2';
     const apiResponse = await NoAuthAPI(url, 'POST', data1);
     if (Object.keys(apiResponse).length) {
-      dispatch({type: 'FILTERED_PRODUCTS', value: apiResponse});
+      dispatch({
+        type: 'FILTERED_PRODUCTS',
+        value: apiResponse,
+      });
     }
   };
 }

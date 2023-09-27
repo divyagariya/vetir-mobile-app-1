@@ -11,6 +11,7 @@ const initialState = {
   getColorsResponse: [],
   getSizeResponse: [],
   brandData2: [],
+  addToClosetParams: {},
 };
 
 const ClosetReducer = (state = initialState, action) => {
@@ -43,6 +44,7 @@ const ClosetReducer = (state = initialState, action) => {
       return {
         ...state,
         addClosetResponse: action.value,
+        addToClosetParams: action.data,
       };
     }
     case 'SINGLE_CLOSET': {
