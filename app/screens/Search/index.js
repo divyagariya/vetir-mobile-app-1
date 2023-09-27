@@ -59,6 +59,8 @@ const Search = props => {
   const [productList, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(0);
+  const [currentProdID, setcurrentProdID] = useState('');
+  const [isFromPagination, setIsFromPagination] = useState(false);
 
   const [totalDataCount, setTotalDataCount] = useState(0);
   const filteredProducts = useSelector(
@@ -82,13 +84,29 @@ const Search = props => {
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
+        let prod = productList;
+        prod.map(product => {
+          if (product?.productId === currentProdID) {
+            product.addedToCloset = false;
+            product.closetItemId = addClosetResponse.closetItemId;
+          }
+        });
+        // setProducts([]);
+        setProducts(prev => [...prev, ...prod]);
         dispatch({type: 'DELETE_CLOSET', value: {}});
         Toast.show('Cloth successfully removed from closet');
-        dispatch(getFilteredProducts(filterParams));
+        // dispatch(getFilteredProducts(filterParams));
         dispatch(getClosetData());
       }
     }
-  }, [deleteClosetResponse, dispatch, filterParams]);
+  }, [
+    addClosetResponse.closetItemId,
+    currentProdID,
+    deleteClosetResponse,
+    dispatch,
+    filterParams,
+    productList,
+  ]);
 
   const showFilterFunction = value => {
     setModal(true);
@@ -127,10 +145,15 @@ const Search = props => {
       setLoader(false);
       setTotalDataCount(filteredProducts?.total);
       setTotalPageCount(filteredProducts?.totalPage);
-      setProducts([...productList, ...filteredProducts?.productDetails]);
+      if (isFromPagination) {
+        setProducts([...productList, ...filteredProducts?.productDetails]);
+      } else {
+        setProducts([]);
+        setProducts(prev => [...prev, ...filteredProducts.productDetails]);
+      }
       dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
-  }, [dispatch, filteredProducts, productList]);
+  }, [dispatch, filteredProducts, isFromPagination, productList]);
 
   // useEffect(() => {
   //   if (Object.keys(filteredProducts).length) {
@@ -166,13 +189,23 @@ const Search = props => {
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
+        let prod = productList;
+        prod.map(product => {
+          if (product?.productId === currentProdID) {
+            product.addedToCloset = true;
+            product.closetItemId = addClosetResponse.closetItemId;
+          }
+        });
+        // setProducts([]);
+        setProducts(prev => [...prev, ...prod]);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getClosetData());
-        dispatch(getFilteredProducts(filterParams));
-        Toast.show('Item successfully added in closet');
+        // dispatch(getFilteredProducts(filterParams));
+        Toast.show('Added to closet');
+        // dispatch(getFilteredProducts(filterParams));
       }
     }
-  }, [addClosetResponse, dispatch]);
+  }, [addClosetResponse, currentProdID, dispatch, productList]);
 
   const addToCloset = item => {
     let data = {
@@ -186,6 +219,7 @@ const Search = props => {
       isImageBase64: false,
       productId: item.productId,
     };
+    setcurrentProdID(item.productId);
     dispatch(addDataInCloset(data));
   };
 
@@ -194,6 +228,15 @@ const Search = props => {
       userId: userId,
       closetItemId: item?.closetItemId,
     };
+    setcurrentProdID(item.productId);
+    let prod = productList;
+    prod.map(product => {
+      if (product?.closetItemId === currentProdID) {
+        product.addedToCloset = false;
+        product.closetItemId = undefined;
+      }
+    });
+    setProducts(prev => [...prev, ...prod]);
     dispatch(deleteClosetData(data));
   };
 
@@ -232,7 +275,8 @@ const Search = props => {
     }
     data1.key = searchKey;
     setFilterParametrs(data);
-    dispatch(getFilteredProducts(data1));
+    setIsFromPagination(false);
+    dispatch(getFilteredProducts(data1, false));
   };
 
   // Your loadMoreData function that fetches more data
@@ -244,6 +288,7 @@ const Search = props => {
     try {
       if (currentPage !== totalPageCount) {
         setLoader(true);
+        setIsFromPagination(true);
         const nextPage = currentPage + 1;
         const data = {
           key: searchKey,
@@ -252,7 +297,7 @@ const Search = props => {
         // setFilterParametrs(data);
         dispatch(getFilteredProducts(data));
         setCurrentPage(nextPage);
-        setLoader(false);
+        // setLoader(false);
       }
     } catch (error) {
       // Handle errors
