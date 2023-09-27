@@ -184,6 +184,7 @@ const ClosetDetailsFrom = props => {
       Toast.show('Please select one color');
       return;
     }
+    const price = priceText.replace(/\$/g, '');
     categorySelected = categorySelected.id.split(' ');
 
     let data = {
@@ -193,7 +194,7 @@ const ClosetDetailsFrom = props => {
       brandId: state.brandSelected?.id,
       season: selectedSeason,
       colorCode: colorsFilter,
-      price: priceText,
+      price: price,
       notes: notesText,
       isImageBase64: isImageEdit,
       itemImageUrl: isImageEdit
