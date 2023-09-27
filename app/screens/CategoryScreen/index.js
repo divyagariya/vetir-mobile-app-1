@@ -36,6 +36,7 @@ import {
   recommendedAction,
 } from '../../redux/actions/stylistAction';
 import {debounce} from '../../utils/common';
+import {returnFilterParams} from './common';
 
 export const ClientList = ({item, index, selectClient, selectedClients}) => {
   return (
@@ -297,7 +298,6 @@ const CategoryScreen = props => {
       console.log('dislikeResp useEffect', dislikeResp);
       if (dislikeResp.statusCode === 200) {
         dispatch({type: 'DISLIKE_PRODUCTS', value: {}});
-
         dispatch(getFilteredProducts(filterParams));
         if (dislikeResp.recommendedProductDetails.dislike) {
           Toast.show('Not liked');
@@ -373,15 +373,22 @@ const CategoryScreen = props => {
   }, [dispatch, productDetailResponse, props.navigation]);
 
   useEffect(() => {
-    if (props.route.params.data) {
-      const data = {
-        optionId: props.route.params.data.optionId,
-        page: currentPage,
-      };
-      setFilterParametrs(data);
-      dispatch(getFilteredProducts(data));
+    if (props.route.params.data && !isFromPagination) {
+      const data1 = {};
+      const data = returnFilterParams(filterParams);
+      data1.optionId = props.route.params.data.optionId;
+      data1.page = currentPage;
+      const dataTosend = {...data1, ...data};
+      // setFilterParametrs(data);
+      dispatch(getFilteredProducts(dataTosend));
     }
-  }, [currentPage, dispatch, props.route.params.data]);
+  }, [
+    currentPage,
+    dispatch,
+    filterParams,
+    isFromPagination,
+    props.route.params.data,
+  ]);
 
   useEffect(() => {
     if (Object.keys(filteredProducts).length) {
@@ -566,11 +573,12 @@ const CategoryScreen = props => {
         setLoader(true);
         setIsFromPagination(true);
         const nextPage = currentPage + 1;
-        const data = {
-          optionId: props.route.params.data.optionId,
-          page: nextPage,
-        };
-        dispatch(getFilteredProducts(data));
+        const data1 = {};
+        const data = returnFilterParams(filterParams);
+        data1.optionId = props.route.params.data.optionId;
+        data1.page = nextPage;
+        const dataTosend = {...data1, ...data};
+        dispatch(getFilteredProducts(dataTosend));
         setCurrentPage(nextPage);
         // setLoader(false);
       }

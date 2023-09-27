@@ -26,6 +26,7 @@ import {
 import CategoryCard from '../CategoryScreen/components/categoryCard';
 import {FilterModal} from '../Closet';
 import {debounce} from '../../utils/common';
+import {returnFilterParams} from '../CategoryScreen/common';
 
 const Search = props => {
   const sortingData = [
@@ -174,15 +175,17 @@ const Search = props => {
   }, [dispatch, productDetailResponse, props.navigation]);
 
   const searchProduct = () => {
-    if (searchKey.length) {
+    if (searchKey.length && !isFromPagination) {
       setSearch(false);
       dispatch({type: 'GET_SEARCH_RESULT', value: []});
-      const data = {
-        key: searchKey,
-        page: currentPage,
-      };
-      setFilterParametrs(data);
-      dispatch(getFilteredProducts(data));
+
+      const data1 = {};
+      const data = returnFilterParams(filterParams);
+      data1.key = searchKey;
+      data1.page = currentPage;
+      const dataTosend = {...data1, ...data};
+      // setFilterParametrs(data);
+      dispatch(getFilteredProducts(dataTosend));
     }
   };
 
@@ -290,12 +293,15 @@ const Search = props => {
         setLoader(true);
         setIsFromPagination(true);
         const nextPage = currentPage + 1;
-        const data = {
-          key: searchKey,
-          page: nextPage,
-        };
+
+        const data1 = {};
+        const data = returnFilterParams(filterParams);
+        data1.key = searchKey;
+        data1.page = nextPage;
+        const dataTosend = {...data1, ...data};
+        dispatch(getFilteredProducts(dataTosend));
+
         // setFilterParametrs(data);
-        dispatch(getFilteredProducts(data));
         setCurrentPage(nextPage);
         // setLoader(false);
       }
