@@ -93,7 +93,7 @@ const Search = props => {
           }
         });
         // setProducts([]);
-        setProducts(prev => [...prev, ...prod]);
+        setProducts(prod);
         dispatch({type: 'DELETE_CLOSET', value: {}});
         Toast.show('Cloth successfully removed from closet');
         // dispatch(getFilteredProducts(filterParams));
@@ -200,7 +200,7 @@ const Search = props => {
           }
         });
         // setProducts([]);
-        setProducts(prev => [...prev, ...prod]);
+        setProducts(prod);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getClosetData());
         // dispatch(getFilteredProducts(filterParams));
@@ -239,7 +239,7 @@ const Search = props => {
         product.closetItemId = undefined;
       }
     });
-    setProducts(prev => [...prev, ...prod]);
+    setProducts(prod);
     dispatch(deleteClosetData(data));
   };
 

@@ -327,10 +327,9 @@ const CategoryScreen = props => {
           }
         });
         // setProducts([]);
-        setProducts(prev => [...prev, ...prod]);
+        setProducts(prod);
         dispatch({type: 'DELETE_CLOSET', value: {}});
         Toast.show('Removed from closet');
-        // dispatch(getFilteredProducts(filterParams));
         dispatch(getClosetData());
       }
     }
@@ -354,11 +353,10 @@ const CategoryScreen = props => {
           }
         });
         // setProducts([]);
-        setProducts(prev => [...prev, ...prod]);
+        setProducts(prod);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
-        dispatch(getClosetData());
-        // dispatch(getFilteredProducts(filterParams));
         Toast.show('Added to closet');
+        dispatch(getClosetData());
       }
     }
   }, [addClosetResponse, currentProdID, dispatch, filterParams, productList]);
@@ -450,7 +448,6 @@ const CategoryScreen = props => {
       productId: item.productId,
     };
     setcurrentProdID(item.productId);
-
     console.log('@@ add data', JSON.stringify(data, undefined, 2));
     dispatch(addDataInCloset(data));
   };
@@ -515,7 +512,7 @@ const CategoryScreen = props => {
         product.closetItemId = undefined;
       }
     });
-    setProducts(prev => [...prev, ...prod]);
+    // setProducts(prev => [...prev, ...prod]);
     dispatch(deleteClosetData(data));
   };
 
