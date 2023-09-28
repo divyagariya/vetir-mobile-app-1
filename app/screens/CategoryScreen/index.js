@@ -38,7 +38,13 @@ import {
 import {debounce} from '../../utils/common';
 import {returnFilterParams} from './common';
 
-export const ClientList = ({item, index, selectClient, selectedClients}) => {
+export const ClientList = ({
+  item,
+  index,
+  selectClient,
+  selectedClients,
+  onPressChat,
+}) => {
   return (
     <TouchableOpacity
       style={{
@@ -60,11 +66,19 @@ export const ClientList = ({item, index, selectClient, selectedClients}) => {
             style={{width: 40, height: 40}}
           />
         )}
-        <View style={{marginLeft: 8}}>
+        <View style={{marginLeft: 8, width: '70%'}}>
           <Text>{item.name}</Text>
           <Text style={{color: Colors.black30}}>{item.emailId}</Text>
         </View>
       </View>
+
+      <TouchableOpacity onPress={() => onPressChat(item)}>
+        <Image
+          source={require('../../assets/chat.webp')}
+          style={{width: 16, height: 16}}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
 
       <View>
         <Image
@@ -87,6 +101,8 @@ export const RenderClients = ({
   selectedClients,
   recommendToClients = () => {},
   selectedProductImg = '',
+  selectedProductData = {},
+  navigation,
 }) => {
   const [noteUi, setNoteUi] = useState(false);
   const [note, setNote] = useState('');
@@ -218,6 +234,18 @@ export const RenderClients = ({
           return (
             <ClientList
               item={item}
+              onPressChat={() => {
+                setShowClientModal(false);
+                navigation.navigate('ChatScreen', {
+                  selectedProductData: selectedProductData,
+                  comingFromProduct: true,
+                  receiverDetails: {
+                    emailId: item?.emailId,
+                    name: item?.name,
+                    userId: item?.userId,
+                  },
+                });
+              }}
               index={index}
               selectClient={selectClient}
               selectedClients={selectedClients}
@@ -253,6 +281,7 @@ const CategoryScreen = props => {
   const [showModal, setModal] = useState(false);
   const [showClientModal, setShowClientModal] = useState(false);
   const [selectedProductImg, setSelectedProductImg] = useState('');
+  const [selectedProductData, setSelectedProductData] = useState({});
   const [showSortModal, setSortModal] = useState(false);
   const [selectedSort, setSelectedSort] = useState({
     type: 'asc',
@@ -518,6 +547,7 @@ const CategoryScreen = props => {
 
   const recommentToClient = item => {
     setShowClientModal(true);
+    setSelectedProductData(item);
     setRecommendedProductId(item.productId);
     setSelectedProductImg(item.imageUrls[0]);
   };
@@ -679,8 +709,10 @@ const CategoryScreen = props => {
           showModal={showClientModal}
           component={
             <RenderClients
+              navigation={props.navigation}
               setShowClientModal={setShowClientModal}
               selectClient={selectClient}
+              selectedProductData={selectedProductData}
               selectedClients={selectedClients}
               recommendToClients={recommendToClients}
               selectedProductImg={selectedProductImg}
