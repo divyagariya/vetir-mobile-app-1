@@ -355,7 +355,7 @@ const ChatScreen = props => {
       return (
         <>
           <Video
-            resizeMode="cover"
+            resizeMode="contain"
             playInBackground
             paused={true}
             source={{uri: props.currentMessage.video}}
@@ -366,6 +366,8 @@ const ChatScreen = props => {
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
+            fullscreen
+            fullscreenOrientation='portrait'
           />
         </>
       );
