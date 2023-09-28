@@ -463,7 +463,7 @@ const ChatScreen = props => {
                 'PUT',
                 s3UploadUrl,
                 {
-                  'Content-Type': 'multipart/form-data',
+                  'Content-Type': undefined,
                 },
                 RNFetchBlob.wrap(media.path),
               ).then(m => {
