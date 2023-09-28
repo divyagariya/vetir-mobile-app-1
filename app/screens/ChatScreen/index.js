@@ -360,14 +360,14 @@ const ChatScreen = props => {
             paused={true}
             source={{uri: props.currentMessage.video}}
             style={{
-              width: normalize(200),
-              height: normalize(200),
+              width: normalize(225),
+              height: normalize(300),
               borderRadius: 10,
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
             fullscreen
-            fullscreenOrientation='portrait'
+            fullscreenOrientation="portrait"
           />
         </>
       );
@@ -459,9 +459,9 @@ const ChatScreen = props => {
             if (media.mime.startsWith('video')) {
               let s3UploadUrl = await getPreSignedUrl({
                 id: isStylistUser ? personalStylistId : clientUserId,
-                type: isStylistUser ? 'personalStylistId' : 'userId'
-              })
-              console.log('s3UploadUrl', s3UploadUrl)
+                type: isStylistUser ? 'personalStylistId' : 'userId',
+              });
+              console.log('s3UploadUrl', s3UploadUrl);
               RNFetchBlob.fetch(
                 'PUT',
                 s3UploadUrl,
@@ -469,14 +469,16 @@ const ChatScreen = props => {
                   'Content-Type': undefined,
                 },
                 RNFetchBlob.wrap(media.path),
-              ).then(m => {
-                console.log('upload finish')
-                if(ref) {
-                  ref.onSend({ video: media.path }, true)
-                }
-             }).catch(error => {
-              console.log('upload error', error)
-             })
+              )
+                .then(m => {
+                  console.log('upload finish');
+                  if (ref) {
+                    ref.onSend({video: media.path}, true);
+                  }
+                })
+                .catch(error => {
+                  console.log('upload error', error);
+                });
               // Handle video
               // const videoPath = `data:${media.mime};base64,${media.path}`;
               // dataToSend = {
