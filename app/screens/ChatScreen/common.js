@@ -34,7 +34,7 @@ export const uploadMediaOnS3 = (dataToSend, imageURL, ref) => {
     });
 };
 
-export const getPreSignedUrl = ({ id, type }) => {
+export const getPreSignedUrl = async({ id, type }) => {
   fetch(
     `https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatVideo?${type}=${id}`,
     {
