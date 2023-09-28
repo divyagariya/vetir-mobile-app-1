@@ -55,8 +55,11 @@ const ChatScreen = props => {
   const giftedChatRef = useRef(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // To keep track of the currently displayed image
+  const [myRef, setMyRef] = useState(null);
 
-  const {receiverDetails} = props?.route?.params || {};
+  const {receiverDetails, selectedProductData, comingFromProduct} =
+    props?.route?.params || {};
+  const [firstTime, setFirstTime] = useState(true);
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
   const userEmail = useSelector(
@@ -87,15 +90,19 @@ const ChatScreen = props => {
   const showActionSheet = ref => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Gallery', 'Camera', 'Cancel'],
-        destructiveButtonIndex: 0,
-        cancelButtonIndex: 2,
+        options: ['Gallery', 'Camera', 'Video Recorder', 'Cancel'],
+        destructiveButtonIndex: 3,
+        cancelButtonIndex: 3,
+        title: 'Pick the media',
       },
       buttonIndex => {
         if (buttonIndex === 0) {
           onSendImage(buttonIndex, ref);
           // delete action
         } else if (buttonIndex === 1) {
+          onSendImage(buttonIndex, ref);
+          // share action
+        } else if (buttonIndex === 2) {
           onSendImage(buttonIndex, ref);
           // share action
         }
@@ -125,11 +132,70 @@ const ChatScreen = props => {
           };
         }),
       );
-      // Set loadingMessages to false when messages are loaded
       setLoadingMessages(false);
+      setMyRef(giftedChatRef);
     });
+    // sendItem();
+
     return () => unsubscribe();
-  }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
+  }, [
+    clientUserId,
+    comingFromProduct,
+    firstTime,
+    isStylistUser,
+    myRef,
+    personalStylistId,
+    receiverDetails?.userId,
+  ]);
+
+  useEffect(() => {
+    if (firstTime && myRef?.current && comingFromProduct) {
+      myRef.current.onSend(
+        {
+          image: selectedProductData?.imageUrls[0],
+        },
+        true,
+      );
+      setFirstTime(false);
+    }
+  }, [
+    comingFromProduct,
+    firstTime,
+    myRef,
+    selectedProductData?.imageUrls,
+    setMyRef,
+  ]);
+
+  // useEffect(() => {
+  //   console.log('giftedChatRef', giftedChatRef);
+  //   debugger;
+  //   if (giftedChatRef.current && firstTime && comingFromProduct) {
+  //     giftedChatRef.current.onSend(
+  //       {
+  //         image: selectedProductData?.imageUrls[0],
+  //       },
+  //       true,
+  //     );
+  //     setFirstTime(false);
+  //   }
+  // }, [
+  //   comingFromProduct,
+  //   firstTime,
+  //   loadingMessages,
+  //   selectedProductData?.imageUrls,
+  // ]);
+
+  // const sendItem = () => {
+  //   if (giftedChatRef.current) {
+  //     giftedChatRef.current.onSend(
+  //       {
+  //         image:
+  //           'https://englishtribuneimages.blob.core.windows.net/gallary-content/2023/9/2023_9$largeimg_1308416977.jpg',
+  //       },
+  //       true,
+  //     );
+  //   }
+  // };
 
   // useLayoutEffect(() => {
   //   const chatId = generateChatId(
@@ -283,20 +349,6 @@ const ChatScreen = props => {
     [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
-  // const CustomInputToolbar = props => {
-  //   return (
-  //     <InputToolbar
-  //       {...props}
-  //       containerStyle={{
-  //         borderTopWidth: 1,
-  //         borderTopColor: '#E0E0E0',
-  //         height: 50,
-  //         marginBottom: 10,
-  //       }}
-  //     />
-  //   );
-  // };
-
   const renderMessageVideo = props => {
     if (props?.currentMessage.video) {
       return (
@@ -330,7 +382,6 @@ const ChatScreen = props => {
         compressVideoPreset: 'MediumQuality',
         includeBase64: true,
       }).then(media => {
-        console.warn('prag', media);
         let dataToSend = {};
         if (media.mime && (media.data || media.path)) {
           //Upload image
@@ -372,46 +423,62 @@ const ChatScreen = props => {
         mediaType: 'any',
         width: 300,
         height: 400,
-        compressVideoPreset: 'MediumQuality',
         includeBase64: true,
-      }).then(media => {
-        console.warn('prag', media);
-        let dataToSend = {};
-        if (media.mime && (media.data || media.path)) {
-          //Upload image
-          if (media.mime.startsWith('image')) {
-            const imagePath = `data:${media.mime};base64,${media.data}`;
-            dataToSend = {
-              base64MediaString: imagePath,
-              ...(isStylistUser
-                ? {personalStylistId: personalStylistId}
-                : {userId: clientUserId}),
-            };
-
-            uploadMediaOnS3(dataToSend, imageURL, ref);
-          } else if (media.mime.startsWith('video')) {
-            if (ref) {
-              ref.onSend(
-                {
-                  video:
-                    'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
-                },
-                true,
-              );
+      })
+        .then(media => {
+          let dataToSend = {};
+          if (media.mime && (media.data || media.path)) {
+            //Upload image
+            if (media.mime.startsWith('image')) {
+              const imagePath = `data:${media.mime};base64,${media.data}`;
+              dataToSend = {
+                base64MediaString: imagePath,
+                ...(isStylistUser
+                  ? {personalStylistId: personalStylistId}
+                  : {userId: clientUserId}),
+              };
+              uploadMediaOnS3(dataToSend, imageURL, ref);
             }
-            // Handle video
-            // const videoPath = `data:${media.mime};base64,${media.path}`;
-            // dataToSend = {
-            //   base64MediaString: videoPath,
-            //   ...(isStylistUser
-            //     ? {personalStylistId: personalStylistId}
-            //     : {userId: clientUserId}),
-            // };
-            // Rest of your video handling code
-            // ...
           }
-        }
-      });
+        })
+        .catch(error => {
+          console.log('Error in openCamera:', error);
+        });
+    } else if (index === 2) {
+      ImagePicker.openCamera({
+        mediaType: 'video',
+        videoQuality: 'medium',
+        // compressVideoPreset: 'MediumQuality',
+      })
+        .then(media => {
+          let dataToSend = {};
+          if (media.mime && (media.data || media.path)) {
+            if (media.mime.startsWith('video')) {
+              if (ref) {
+                ref.onSend(
+                  {
+                    video:
+                      'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
+                  },
+                  true,
+                );
+              }
+              // Handle video
+              // const videoPath = `data:${media.mime};base64,${media.path}`;
+              // dataToSend = {
+              //   base64MediaString: videoPath,
+              //   ...(isStylistUser
+              //     ? {personalStylistId: personalStylistId}
+              //     : {userId: clientUserId}),
+              // };
+              // Rest of your video handling code
+              // ...
+            }
+          }
+        })
+        .catch(error => {
+          console.log('Error in openCamera:', error);
+        });
     }
   };
 
@@ -533,16 +600,12 @@ const ChatScreen = props => {
         // Display a loader while messages are being fetched
         <View style={{flex: 0.97}}>
           <GiftedChat
-            {...props}
-            textInputRef={giftedChatRef}
-            // shouldUpdateMessage={() => {
-            //   return true;
-            // }}
+            ref={giftedChatRef}
             messages={messages}
             alwaysShowSend
+            // messageContainerRef={giftedChatRef}
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
-            isTyping
             onSend={newMessages => onSend(newMessages)}
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
