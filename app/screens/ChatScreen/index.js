@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import { GiftedChat, InputToolbar, Send } from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
 import {
   addDoc,
   collection,
@@ -27,8 +27,8 @@ import {
   child,
   get,
 } from 'firebase/database';
-import { getAuth } from '@firebase/auth';
-import { initializeApp } from 'firebase/app';
+import {getAuth} from '@firebase/auth';
+import {initializeApp} from 'firebase/app';
 import {
   TouchableOpacity,
   ActionSheetIOS,
@@ -38,18 +38,18 @@ import {
   Text,
 } from 'react-native';
 import DashboardHeader from '../../components/DashboardHeader';
-import { Styles } from './styles';
-import { db, auth } from '../../firebase';
-import { useSelector } from 'react-redux';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { Image } from 'react-native';
+import {Styles} from './styles';
+import {db, auth} from '../../firebase';
+import {useSelector} from 'react-redux';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import { normalize } from '../../utils/normalise';
+import {normalize} from '../../utils/normalise';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
-import { getPreSignedUrl, uploadMediaOnS3 } from './common';
+import {getPreSignedUrl, uploadMediaOnS3} from './common';
 import RNFetchBlob from 'react-native-blob-util';
 
 const ChatScreen = props => {
@@ -58,7 +58,7 @@ const ChatScreen = props => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // To keep track of the currently displayed image
   const [myRef, setMyRef] = useState(null);
 
-  const { receiverDetails, selectedProductData, comingFromProduct } =
+  const {receiverDetails, selectedProductData, comingFromProduct} =
     props?.route?.params || {};
   const [firstTime, setFirstTime] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -82,7 +82,7 @@ const ChatScreen = props => {
 
   useEffect(() => {
     signInWithEmailAndPassword(auth, userEmail, userEmail)
-      .then(resp => { })
+      .then(resp => {})
       .catch(error => {
         console.log('Firebase error', error);
       });
@@ -276,7 +276,7 @@ const ChatScreen = props => {
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
-      const { _id, createdAt, text, user, image, video } = messages[0];
+      const {_id, createdAt, text, user, image, video} = messages[0];
       try {
         const chatId = generateChatId(
           isStylistUser ? personalStylistId : clientUserId,
@@ -332,7 +332,7 @@ const ChatScreen = props => {
             lastMessage: 'messageData',
             receiverId: receiverDetails?.userId,
           },
-          { merge: true },
+          {merge: true},
         );
 
         await setDoc(
@@ -341,7 +341,7 @@ const ChatScreen = props => {
             lastMessage: 'messageData',
             senderId: isStylistUser ? personalStylistId : clientUserId,
           },
-          { merge: true },
+          {merge: true},
         );
       } catch (error) {
         console.error('Error writing document: ', error);
@@ -358,7 +358,7 @@ const ChatScreen = props => {
             resizeMode="cover"
             playInBackground
             paused={true}
-            source={{ uri: props.currentMessage.video }}
+            source={{uri: props.currentMessage.video}}
             style={{
               width: normalize(200),
               height: normalize(200),
@@ -391,8 +391,8 @@ const ChatScreen = props => {
             dataToSend = {
               base64MediaString: imagePath,
               ...(isStylistUser
-                ? { personalStylistId: personalStylistId }
-                : { userId: clientUserId }),
+                ? {personalStylistId: personalStylistId}
+                : {userId: clientUserId}),
             };
 
             uploadMediaOnS3(dataToSend, imageURL, ref);
@@ -435,8 +435,8 @@ const ChatScreen = props => {
               dataToSend = {
                 base64MediaString: imagePath,
                 ...(isStylistUser
-                  ? { personalStylistId: personalStylistId }
-                  : { userId: clientUserId }),
+                  ? {personalStylistId: personalStylistId}
+                  : {userId: clientUserId}),
               };
               uploadMediaOnS3(dataToSend, imageURL, ref);
             }
@@ -455,27 +455,26 @@ const ChatScreen = props => {
           let dataToSend = {};
           if (media.mime && (media.data || media.path)) {
             if (media.mime.startsWith('video')) {
-              getPreSignedUrl({
+              let s3UploadUrl = await getPreSignedUrl({
                 id: isStylistUser ? personalStylistId : clientUserId,
                 type: isStylistUser ? 'personalStylistId' : 'userId'
-              }).then(s3UploadUrl => {
-                console.log('s3UploadUrl', s3UploadUrl)
-                RNFetchBlob.fetch(
-                  'PUT',
-                  s3UploadUrl,
-                  {
-                    'Content-Type': undefined,
-                  },
-                  RNFetchBlob.wrap(media.path),
-                ).then(m => {
-                  console.log('upload finish')
-                  if (ref) {
-                    ref.onSend({ video: media.path }, true)
-                  }
-                }).catch(error => {
-                  console.log('upload error', error)
-                })
               })
+              console.log('s3UploadUrl', s3UploadUrl)
+              RNFetchBlob.fetch(
+                'PUT',
+                s3UploadUrl,
+                {
+                  'Content-Type': undefined,
+                },
+                RNFetchBlob.wrap(media.path),
+              ).then(m => {
+                console.log('upload finish')
+                if(ref) {
+                  ref.onSend({ video: media.path }, true)
+                }
+             }).catch(error => {
+              console.log('upload error', error)
+             })
               // Handle video
               // const videoPath = `data:${media.mime};base64,${media.path}`;
               // dataToSend = {
@@ -514,7 +513,7 @@ const ChatScreen = props => {
   };
 
   const renderMessageImage = props => {
-    let { currentMessage } = props;
+    let {currentMessage} = props;
     const imageUrl = currentMessage.image;
 
     const images = messages
@@ -529,7 +528,7 @@ const ChatScreen = props => {
           openImageModal(imageIndex);
         }}>
         <FastImage
-          prefetch={{ uri: currentMessage.image }}
+          prefetch={{uri: currentMessage.image}}
           style={Styles.messageImage}
           source={{
             uri: currentMessage.image,
@@ -562,7 +561,7 @@ const ChatScreen = props => {
         style={Styles.modalView}
         onBackdropPress={closeModal}
         visible={isModalVisible}>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <TouchableOpacity
             style={Styles.crossBtn}
             onPress={() => setModalVisible(false)}>
@@ -571,8 +570,9 @@ const ChatScreen = props => {
               style={Styles.crossIcon}
             />
           </TouchableOpacity>
-          <Text style={Styles.previewCountText}>{`${selectedImageIndex + 1}/${images.length
-            }`}</Text>
+          <Text style={Styles.previewCountText}>{`${selectedImageIndex + 1}/${
+            images.length
+          }`}</Text>
           <ImageViewer
             enableImageZoom
             useNativeDriver
@@ -605,12 +605,12 @@ const ChatScreen = props => {
         />
       </View>
       {loadingMessages ? (
-        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
           <ActivityIndicator size="small" color="grey" />
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{ flex: 0.97 }}>
+        <View style={{flex: 0.97}}>
           <GiftedChat
             ref={giftedChatRef}
             messages={messages}

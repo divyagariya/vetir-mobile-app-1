@@ -34,8 +34,8 @@ export const uploadMediaOnS3 = (dataToSend, imageURL, ref) => {
     });
 };
 
-export const getPreSignedUrl = async({ id, type }) => {
-  fetch(
+export const getPreSignedUrl = async ({ id, type }) => {
+  let fetchRes = await fetch(
     `https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatVideo?${type}=${id}`,
     {
       method: 'GET',
@@ -58,5 +58,8 @@ export const getPreSignedUrl = async({ id, type }) => {
       Toast.show('There is some error in image upload');
       console.error('API error:', error);
     });
+
+    console.log('fetchRes', fetchRes)
+    return fetchRes
 };
 
