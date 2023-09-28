@@ -46,8 +46,10 @@ import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import Toast from 'react-native-simple-toast';
 import {normalize} from '../../utils/normalise';
+import Video from 'react-native-video';
+import FastImage from 'react-native-fast-image';
+import {uploadMediaOnS3} from './common';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -57,7 +59,6 @@ const ChatScreen = props => {
   const {receiverDetails} = props?.route?.params || {};
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
-
   const userEmail = useSelector(
     state => state.ProfileReducer?.userProfileResponse?.emailId,
   );
@@ -83,6 +84,25 @@ const ChatScreen = props => {
       });
   }, [userEmail]);
 
+  const showActionSheet = ref => {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Gallery', 'Camera', 'Cancel'],
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          onSendImage(buttonIndex, ref);
+          // delete action
+        } else if (buttonIndex === 1) {
+          onSendImage(buttonIndex, ref);
+          // share action
+        }
+      },
+    );
+  };
+
   useLayoutEffect(() => {
     const chatId = generateChatId(
       isStylistUser ? personalStylistId : clientUserId,
@@ -100,6 +120,7 @@ const ChatScreen = props => {
             user: doc.data().user,
             image: doc.data().image,
             sent: doc.data().sent,
+            video: doc.data().video,
             received: doc.data().received,
           };
         }),
@@ -188,7 +209,7 @@ const ChatScreen = props => {
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
-      const {_id, createdAt, text, user, image} = messages[0];
+      const {_id, createdAt, text, user, image, video} = messages[0];
       try {
         const chatId = generateChatId(
           isStylistUser ? personalStylistId : clientUserId,
@@ -213,6 +234,17 @@ const ChatScreen = props => {
               _id: _id,
               createdAt: createdAt,
               image: image, // Store the image URL or data
+              receiverDetails: receiverDetails,
+              user: user,
+              sent: true,
+              received: '',
+            });
+          } else if (message.video) {
+            // Handle image messages
+            await addDoc(collection(db, 'chats', chatId, 'messages'), {
+              _id: _id,
+              createdAt: createdAt,
+              video: video, // Store the image URL or data
               receiverDetails: receiverDetails,
               user: user,
               sent: true,
@@ -265,54 +297,122 @@ const ChatScreen = props => {
   //   );
   // };
 
-  const onSendImage = ref => {
+  const renderMessageVideo = props => {
+    if (props?.currentMessage.video) {
+      return (
+        <>
+          <Video
+            resizeMode="cover"
+            playInBackground
+            paused={true}
+            source={{uri: props.currentMessage.video}}
+            style={{
+              width: normalize(200),
+              height: normalize(200),
+              borderRadius: 10,
+            }}
+            controls={true}
+            onError={error => console.error('Video error:', error)}
+          />
+        </>
+      );
+    }
+    return null;
+  };
+
+  const onSendImage = (index, ref) => {
     let imageURL = {};
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true,
-    }).then(image => {
-      console.log('prag', image);
-      const imagePath = `data:image/jpeg;base64,${image.data}`;
-      const dataToSend = {
-        base64MediaString: imagePath,
-        ...(isStylistUser
-          ? {personalStylistId: personalStylistId}
-          : {userId: clientUserId}),
-      };
-      fetch(
-        'https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatMedia',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataToSend),
-        },
-      )
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+    if (index === 0) {
+      ImagePicker.openPicker({
+        mediaType: 'any',
+        width: 300,
+        height: 400,
+        compressVideoPreset: 'MediumQuality',
+        includeBase64: true,
+      }).then(media => {
+        console.warn('prag', media);
+        let dataToSend = {};
+        if (media.mime && (media.data || media.path)) {
+          //Upload image
+          if (media.mime.startsWith('image')) {
+            const imagePath = `data:${media.mime};base64,${media.data}`;
+            dataToSend = {
+              base64MediaString: imagePath,
+              ...(isStylistUser
+                ? {personalStylistId: personalStylistId}
+                : {userId: clientUserId}),
+            };
+
+            uploadMediaOnS3(dataToSend, imageURL, ref);
+          } else if (media.mime.startsWith('video')) {
+            if (ref) {
+              ref.onSend(
+                {
+                  video:
+                    'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
+                },
+                true,
+              );
+            }
+            // Handle video
+            // const videoPath = `data:${media.mime};base64,${media.path}`;
+            // dataToSend = {
+            //   base64MediaString: videoPath,
+            //   ...(isStylistUser
+            //     ? {personalStylistId: personalStylistId}
+            //     : {userId: clientUserId}),
+            // };
+            // Rest of your video handling code
+            // ...
           }
-          return response.json();
-        })
-        .then(responseData => {
-          imageURL = responseData?.data?.imageUrl;
-          if (ref) {
-            ref.onSend(
-              {
-                image: imageURL,
-              },
-              true,
-            );
+        }
+      });
+    } else if (index === 1) {
+      ImagePicker.openCamera({
+        mediaType: 'any',
+        width: 300,
+        height: 400,
+        compressVideoPreset: 'MediumQuality',
+        includeBase64: true,
+      }).then(media => {
+        console.warn('prag', media);
+        let dataToSend = {};
+        if (media.mime && (media.data || media.path)) {
+          //Upload image
+          if (media.mime.startsWith('image')) {
+            const imagePath = `data:${media.mime};base64,${media.data}`;
+            dataToSend = {
+              base64MediaString: imagePath,
+              ...(isStylistUser
+                ? {personalStylistId: personalStylistId}
+                : {userId: clientUserId}),
+            };
+
+            uploadMediaOnS3(dataToSend, imageURL, ref);
+          } else if (media.mime.startsWith('video')) {
+            if (ref) {
+              ref.onSend(
+                {
+                  video:
+                    'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
+                },
+                true,
+              );
+            }
+            // Handle video
+            // const videoPath = `data:${media.mime};base64,${media.path}`;
+            // dataToSend = {
+            //   base64MediaString: videoPath,
+            //   ...(isStylistUser
+            //     ? {personalStylistId: personalStylistId}
+            //     : {userId: clientUserId}),
+            // };
+            // Rest of your video handling code
+            // ...
           }
-        })
-        .catch(error => {
-          Toast.show('There is some error in image upload');
-          console.error('API error:', error);
-        });
-    });
+        }
+      });
+    }
   };
 
   const renderActions = ref => {
@@ -320,7 +420,9 @@ const ChatScreen = props => {
       <TouchableOpacity
         style={Styles.sendIcon}
         activeOpacity={1}
-        onPress={() => onSendImage(ref)}>
+        onPress={() => {
+          showActionSheet(ref);
+        }}>
         <Image
           source={require('../../assets/gallery.webp')}
           resizeMethod="resize"
@@ -334,6 +436,7 @@ const ChatScreen = props => {
   const renderMessageImage = props => {
     let {currentMessage} = props;
     const imageUrl = currentMessage.image;
+
     const images = messages
       .filter(message => message.image) // Filter out messages without images
       .map(message => ({
@@ -345,9 +448,13 @@ const ChatScreen = props => {
         onPress={() => {
           openImageModal(imageIndex);
         }}>
-        <Image
+        <FastImage
+          prefetch={{uri: currentMessage.image}}
           style={Styles.messageImage}
-          source={{uri: currentMessage.image}}
+          source={{
+            uri: currentMessage.image,
+            priority: FastImage.priority.high,
+          }}
           resizeMode={'cover'}
         />
       </TouchableOpacity>
@@ -405,37 +512,9 @@ const ChatScreen = props => {
     );
   };
 
-  const renderChatEmpty = () => (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Text>No messages to display</Text>
-    </View>
-  );
-
   const openImageModal = index => {
     setSelectedImageIndex(index);
     setModalVisible(true);
-  };
-
-  const renderCustomView = () => {};
-
-  const CustomInputToolbar = props => {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={{
-          borderTopWidth: 1,
-          borderTopColor: '#E0E0E0',
-          height: 60, // Set the desired input height here
-          marginBottom: 10, // Add margin to the bottom
-          paddingBottom: 10, // Optional padding to adjust the space between the input and actions
-        }}
-      />
-    );
   };
 
   return (
@@ -463,12 +542,12 @@ const ChatScreen = props => {
             alwaysShowSend
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
-            // isTyping
+            isTyping
             onSend={newMessages => onSend(newMessages)}
             textInputStyle={Styles.textInputStyle}
             minInputToolbarHeight={50}
             renderMessageImage={props => renderMessageImage(props)}
-            // renderChatEmpty={renderChatEmpty}
+            renderMessageVideo={props => renderMessageVideo(props)}
             renderSend={props => (
               <Send {...props}>
                 <Image
