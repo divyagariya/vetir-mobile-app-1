@@ -49,7 +49,8 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import {normalize} from '../../utils/normalise';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
-import {uploadMediaOnS3} from './common';
+import {getPreSignedUrl, uploadMediaOnS3} from './common';
+import RNFetchBlob from 'react-native-blob-util';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -454,15 +455,22 @@ const ChatScreen = props => {
           let dataToSend = {};
           if (media.mime && (media.data || media.path)) {
             if (media.mime.startsWith('video')) {
-              if (ref) {
-                ref.onSend(
-                  {
-                    video:
-                      'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
-                  },
-                  true,
-                );
-              }
+              let s3UploadUrl = getPreSignedUrl({
+                id: isStylistUser ? personalStylistId : clientUserId,
+                type: isStylistUser ? 'personalStylistId' : 'userId'
+              })
+              RNFetchBlob.fetch(
+                'PUT',
+                s3UploadUrl,
+                {
+                  'Content-Type': 'multipart/form-data',
+                },
+                RNFetchBlob.wrap(media.path),
+              ).then(m => {
+                if(ref) {
+                  ref.onSend({ video: media.path }, true)
+                }
+             })
               // Handle video
               // const videoPath = `data:${media.mime};base64,${media.path}`;
               // dataToSend = {
