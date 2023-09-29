@@ -116,6 +116,9 @@ const ChatScreen = props => {
       receiverDetails?.userId,
     );
     const chatMessagesRef = query(collection(db, 'chats', chatId, 'messages'));
+
+    // const limitedQuery = limit(chatMessagesRef, 20);
+
     const q = query(chatMessagesRef, orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, querySnapshot => {
       setMessages(
@@ -165,104 +168,6 @@ const ChatScreen = props => {
     selectedProductData?.imageUrls,
     setMyRef,
   ]);
-
-  // useEffect(() => {
-  //   console.log('giftedChatRef', giftedChatRef);
-  //   debugger;
-  //   if (giftedChatRef.current && firstTime && comingFromProduct) {
-  //     giftedChatRef.current.onSend(
-  //       {
-  //         image: selectedProductData?.imageUrls[0],
-  //       },
-  //       true,
-  //     );
-  //     setFirstTime(false);
-  //   }
-  // }, [
-  //   comingFromProduct,
-  //   firstTime,
-  //   loadingMessages,
-  //   selectedProductData?.imageUrls,
-  // ]);
-
-  // const sendItem = () => {
-  //   if (giftedChatRef.current) {
-  //     giftedChatRef.current.onSend(
-  //       {
-  //         image:
-  //           'https://englishtribuneimages.blob.core.windows.net/gallary-content/2023/9/2023_9$largeimg_1308416977.jpg',
-  //       },
-  //       true,
-  //     );
-  //   }
-  // };
-
-  // useLayoutEffect(() => {
-  //   const chatId = generateChatId(
-  //     isStylistUser ? personalStylistId : clientUserId,
-  //     receiverDetails?.userId,
-  //   );
-
-  //   const firebaseConfig = {
-  //     apiKey: 'AIzaSyA0mcU5B7BIJ4_XNfv5Gc7Q8ra7TULZmoU',
-  //     authDomain: 'vetir-112233.firebaseapp.com',
-  //     projectId: 'vetir-112233',
-  //     storageBucket: 'vetir-112233.appspot.com',
-  //     messagingSenderId: '185367964920',
-  //     appId: '1:185367964920:ios:d4bf19861684b03d795f0d',
-  //     measurementId: 'G-NZ8K8PP3KD"', // optional
-  //   };
-
-  //   const app = initializeApp(firebaseConfig);
-  //   const dbase = getDatabase(app);
-  //   const chatMessagesRef = ref(dbase, `chats/${chatId}/messages`);
-
-  //   const loadData = async () => {
-  //     try {
-  //       const snapshot = await get(
-  //         query(chatMessagesRef, orderByChild('createdAt')),
-  //       );
-  //       if (snapshot.exists()) {
-  //         const updatedMessages = [];
-  //         snapshot.forEach(childSnapshot => {
-  //           const messageData = {
-  //             _id: childSnapshot.key, // Assuming the message ID is the key
-  //             createdAt: new Date(childSnapshot.child('createdAt').val()), // Convert createdAt to Date
-  //             text: childSnapshot.child('text').val(),
-  //             user: childSnapshot.child('user').val(),
-  //             image: childSnapshot.child('image').val(),
-  //             sent: childSnapshot.child('sent').val(),
-  //             received: childSnapshot.child('received').val(),
-  //           };
-
-  //           // Update the 'received' status if it's the recipient's message
-  //           if (
-  //             messageData.user._id !== clientUserId &&
-  //             !messageData.received
-  //           ) {
-  //             update(ref(chatMessagesRef, `${messageData._id}/received`), true);
-  //             messageData.received = true; // Update the local message data
-  //           }
-
-  //           updatedMessages.push(messageData);
-  //         });
-
-  //         // Set the updated messages
-  //         setMessages(updatedMessages);
-  //         // Set loadingMessages to false when messages are loaded
-  //         setLoadingMessages(false);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error loading data:', error);
-  //     }
-  //   };
-
-  //   loadData();
-
-  //   return () => {
-  //     // Clean up resources if needed
-  //   };
-  // }, [clientUserId, isStylistUser, personalStylistId, receiverDetails?.userId]);
 
   const generateChatId = (userId1, userId2) => {
     const sortedUserIds = [userId1, userId2];
@@ -349,7 +254,7 @@ const ChatScreen = props => {
     [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
-  const renderMessageVideo = props => {
+  const renderMessageVideo = useCallback(props => {
     if (props?.currentMessage.video) {
       return (
         <>
@@ -370,7 +275,7 @@ const ChatScreen = props => {
       );
     }
     return null;
-  };
+  }, []);
 
   const onSendImage = (index, ref) => {
     let imageURL = {};
@@ -482,51 +387,59 @@ const ChatScreen = props => {
     }
   };
 
-  const renderActions = ref => {
-    return (
-      <TouchableOpacity
-        style={Styles.sendIcon}
-        activeOpacity={1}
-        onPress={() => {
-          showActionSheet(ref);
-        }}>
-        <Image
-          source={require('../../assets/gallery.webp')}
-          resizeMethod="resize"
-          resizeMode="contain"
+  const renderActions = useCallback(
+    ref => {
+      return (
+        <TouchableOpacity
           style={Styles.sendIcon}
-        />
-      </TouchableOpacity>
-    );
-  };
+          activeOpacity={1}
+          onPress={() => {
+            showActionSheet(ref);
+          }}>
+          <Image
+            source={require('../../assets/gallery.webp')}
+            resizeMethod="resize"
+            resizeMode="contain"
+            style={Styles.sendIcon}
+          />
+        </TouchableOpacity>
+      );
+    },
+    [showActionSheet],
+  );
 
-  const renderMessageImage = props => {
-    let {currentMessage} = props;
-    const imageUrl = currentMessage.image;
+  const renderMessageImage = useCallback(
+    props => {
+      let {currentMessage} = props;
+      const imageUrl = currentMessage.image;
 
-    const images = messages
-      .filter(message => message.image) // Filter out messages without images
-      .map(message => ({
-        url: message.image,
-      }));
-    const imageIndex = images.findIndex(image => image.url === imageUrl);
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          openImageModal(imageIndex);
-        }}>
-        <FastImage
-          prefetch={{uri: currentMessage.image}}
-          style={Styles.messageImage}
-          source={{
-            uri: currentMessage.image,
-            priority: FastImage.priority.high,
-          }}
-          resizeMode={'cover'}
-        />
-      </TouchableOpacity>
-    );
-  };
+      const images = messages
+        .filter(message => message.image) // Filter out messages without images
+        .map(message => ({
+          url: message.image,
+        }));
+      const imageIndex = images.findIndex(image => image.url === imageUrl);
+
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            openImageModal(imageIndex);
+          }}>
+          <FastImage
+            prefetch={{uri: currentMessage.image}}
+            style={Styles.messageImage}
+            source={{
+              uri: currentMessage.image,
+              priority: FastImage.priority.high,
+            }}
+            resizeMode={'cover'}
+          />
+        </TouchableOpacity>
+      );
+    },
+    [messages],
+  );
+
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -535,7 +448,7 @@ const ChatScreen = props => {
     setSelectedImageIndex(index);
   };
 
-  const ImageModal = () => {
+  const ImageModal = useCallback(() => {
     const images = messages
       .filter(message => message.image) // Filter out messages without images
       .map(message => ({
@@ -577,7 +490,7 @@ const ChatScreen = props => {
         </View>
       </Modal>
     );
-  };
+  }, [isModalVisible, selectedImageIndex, messages]);
 
   const openImageModal = index => {
     setSelectedImageIndex(index);
@@ -622,6 +535,7 @@ const ChatScreen = props => {
                 />
               </Send>
             )}
+            textInputProps={{autoCorrect: false}} // Disable autocorrect
             user={{
               _id: isStylistUser ? personalStylistId : clientUserId,
               email: userEmail,
@@ -636,4 +550,4 @@ const ChatScreen = props => {
   );
 };
 
-export default ChatScreen;
+export default React.memo(ChatScreen);
