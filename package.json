@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package && npx pod-install"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.2.2",
@@ -33,6 +33,7 @@
     "react": "18.1.0",
     "react-native": "0.70.1",
     "react-native-actionsheet": "^2.4.2",
+    "react-native-blob-util": "^0.19.1",
     "react-native-confirmation-code-field": "^7.3.1",
     "react-native-device-info": "^10.3.0",
     "react-native-fast-image": "^8.6.3",

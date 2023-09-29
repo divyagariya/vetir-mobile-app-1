@@ -49,7 +49,8 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import {normalize} from '../../utils/normalise';
 import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
-import {uploadMediaOnS3} from './common';
+import {getPreSignedUrl, uploadMediaOnS3} from './common';
+import RNFetchBlob from 'react-native-blob-util';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -259,17 +260,19 @@ const ChatScreen = props => {
       return (
         <>
           <Video
-            resizeMode="cover"
+            resizeMode="contain"
             playInBackground
             paused={true}
             source={{uri: props.currentMessage.video}}
             style={{
-              width: normalize(200),
-              height: normalize(200),
+              width: normalize(225),
+              height: normalize(300),
               borderRadius: 10,
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
+            fullscreen
+            fullscreenOrientation="portrait"
           />
         </>
       );
@@ -355,19 +358,32 @@ const ChatScreen = props => {
         videoQuality: 'medium',
         // compressVideoPreset: 'MediumQuality',
       })
-        .then(media => {
+        .then(async media => {
           let dataToSend = {};
           if (media.mime && (media.data || media.path)) {
             if (media.mime.startsWith('video')) {
-              if (ref) {
-                ref.onSend(
-                  {
-                    video:
-                      'https://assets.mixkit.co/videos/download/mixkit-countryside-meadow-4075.mp4',
-                  },
-                  true,
-                );
-              }
+              let s3UploadUrl = await getPreSignedUrl({
+                id: isStylistUser ? personalStylistId : clientUserId,
+                type: isStylistUser ? 'personalStylistId' : 'userId',
+              });
+              console.log('s3UploadUrl', s3UploadUrl);
+              RNFetchBlob.fetch(
+                'PUT',
+                s3UploadUrl,
+                {
+                  'Content-Type': undefined,
+                },
+                RNFetchBlob.wrap(media.path),
+              )
+                .then(m => {
+                  console.log('upload finish');
+                  if (ref) {
+                    ref.onSend({video: media.path}, true);
+                  }
+                })
+                .catch(error => {
+                  console.log('upload error', error);
+                });
               // Handle video
               // const videoPath = `data:${media.mime};base64,${media.path}`;
               // dataToSend = {
