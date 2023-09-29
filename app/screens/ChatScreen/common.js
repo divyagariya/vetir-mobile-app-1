@@ -34,7 +34,7 @@ export const uploadMediaOnS3 = (dataToSend, imageURL, ref) => {
     });
 };
 
-export const getPreSignedUrl = async ({ id, type }) => {
+export const getPreSignedUrl = async ({id, type}) => {
   let fetchRes = await fetch(
     `https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/uploadChatVideo?${type}=${id}`,
     {
@@ -51,7 +51,10 @@ export const getPreSignedUrl = async ({ id, type }) => {
       return response.json();
     })
     .then(responseData => {
-      console.log('responseData?.data?.presignedUrl', responseData?.data?.presignedUrl)
+      console.log(
+        'responseData?.data?.presignedUrl',
+        responseData?.data?.presignedUrl,
+      );
       return responseData?.data?.presignedUrl;
     })
     .catch(error => {
@@ -59,7 +62,6 @@ export const getPreSignedUrl = async ({ id, type }) => {
       console.error('API error:', error);
     });
 
-    console.log('fetchRes', fetchRes)
-    return fetchRes
+  console.log('fetchRes', fetchRes);
+  return fetchRes;
 };
-
