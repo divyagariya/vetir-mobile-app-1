@@ -43,7 +43,7 @@ export const ClientList = ({
   index,
   selectClient,
   selectedClients,
-  onPressChat,
+  // onPressChat,
 }) => {
   return (
     <TouchableOpacity
@@ -72,13 +72,13 @@ export const ClientList = ({
         </View>
       </View>
 
-      <TouchableOpacity onPress={() => onPressChat(item)}>
+      {/* <TouchableOpacity onPress={() => onPressChat(item)}>
         <Image
           source={require('../../assets/chat.webp')}
           style={{width: 16, height: 16}}
           resizeMode="contain"
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View>
         <Image
@@ -234,18 +234,18 @@ export const RenderClients = ({
           return (
             <ClientList
               item={item}
-              onPressChat={() => {
-                setShowClientModal(false);
-                navigation.navigate('ChatScreen', {
-                  selectedProductData: selectedProductData,
-                  comingFromProduct: true,
-                  receiverDetails: {
-                    emailId: item?.emailId,
-                    name: item?.name,
-                    userId: item?.userId,
-                  },
-                });
-              }}
+              // onPressChat={() => {
+              //   setShowClientModal(false);
+              //   navigation.navigate('ChatScreen', {
+              //     selectedProductData: selectedProductData,
+              //     comingFromProduct: true,
+              //     receiverDetails: {
+              //       emailId: item?.emailId,
+              //       name: item?.name,
+              //       userId: item?.userId,
+              //     },
+              //   });
+              // }}
               index={index}
               selectClient={selectClient}
               selectedClients={selectedClients}
