@@ -29,7 +29,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
-import InstagramLogin from 'react-native-instagram-login';
+// import InstagramLogin from 'react-native-instagram-login';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -319,7 +319,7 @@ class LandingPage extends React.Component {
               <View style={styles.line} />
             </View> */}
             <View style={styles.socialIconContainer}>
-              <TestInsta />
+              {/* <TestInsta /> */}
               <TouchableOpacity onPress={this.googleLogin}>
                 <Image
                   source={require('../../assets/google.webp')}
