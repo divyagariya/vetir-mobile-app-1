@@ -49,7 +49,7 @@ const AiChatScreen = props => {
           text: aiResponse.message,
           user: {
             _id: 2,
-            name: 'Vetir bot',
+            name: 'Vêtir AI Stylist',
             avatar: ChatBotPNG,
           },
         },
@@ -84,7 +84,6 @@ const AiChatScreen = props => {
           // }}
           messages={messages}
           // renderActions={ref => renderActions(ref)}
-          alwaysShowSend
           isTyping={isTyping}
           onSend={newMessages => onSend(newMessages)}
           // renderInputToolbar={props => <CustomInputToolbar {...props} />}
