@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Alert,
+  Linking,
 } from 'react-native';
 import {Colors} from '../../colors';
 import {Buttons, Header, Input, OverlayModal} from '../../components';
@@ -45,6 +46,11 @@ const Menu = props => {
       icon: require('../../assets/myprofile.png'),
       manuName: 'My Profile',
       route: 'ProfileSetup',
+    },
+    {
+      icon: require('../../assets/preferences.png'),
+      manuName: 'Add Products',
+      route: 'AddProducts',
     },
     {
       icon: require('../../assets/preferences.png'),
@@ -157,6 +163,11 @@ const Menu = props => {
           },
         },
       ]);
+    }
+    if (item.manuName === 'Add Products') {
+      Linking.openURL(
+        'https://vetir-admin.netlify.app/#/add-product-by-stylist',
+      );
     }
     if (item.route) {
       props.navigation.navigate(item.route);
@@ -337,6 +348,9 @@ const Menu = props => {
         <View>
           {menuData.map(item => {
             if (isStylistUser && item.route === 'YourPreferences') {
+              return null;
+            }
+            if (!isStylistUser && item.route === 'AddProducts') {
               return null;
             }
             return (
