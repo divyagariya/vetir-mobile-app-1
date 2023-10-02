@@ -19,6 +19,7 @@ import {
   addStylistAction,
   deleteStylistAction,
 } from '../../redux/actions/stylistAction';
+import WebView from 'react-native-webview';
 
 const Menu = props => {
   const [stylistEmail, setStylistEmail] = useState('');
@@ -165,8 +166,13 @@ const Menu = props => {
       ]);
     }
     if (item.manuName === 'Add Products') {
-      Linking.openURL(
-        'https://vetir-admin.netlify.app/#/add-product-by-stylist',
+      return (
+        <WebView
+          source={{
+            uri: 'https://vetir-admin.netlify.app/#/add-product-by-stylist',
+          }}
+          style={{flex: 1}}
+        />
       );
     }
     if (item.route) {
