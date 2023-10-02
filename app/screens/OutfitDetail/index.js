@@ -81,6 +81,7 @@ const OutfitDetail = props => {
   }, [dispatch, props.navigation, singleClosetReponse]);
 
   useEffect(() => {
+    console.log(props?.route?.params);
     const unsubscribe = props.navigation.addListener('focus', () => {
       if (props?.route?.params?.outfitId) {
         dispatch(

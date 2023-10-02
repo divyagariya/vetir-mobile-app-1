@@ -39,6 +39,8 @@ const Outfits = props => {
   const getOutfitData =
     useSelector(state => state.OutfitReducer.getOutfitData) || [];
 
+  const userId = useSelector(state => state.AuthReducer.userId);
+
   const renderItem = (item, index) => {
     return (
       <View
@@ -54,6 +56,7 @@ const Outfits = props => {
           onPress={() =>
             props.navigation.navigate('OutfitDetail', {
               outfitId: item.outfitId,
+              id: userId,
             })
           }
           style={{

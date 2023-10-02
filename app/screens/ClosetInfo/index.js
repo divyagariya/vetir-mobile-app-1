@@ -49,7 +49,7 @@ const ClosetInfo = props => {
   useEffect(() => {
     dispatch(
       findOutfitList({
-        userId: isStylistUser ? props?.route?.params?.id : userId,
+        userId: isStylistUser ? props?.route?.params?.apiData?.userId : userId,
         closetItemId: props.route?.params?.apiData?.closetItemId,
       }),
     );
