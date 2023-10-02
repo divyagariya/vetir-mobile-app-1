@@ -44,15 +44,16 @@ const Menu = props => {
   const [showModal, setModal] = useState(false);
   const menuData = [
     {
+      icon: require('../../assets/addproducts.webp'),
+      manuName: 'Add Products',
+      route: 'AddProducts',
+    },
+    {
       icon: require('../../assets/myprofile.png'),
       manuName: 'My Profile',
       route: 'ProfileSetup',
     },
-    {
-      icon: require('../../assets/addProducts.png'),
-      manuName: 'Add Products',
-      route: 'AddProducts',
-    },
+
     {
       icon: require('../../assets/preferences.png'),
       manuName: 'Your Preferences',
