@@ -48,7 +48,7 @@ const Menu = props => {
       route: 'ProfileSetup',
     },
     {
-      icon: require('../../assets/preferences.png'),
+      icon: require('../../assets/addProducts.png'),
       manuName: 'Add Products',
       route: 'AddProducts',
     },
