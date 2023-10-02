@@ -165,16 +165,7 @@ const Menu = props => {
         },
       ]);
     }
-    if (item.manuName === 'Add Products') {
-      return (
-        <WebView
-          source={{
-            uri: 'https://vetir-admin.netlify.app/#/add-product-by-stylist',
-          }}
-          style={{flex: 1}}
-        />
-      );
-    }
+
     if (item.route) {
       props.navigation.navigate(item.route);
     }
