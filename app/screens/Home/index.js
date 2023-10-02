@@ -181,7 +181,7 @@ const Home = props => {
               style={{paddingRight: 16}}
               onPress={() => props.navigation.navigate('Search')}>
               <Image
-                source={require('../../assets/search.webp')}
+                source={require('../../assets/search_top.webp')}
                 style={styles.menuIcons}
               />
             </TouchableOpacity>
