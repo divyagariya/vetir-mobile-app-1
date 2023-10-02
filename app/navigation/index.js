@@ -40,7 +40,7 @@ import ClosetFilter from '../screens/ClosetFilter';
 import {getHomePageData, getVideoList} from '../redux/actions/homeActions';
 import {NoAuthAPI} from '../services';
 import YourPreferences from '../screens/YourPreferences';
-import AddProducts from '../screens/Addproducts';
+import AddProducts from '../screens/AddProducts';
 import Search from '../screens/Search';
 import Clients from '../screens/Clients';
 import {getAllClients} from '../redux/actions/stylistAction';
