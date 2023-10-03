@@ -56,14 +56,20 @@ const PlaceOrder = props => {
   return (
     <VView
       style={{
-        backgroundColor: 'white',
+        backgroundColor: Colors.grey1,
         flex: 1,
         paddingBottom: 140,
         paddingTop: 16,
       }}>
       <Header showBack title="Checkout" {...props} />
       <ScrollView bounces={false}>
-        <View testID="cartTotal" style={{padding: 16, marginBottom: 4}}>
+        <View
+          testID="cartTotal"
+          style={{
+            padding: 16,
+            backgroundColor: Colors.white,
+            marginTop: 4,
+          }}>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Item Total</Text>
             <Text style={styles.text}>
@@ -166,6 +172,7 @@ export default PlaceOrder;
 const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   justifyBetween: {
     flexDirection: 'row',
@@ -221,8 +228,10 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   paymentMethodContainer: {
-    marginVertical: 16,
-    paddingHorizontal: 16,
+    marginTop: 4,
+    padding: 16,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
   },
-  paymentIcon: {height: 20, width: 40, alignSelf: 'center', marginRight: 16},
+  paymentIcon: {height: 26, width: 40, alignSelf: 'center', marginRight: 16},
 });
