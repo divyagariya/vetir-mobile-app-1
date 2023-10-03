@@ -88,7 +88,7 @@ export default ({
                   style={{padding: 8}}
                   onPress={() => onPressChat(item)}>
                   <Image
-                    source={require('../../../assets/chat.webp')}
+                    source={require('../../../assets/send_to_chat.webp')}
                     style={{width: 24, height: 24}}
                     resizeMode="contain"
                   />
@@ -123,7 +123,7 @@ export default ({
                   style={{padding: 8}}
                   onPress={() => onPressChat(item)}>
                   <Image
-                    source={require('../../../assets/chat.webp')}
+                    source={require('../../../assets/send_to_chat.webp')}
                     style={{width: 24, height: 24}}
                     resizeMode="contain"
                   />
