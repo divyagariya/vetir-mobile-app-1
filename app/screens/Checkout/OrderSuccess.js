@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import { Colors } from '../../colors';
+import {Colors} from '../../colors';
 import {
   VText,
   VView,
@@ -21,25 +21,25 @@ import {
   Loader,
 } from '../../components';
 import CheckBox from '@react-native-community/checkbox';
-import { FONTS_SIZES } from '../../fonts';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import {FONTS_SIZES} from '../../fonts';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {
   addDataInCloset,
   deleteClosetData,
   getClosetData,
 } from '../../redux/actions/closetAction';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
-import { getProductDetailsApi } from '../../redux/actions/homeActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
-import dynamicLinks, { firebase } from '@react-native-firebase/dynamic-links';
-import { NoAuthAPI } from '../../services';
-import { RenderClients } from '../CategoryScreen';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import {NoAuthAPI} from '../../services';
+import {RenderClients} from '../CategoryScreen';
 import ProductCard from './Components/ProductCard';
 import CityCreditCard from '../../assets/citiCreditCard.png';
 import GooglePay from '../../assets/googlePay.png';
@@ -53,20 +53,26 @@ const OrderSuccess = props => {
   return (
     <VView
       style={{
-        backgroundColor: 'white',
+        backgroundColor: Colors.grey1,
         flex: 1,
         paddingBottom: 140,
         paddingTop: 16,
       }}>
-      <Header
-        showBack
-        title="Checkout"
-        {...props}
-      />
+      <Header showBack title="Checkout" {...props} />
       <ScrollView bounces={false}>
-        <Text>
-            Order placed, thanks.
-        </Text>
+        <View style={styles.orderSuccess}>
+          <View style={{flexDirection: 'row', marginBottom: 4}}>
+            <Image
+              resizeMode="contain"
+              source={require('../../assets/confirmed.webp')}
+              style={{width: 16, height: 16, marginRight: 8}}
+            />
+            <Text style={styles.orderSuccessText}>Order placed, thanks.</Text>
+          </View>
+          <Text style={Colors.black}>
+            Confirmation will be sent by the email.
+          </Text>
+        </View>
       </ScrollView>
       {loader && <Loader />}
     </VView>
@@ -136,5 +142,18 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     paddingHorizontal: 16,
   },
-  paymentIcon: { height: 20, width: 40, alignSelf: 'center', marginRight: 16 }
+  paymentIcon: {height: 20, width: 40, alignSelf: 'center', marginRight: 16},
+  orderSuccess: {
+    flexDirection: 'column',
+    padding: 16,
+    backgroundColor: Colors.white,
+    marginTop: 4,
+  },
+  orderSuccessText: {
+    color: Colors.tertiary,
+    fontSize: FONTS_SIZES.s4,
+    fontWeight: '700',
+    marginBottom: 4,
+    textAlign: 'auto',
+  },
 });

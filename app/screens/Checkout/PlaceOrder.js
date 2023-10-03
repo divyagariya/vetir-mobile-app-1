@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import { Colors } from '../../colors';
+import {Colors} from '../../colors';
 import {
   VText,
   VView,
@@ -21,25 +21,25 @@ import {
   Loader,
 } from '../../components';
 import CheckBox from '@react-native-community/checkbox';
-import { FONTS_SIZES } from '../../fonts';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import {FONTS_SIZES} from '../../fonts';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {
   addDataInCloset,
   deleteClosetData,
   getClosetData,
 } from '../../redux/actions/closetAction';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
-import { getProductDetailsApi } from '../../redux/actions/homeActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
-import dynamicLinks, { firebase } from '@react-native-firebase/dynamic-links';
-import { NoAuthAPI } from '../../services';
-import { RenderClients } from '../CategoryScreen';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import {NoAuthAPI} from '../../services';
+import {RenderClients} from '../CategoryScreen';
 import ProductCard from './Components/ProductCard';
 import CityCreditCard from '../../assets/citiCreditCard.png';
 import GooglePay from '../../assets/googlePay.png';
@@ -49,10 +49,10 @@ export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
 
 const PlaceOrder = props => {
-  const productDetails = props?.route?.params?.productDetails
-  const productCount = props?.route?.params?.productCount
+  const productDetails = props?.route?.params?.productDetails;
+  const productCount = props?.route?.params?.productCount;
   const [loader, setLoader] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(-1)
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(-1);
   return (
     <VView
       style={{
@@ -61,16 +61,14 @@ const PlaceOrder = props => {
         paddingBottom: 140,
         paddingTop: 16,
       }}>
-      <Header
-        showBack
-        title="Checkout"
-        {...props}
-      />
+      <Header showBack title="Checkout" {...props} />
       <ScrollView bounces={false}>
-        <View testID='cartTotal' style={{ padding: 16, marginBottom: 4 }}>
+        <View testID="cartTotal" style={{padding: 16, marginBottom: 4}}>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Item Total</Text>
-            <Text style={styles.text}>${productDetails?.productPrice * productCount}</Text>
+            <Text style={styles.text}>
+              ${productDetails?.productPrice * productCount}
+            </Text>
           </View>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Discount</Text>
@@ -86,57 +84,72 @@ const PlaceOrder = props => {
           </View>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
-            <Text style={styles.text}>${(productDetails?.productPrice * productCount) - 130 - 5 - 35}</Text>
+            <Text style={styles.text}>
+              ${productDetails?.productPrice * productCount - 130 - 5 - 35}
+            </Text>
           </View>
         </View>
 
         <View>
-          <View testID='paymentMethod' style={styles.paymentMethodContainer}>
+          <View testID="paymentMethod" style={styles.paymentMethodContainer}>
             <View style={styles.flexRow}>
               <Image source={CityCreditCard} style={styles.paymentIcon} />
               <View>
                 <Text style={styles.text}>CITI Credit Card</Text>
                 <Text style={styles.textLightBlack}>**** 2030</Text>
               </View>
-              <View style={{ marginLeft: 'auto', marginRight: 16 }}>
-                <CheckBox onCheckColor={Colors.black} value={selectedPaymentMethod === 0} onValueChange={() => setSelectedPaymentMethod(0)} />
+              <View style={{marginLeft: 'auto', marginRight: 16}}>
+                <CheckBox
+                  onCheckColor={Colors.black}
+                  value={selectedPaymentMethod === 0}
+                  onValueChange={() => setSelectedPaymentMethod(0)}
+                />
               </View>
             </View>
           </View>
-          <View testID='paymentMethod' style={styles.paymentMethodContainer}>
+          <View testID="paymentMethod" style={styles.paymentMethodContainer}>
             <View style={styles.flexRow}>
               <Image source={GooglePay} style={styles.paymentIcon} />
               <View>
                 <Text style={styles.text}>Google pay</Text>
                 <Text style={styles.textLightBlack}>**** 2030</Text>
               </View>
-              <View style={{ marginLeft: 'auto', marginRight: 16 }}>
-                <CheckBox value={selectedPaymentMethod === 1} onValueChange={() => setSelectedPaymentMethod(1)} />
+              <View style={{marginLeft: 'auto', marginRight: 16}}>
+                <CheckBox
+                  value={selectedPaymentMethod === 1}
+                  onValueChange={() => setSelectedPaymentMethod(1)}
+                />
               </View>
             </View>
           </View>
-          <View testID='paymentMethod' style={styles.paymentMethodContainer}>
+          <View testID="paymentMethod" style={styles.paymentMethodContainer}>
             <View style={styles.flexRow}>
               <Image source={ApplePay} style={styles.paymentIcon} />
               <View>
                 <Text style={styles.text}>Apple pay</Text>
                 <Text style={styles.textLightBlack}>**** 2030</Text>
               </View>
-              <View style={{ marginLeft: 'auto', marginRight: 16 }}>
-                <CheckBox value={selectedPaymentMethod === 2} onValueChange={() => setSelectedPaymentMethod(2)} />
+              <View style={{marginLeft: 'auto', marginRight: 16}}>
+                <CheckBox
+                  value={selectedPaymentMethod === 2}
+                  onValueChange={() => setSelectedPaymentMethod(2)}
+                />
               </View>
             </View>
           </View>
         </View>
         {selectedPaymentMethod !== -1 && (
-          <View style={{
-            margin: 16
-          }}>
+          <View
+            style={{
+              margin: 16,
+            }}>
             <Buttons
               onPress={() => {
-                props.navigation.navigate('OrderSuccess')
+                props.navigation.navigate('OrderSuccess');
               }}
-              text={`Pay \$${(productDetails?.productPrice * productCount) - 130 - 5 - 35}`}
+              text={`Pay \$${
+                productDetails?.productPrice * productCount - 130 - 5 - 35
+              }`}
             />
           </View>
         )}
@@ -209,5 +222,5 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     paddingHorizontal: 16,
   },
-  paymentIcon: { height: 20, width: 40, alignSelf: 'center', marginRight: 16 }
+  paymentIcon: {height: 20, width: 40, alignSelf: 'center', marginRight: 16},
 });

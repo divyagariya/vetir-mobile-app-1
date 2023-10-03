@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import { Colors } from '../../colors';
+import {Colors} from '../../colors';
 import {
   VText,
   VView,
@@ -20,25 +20,25 @@ import {
   OverlayModal,
   Loader,
 } from '../../components';
-import { FONTS_SIZES } from '../../fonts';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import {FONTS_SIZES} from '../../fonts';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {
   addDataInCloset,
   deleteClosetData,
   getClosetData,
 } from '../../redux/actions/closetAction';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
-import { getProductDetailsApi } from '../../redux/actions/homeActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
-import dynamicLinks, { firebase } from '@react-native-firebase/dynamic-links';
-import { NoAuthAPI } from '../../services';
-import { RenderClients } from '../CategoryScreen';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import {NoAuthAPI} from '../../services';
+import {RenderClients} from '../CategoryScreen';
 import ProductCard from './Components/ProductCard';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -46,11 +46,12 @@ export const ITEM_WIDTH = SLIDER_WIDTH;
 
 const Checkout = props => {
   const [loader, setLoader] = useState(false);
-  const productDetails = props?.route?.params?.productDetails
-  const [productCount, setProductCount] = useState(props?.route?.params?.productCount)
+  const productDetails = props?.route?.params?.productDetails;
+  const [productCount, setProductCount] = useState(
+    props?.route?.params?.productCount,
+  );
 
-
-  console.log('productDetails', productDetails)
+  console.log('productDetails', productDetails);
 
   //   {
   //     "addedToCloset": true,
@@ -91,39 +92,43 @@ const Checkout = props => {
   return (
     <VView
       style={{
-        backgroundColor: 'white',
+        backgroundColor: Colors.grey1,
         flex: 1,
         paddingBottom: 140,
         paddingTop: 16,
       }}>
-      <Header
-        showBack
-        title="Checkout"
-        {...props}
-      />
+      <Header showBack title="Checkout" {...props} />
       <ScrollView bounces={false}>
-        <ProductCard 
-          productDetails={productDetails} 
+        <ProductCard
+          productDetails={productDetails}
           productCount={productCount}
           onDecrement={() => {
-            setProductCount(previous => previous - 1)
+            setProductCount(previous => previous - 1);
           }}
           onIncrement={() => {
-            setProductCount(previous => previous + 1)
+            setProductCount(previous => previous + 1);
           }}
           removeItemFromCart={() => {}}
         />
-        <View testID='deliveryAddress' style={{ padding: 16, marginBottom: 4 }}>
+        <View
+          testID="deliveryAddress"
+          style={{padding: 16, marginTop: 4, backgroundColor: 'white'}}>
           <View style={styles.flexRow}>
             <Text style={styles.text}>Deliver To: </Text>
             <Text style={styles.boldText}>Kate Davidson Hudson</Text>
           </View>
-          <Text style={styles.textLightBlack}>30 E 62nd St 9DE New York 100658 NY</Text>
+          <Text style={styles.textLightBlack}>
+            30 E 62nd St 9DE New York 100658 NY
+          </Text>
         </View>
-        <View testID='cartTotal' style={{ padding: 16, marginBottom: 4 }}>
+        <View
+          testID="cartTotal"
+          style={{padding: 16, marginTop: 4, backgroundColor: 'white'}}>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Item Total</Text>
-            <Text style={styles.text}>${productDetails?.productPrice * productCount}</Text>
+            <Text style={styles.text}>
+              ${productDetails?.productPrice * productCount}
+            </Text>
           </View>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Discount</Text>
@@ -139,18 +144,21 @@ const Checkout = props => {
           </View>
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
-            <Text style={styles.text}>${(productDetails?.productPrice * productCount) - 130 - 5 - 35}</Text>
+            <Text style={styles.text}>
+              ${productDetails?.productPrice * productCount - 130 - 5 - 35}
+            </Text>
           </View>
         </View>
-        <View style={{
-          margin: 16
-        }}>
+        <View
+          style={{
+            margin: 16,
+          }}>
           <Buttons
-            onPress={() => { 
+            onPress={() => {
               props.navigation.navigate('PlaceOrder', {
                 productDetails,
-                productCount
-              })
+                productCount,
+              });
             }}
             text={'Place order'}
           />
@@ -165,7 +173,7 @@ export default Checkout;
 
 const styles = StyleSheet.create({
   flexRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   justifyBetween: {
     flexDirection: 'row',
@@ -219,5 +227,5 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontWeight: '700',
     lineHeight: 24,
-  }
+  },
 });
