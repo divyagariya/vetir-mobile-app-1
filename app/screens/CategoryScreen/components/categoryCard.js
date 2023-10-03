@@ -18,6 +18,7 @@ export default ({
   isStylistUser,
   recommentToClient,
   dislikeProducts,
+  onPressChat,
 }) => {
   return (
     <>
@@ -83,6 +84,15 @@ export default ({
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={{padding: 8}}
+                  onPress={() => onPressChat(item)}>
+                  <Image
+                    source={require('../../../assets/chat.webp')}
+                    style={{width: 24, height: 24}}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
               </View>
             ) : (
               <View style={{flexDirection: 'row'}}>
@@ -108,6 +118,15 @@ export default ({
                       resizeMode="contain"
                     />
                   )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{padding: 8}}
+                  onPress={() => onPressChat(item)}>
+                  <Image
+                    source={require('../../../assets/chat.webp')}
+                    style={{width: 24, height: 24}}
+                    resizeMode="contain"
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{padding: 8}}

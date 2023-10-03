@@ -37,13 +37,15 @@ import {
 } from '../../redux/actions/stylistAction';
 import {debounce} from '../../utils/common';
 import {returnFilterParams} from './common';
+import {ClientModelChat} from './components/clientModelChat';
 
 export const ClientList = ({
   item,
   index,
   selectClient,
   selectedClients,
-  // onPressChat,
+  onPressChat,
+  showChatIcon,
 }) => {
   return (
     <TouchableOpacity
@@ -71,26 +73,28 @@ export const ClientList = ({
           <Text style={{color: Colors.black30}}>{item.emailId}</Text>
         </View>
       </View>
-
-      {/* <TouchableOpacity onPress={() => onPressChat(item)}>
-        <Image
-          source={require('../../assets/chat.webp')}
-          style={{width: 16, height: 16}}
-          resizeMode="contain"
-        />
-      </TouchableOpacity> */}
-
-      <View>
-        <Image
-          source={
-            selectedClients.includes(item.userId)
-              ? require('../../assets/iSelectedCheck.png')
-              : require('../../assets/iCheck.png')
-          }
-          style={{width: 16, height: 16}}
-          resizeMode="contain"
-        />
-      </View>
+      {showChatIcon && (
+        <TouchableOpacity onPress={() => onPressChat(item)}>
+          <Image
+            source={require('../../assets/send_to_chat.webp')}
+            style={{width: 20, height: 20}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      )}
+      {!showChatIcon && (
+        <View>
+          <Image
+            source={
+              selectedClients.includes(item.userId)
+                ? require('../../assets/iSelectedCheck.png')
+                : require('../../assets/iCheck.png')
+            }
+            style={{width: 16, height: 16}}
+            resizeMode="contain"
+          />
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -280,6 +284,7 @@ const CategoryScreen = props => {
   const [recommendedProductId, setRecommendedProductId] = useState('');
   const [showModal, setModal] = useState(false);
   const [showClientModal, setShowClientModal] = useState(false);
+  const [showClientModalForChat, setShowClientModalForChat] = useState(false);
   const [selectedProductImg, setSelectedProductImg] = useState('');
   const [selectedProductData, setSelectedProductData] = useState({});
   const [showSortModal, setSortModal] = useState(false);
@@ -296,7 +301,14 @@ const CategoryScreen = props => {
   const [totalDataCount, setTotalDataCount] = useState(0);
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [currentProdID, setcurrentProdID] = useState('');
-
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
   const filteredProducts = useSelector(
     state => state.HomeReducer.filteredProducts,
   );
@@ -465,6 +477,7 @@ const CategoryScreen = props => {
   };
 
   const addToCloset = item => {
+    console.warn('userId', userId);
     let data = {
       userId: userId,
       categoryId: item.categoryId,
@@ -649,6 +662,22 @@ const CategoryScreen = props => {
             <CategoryCard
               index={index}
               item={item}
+              onPressChat={() => {
+                if (isStylistUser) {
+                  setSelectedProductData(item);
+                  setShowClientModalForChat(true);
+                } else {
+                  props.navigation.navigate('ChatScreen', {
+                    selectedProductData: item,
+                    comingFromProduct: true,
+                    receiverDetails: {
+                      emailId: emailId,
+                      name: name,
+                      userId: _id,
+                    },
+                  });
+                }
+              }}
               getProductDetails={() => getProductDetails(item.productId)}
               addToCloset={() => addToCloset(item)}
               deletFromClost={() => deletFromClost(item)}
@@ -715,6 +744,21 @@ const CategoryScreen = props => {
               selectedProductData={selectedProductData}
               selectedClients={selectedClients}
               recommendToClients={recommendToClients}
+              selectedProductImg={selectedProductImg}
+            />
+          }
+        />
+      )}
+      {showClientModalForChat && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModalForChat}
+          component={
+            <ClientModelChat
+              navigation={props.navigation}
+              setShowClientModalForChat={setShowClientModalForChat}
+              selectedProductData={selectedProductData}
+              selectedClients={selectedClients}
               selectedProductImg={selectedProductImg}
             />
           }

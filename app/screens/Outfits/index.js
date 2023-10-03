@@ -6,13 +6,25 @@ import {Colors} from '../../colors';
 import {Buttons, Header, OverlayModal, VView} from '../../components';
 import {FONTS_SIZES} from '../../fonts';
 import {getOutfitsList} from '../../redux/actions/outfitActions';
+import {normalize} from '../../utils/normalise';
+import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
 
 const Outfits = props => {
   const dispatch = useDispatch();
   const [showModal, setModal] = useState(false);
   const [selectedSort, setSelectedSort] = useState({});
   const [selectedSortIndex, setSelectedSortIndex] = useState(null);
-
+  const [showClientModalForChat, setShowClientModalForChat] = useState(false);
+  const [selectedProductData, setSelectedProductData] = useState({});
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
   const sortingData = [
     {
       type: 'asc',
@@ -74,6 +86,47 @@ const Outfits = props => {
               width: '100%',
               alignSelf: 'center',
             }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: normalize(10),
+            top: normalize(5),
+          }}
+          onPress={() => {
+            const item1 = {
+              imageUrls: [item?.itemImageUrl],
+              brandName: item?.brandName,
+              productName: '',
+              productPrice: '',
+              categoryId: item?.categoryId,
+              subCategoryId: item?.subCategoryId,
+              brandId: item?.brandId,
+              season: item?.seasons,
+              productColorCode: item?.colorCode,
+              isImageBase64: false,
+            };
+            setSelectedProductData(item1);
+            if (isStylistUser) {
+              setShowClientModalForChat(true);
+            } else {
+              props.navigation.navigate('ChatScreen', {
+                selectedProductData: item1,
+                comingFromProduct: true,
+                receiverDetails: {
+                  emailId: emailId,
+                  name: name,
+                  userId: _id,
+                },
+              });
+            }
+            setSelectedProductData(item1);
+          }}>
+          <Image
+            source={require('../../assets/send_to_chat.webp')}
+            style={{width: 20, height: 20}}
+            resizeMode="contain"
           />
         </TouchableOpacity>
         <Text>{item.name}</Text>
@@ -251,6 +304,19 @@ const Outfits = props => {
       )}
 
       <OverlayModal showModal={showModal} component={sortData()} />
+      {showClientModalForChat && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModalForChat}
+          component={
+            <ClientModelChat
+              navigation={props.navigation}
+              setShowClientModalForChat={setShowClientModalForChat}
+              selectedProductData={selectedProductData}
+            />
+          }
+        />
+      )}
     </View>
   );
 };
