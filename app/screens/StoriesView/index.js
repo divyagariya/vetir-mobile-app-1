@@ -44,6 +44,7 @@ const StoriesView = () => {
       <WebView
         onLoadStart={() => showLoader()}
         onLoad={() => hideLoader()}
+        onLoadProgress={() => hideLoader()}
         source={{
           uri: 'https://www.vogue.com/shopping/new-arrivals',
         }}

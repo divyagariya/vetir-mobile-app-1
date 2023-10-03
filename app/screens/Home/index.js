@@ -352,7 +352,6 @@ const Home = props => {
                     borderColor: 'rgba(0,0,0,0.08)',
                     marginRight: 12,
                     width: 165,
-                    borderRadius: 8,
                   }}>
                   <Image
                     source={item?.imageUrl}
