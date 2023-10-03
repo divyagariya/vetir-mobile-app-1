@@ -40,6 +40,7 @@ import ClosetFilter from '../screens/ClosetFilter';
 import {getHomePageData, getVideoList} from '../redux/actions/homeActions';
 import {NoAuthAPI} from '../services';
 import YourPreferences from '../screens/YourPreferences';
+import AddProducts from '../screens/AddProducts';
 import Search from '../screens/Search';
 import Clients from '../screens/Clients';
 import {getAllClients} from '../redux/actions/stylistAction';
@@ -295,6 +296,7 @@ function AppNavigation() {
           <Stack.Screen name="SubmitOutfit" component={SubmitOutfit} />
           <Stack.Screen name="OutfitDetail" component={OutfitDetail} />
           <Stack.Screen name="YourPreferences" component={YourPreferences} />
+          <Stack.Screen name="AddProducts" component={AddProducts} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="ClientDetails" component={ClientDetails} />
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
