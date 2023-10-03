@@ -34,6 +34,8 @@ import Modal from 'react-native-modal';
 import {FONTS_SIZES} from '../../fonts';
 import CheckBox from '@react-native-community/checkbox';
 import moment from 'moment';
+import {normalize} from '../../utils/normalise';
+import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
 
 const {height} = Dimensions.get('screen');
 export default props => {
@@ -67,10 +69,20 @@ export default props => {
   });
   const [selectedSortIndex, setSelectedSortIndex] = useState(null);
   const categoryData = useSelector(state => state.ClosetReducer.categoryData);
-
+  const [showClientModalForChat, setShowClientModalForChat] = useState(false);
+  const [selectedProductData, setSelectedProductData] = useState({});
   const singleClosetReponse = useSelector(
     state => state.ClosetReducer.singleClosetReponse,
   );
+  const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
 
   useEffect(() => {
     if (Object.keys(singleClosetReponse).length) {
@@ -186,11 +198,11 @@ export default props => {
                     width: '50%',
                     marginVertical: 8,
                   }}
-                  onPress={() =>
+                  onPress={() => {
                     props.navigation.navigate('ClosetCategory', {
                       categoryType: item,
-                    })
-                  }>
+                    });
+                  }}>
                   <View
                     style={{
                       width: '100%',
@@ -306,12 +318,55 @@ export default props => {
                     backgroundColor: Colors.grey1,
                     margin: 8,
                   }}
-                  onPress={() => openClosetInfo(item.closetItemId)}>
+                  onPress={() => {
+                    console.log('item', item);
+                    openClosetInfo(item.closetItemId);
+                  }}>
                   <Image
                     source={{uri: item.itemImageUrl}}
                     style={{width: 150, height: 140}}
                     resizeMode="contain"
                   />
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      right: normalize(10),
+                      top: normalize(5),
+                    }}
+                    onPress={() => {
+                      const item1 = {
+                        imageUrls: [item?.itemImageUrl],
+                        brandName: item?.brandName,
+                        productName: '',
+                        productPrice: '',
+                        categoryId: item?.categoryId,
+                        subCategoryId: item?.subCategoryId,
+                        brandId: item?.brandId,
+                        season: item?.seasons,
+                        productColorCode: item?.colorCode,
+                        isImageBase64: false,
+                      };
+                      setSelectedProductData(item1);
+                      if (isStylistUser) {
+                        setShowClientModalForChat(true);
+                      } else {
+                        props.navigation.navigate('ChatScreen', {
+                          selectedProductData: item1,
+                          comingFromProduct: true,
+                          receiverDetails: {
+                            emailId: emailId,
+                            name: name,
+                            userId: _id,
+                          },
+                        });
+                      }
+                    }}>
+                    <Image
+                      source={require('../../assets/send_to_chat.webp')}
+                      style={{width: 20, height: 20}}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
                 </TouchableOpacity>
               );
             })
@@ -541,6 +596,19 @@ export default props => {
           />
         }
       />
+      {showClientModalForChat && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModalForChat}
+          component={
+            <ClientModelChat
+              navigation={props.navigation}
+              setShowClientModalForChat={setShowClientModalForChat}
+              selectedProductData={selectedProductData}
+            />
+          }
+        />
+      )}
     </VView>
   );
 };
