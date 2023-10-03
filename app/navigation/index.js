@@ -58,6 +58,7 @@ import {Colors} from '../colors';
 import {normalize} from '../utils/normalise';
 import {NavigationContainer} from '@react-navigation/native';
 import AiChatScreen from '../screens/AiChatScreen';
+import StoriesView from '../screens/StoriesView';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -304,6 +305,7 @@ function AppNavigation() {
           <Stack.Screen name="ItemsByCategory" component={ItemsByCategory} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Screen name="StoriesView" component={StoriesView} />
           <Stack.Screen
             name="OrderHistoryDetails"
             component={OrderHistoryDetails}

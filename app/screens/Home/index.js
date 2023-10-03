@@ -32,6 +32,21 @@ import {
 import {auth} from '../../firebase';
 import {Images} from '../../assets';
 
+const storiesData = [
+  {
+    imageUrl: Images.story2,
+    description: '45 New Arrivals to Shop Now -Fresh De...',
+  },
+  {
+    imageUrl: Images.story3,
+    description: '45 New Arrivals to Shop Now -Fresh De...',
+  },
+  {
+    imageUrl: Images.story1,
+    description: '45 New Arrivals to Shop Now -Fresh De...',
+  },
+];
+
 const Home = props => {
   const [videoList] = [1, 2, 3, 4, 5, 6, 7, 8];
   const dispatch = useDispatch();
@@ -302,6 +317,70 @@ const Home = props => {
             </TouchableOpacity>
           </View>
         )}
+
+        {/* Stories section */}
+
+        <>
+          <View
+            style={{
+              padding: 16,
+            }}>
+            <Text
+              style={{
+                fontSize: FONTS_SIZES.s3,
+                fontWeight: '700',
+                marginBottom: 4,
+                color: '#212427',
+              }}>
+              The Stories
+            </Text>
+          </View>
+
+          <ScrollView
+            horizontal
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 10,
+            }}>
+            {storiesData.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate('StoriesView')}
+                  key={index}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.08)',
+                    marginRight: 12,
+                    width: 165,
+                    borderRadius: 8,
+                  }}>
+                  <Image
+                    source={item?.imageUrl}
+                    style={{
+                      height: 123,
+                      width: '100%',
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
+                    }}
+                    resizeMode="contain"
+                  />
+                  <View
+                    style={{
+                      padding: 16,
+                    }}>
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        fontSize: FONTS_SIZES.s4,
+                      }}>
+                      {item.description}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </>
 
         {homeResponse.length > 0 &&
           homeResponse.map(item => {
