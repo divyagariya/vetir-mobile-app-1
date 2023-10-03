@@ -327,6 +327,7 @@ const Home = props => {
           <View
             style={{
               paddingHorizontal: 16,
+              marginTop: 16,
             }}>
             <Text
               style={{
