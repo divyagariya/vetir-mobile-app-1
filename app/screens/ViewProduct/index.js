@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -9,8 +9,9 @@ import {
   Alert,
   Text,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
-import {Colors} from '../../colors';
+import { Colors } from '../../colors';
 import {
   VText,
   VView,
@@ -19,25 +20,28 @@ import {
   OverlayModal,
   Loader,
 } from '../../components';
-import {FONTS_SIZES} from '../../fonts';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
+import { FONTS_SIZES } from '../../fonts';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import {
   addDataInCloset,
   deleteClosetData,
   getClosetData,
 } from '../../redux/actions/closetAction';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
-import {getProductDetailsApi} from '../../redux/actions/homeActions';
+import { getProductDetailsApi } from '../../redux/actions/homeActions';
 import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
-import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
-import {NoAuthAPI} from '../../services';
-import {RenderClients} from '../CategoryScreen';
+import dynamicLinks, { firebase } from '@react-native-firebase/dynamic-links';
+import { NoAuthAPI } from '../../services';
+import { RenderClients } from '../CategoryScreen';
+import { cartUtil } from '../../hooks/cart';
+import { useCart } from '../../hooks/useCart';
+import { addToCart, decrement, increment } from '../../redux/actions/cartAction';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -48,9 +52,13 @@ const ViewProduct = props => {
   let _slider1Ref = useRef(null);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
   const [productData, setProductData] = useState({});
+  const [showCheckoutButton, setShowCheckoutButton] = useState(false)
+  const [itemCount, setItemCount] = useState(1)
   const addClosetResponse = useSelector(
     state => state.ClosetReducer.addClosetResponse,
   );
+  const cartData = useSelector(state => state.CartReducer);
+  console.log('cartData', cartData)
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const userId = useSelector(state => state.AuthReducer.userId);
   const deleteClosetResponse = useSelector(
@@ -78,7 +86,7 @@ const ViewProduct = props => {
     if (Object.keys(recommendedToClientsRes).length) {
       if (recommendedToClientsRes.statusCode === 200) {
         setSelectedClients([]);
-        dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
+        dispatch({ type: 'RECOMMENDED_TO_CLIENTS', value: {} });
         Toast.show('Recommended to client');
       }
     }
@@ -87,7 +95,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
       if (dislikeResp.statusCode === 200) {
-        dispatch({type: 'DISLIKE_PRODUCTS', value: {}});
+        dispatch({ type: 'DISLIKE_PRODUCTS', value: {} });
         dispatch(getProductDetailsApi(productData.productId));
         Toast.show('Not liked');
       }
@@ -103,7 +111,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
-        dispatch({type: 'DELETE_CLOSET', value: {}});
+        dispatch({ type: 'DELETE_CLOSET', value: {} });
         Toast.show('Removed from closet');
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
@@ -114,7 +122,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
-        dispatch({type: 'ADD_TO_CLOSET', value: {}});
+        dispatch({ type: 'ADD_TO_CLOSET', value: {} });
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
         Toast.show('Added to closet');
@@ -128,10 +136,10 @@ const ViewProduct = props => {
     }
   }, []);
 
-  const _renderItem = ({item, index}) => {
+  const _renderItem = ({ item, index }) => {
     return (
       <View style={styles.container} key={index}>
-        <Image source={{uri: item}} style={styles.image} resizeMode="contain" />
+        <Image source={{ uri: item }} style={styles.image} resizeMode="contain" />
       </View>
     );
   };
@@ -324,8 +332,8 @@ const ViewProduct = props => {
             productData.isDisliked
               ? require('../../assets/iDisliked.webp')
               : productData.isDisliked != undefined
-              ? require('../../assets/iDislike.webp')
-              : null
+                ? require('../../assets/iDislike.webp')
+                : null
           }
           showBack
           addToCloset={addToCloset}
@@ -368,7 +376,7 @@ const ViewProduct = props => {
             tappableDots={true}
           />
         </VView>
-        <VView style={{padding: 16}}>
+        <VView style={{ padding: 16 }}>
           <VView>
             <Text
               numberOfLines={1}
@@ -380,7 +388,7 @@ const ViewProduct = props => {
               {productData.brandName}
             </Text>
             <VText
-              style={{fontSize: FONTS_SIZES.s4, fontWeight: '400'}}
+              style={{ fontSize: FONTS_SIZES.s4, fontWeight: '400' }}
               text={productData?.productName}
             />
             <VText
@@ -398,7 +406,7 @@ const ViewProduct = props => {
                 flexDirection: 'row',
                 alignItems: 'baseline',
               }}>
-              <Text style={[styles.subitleStyle, {marginRight: 8}]}>
+              <Text style={[styles.subitleStyle, { marginRight: 8 }]}>
                 {productData.productColor}
               </Text>
               <View
@@ -420,10 +428,10 @@ const ViewProduct = props => {
             {productData.seasons && productData.seasons.length > 0 && (
               <>
                 <Text style={styles.titleStyle}>Season</Text>
-                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                   {productData.seasons.map(item => {
                     return (
-                      <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                      <Text style={[styles.subitleStyle, { marginRight: 4 }]}>
                         {item}
                       </Text>
                     );
@@ -433,10 +441,10 @@ const ViewProduct = props => {
             )}
 
             <Text style={styles.titleStyle}>Size</Text>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {productData.productSizes.map(item => {
                 return (
-                  <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                  <Text style={[styles.subitleStyle, { marginRight: 4 }]}>
                     {item}
                   </Text>
                 );
@@ -444,7 +452,7 @@ const ViewProduct = props => {
             </View>
             <Text>Description</Text>
             <VText
-              style={{color: Colors.black60, marginBottom: 16, marginTop: 8}}
+              style={{ color: Colors.black60, marginBottom: 16, marginTop: 8 }}
               text={productData.productDescription}
             />
             {productData.note ? (
@@ -480,7 +488,96 @@ const ViewProduct = props => {
           shadowRadius: 4,
           shadowOpacity: 0.16,
         }}>
-        <Buttons text="Buy Now" onPress={openLink} />
+        {showCheckoutButton ? (
+          <View style={{
+            flexDirection: "row",
+            justifyContent: 'space-between',
+            marginBottom: 8,
+            gap: 8,
+          }}>
+            <View style={{
+              flexDirection: "row",
+              padding: 8,
+              borderRadius: 8,
+              gap: 16,
+              borderWidth: 1,
+              borderColor: Colors.tertiary,
+              backgroundColor: Colors.tertiaryLight,
+              width: '49%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 56,
+            }}>
+              <Pressable style={{
+                paddingHorizontal: 8,
+                minWidth: 24,
+              }} onPress={() => {
+                if (itemCount <= 1) {
+                  setShowCheckoutButton(false)
+                  setItemCount(0)
+                  return
+                }
+                setItemCount(current => current - 1)
+                dispatch(decrement({ productId: productData.productId }))
+              }}>
+                <Text style={{ color: Colors.tertiary, fontSize: 20 }}>-</Text>
+              </Pressable>
+              <View style={{
+                paddingHorizontal: 8,
+              }}>
+                <Text style={{ color: Colors.tertiary, fontSize: 20 }}>{itemCount}</Text>
+              </View>
+              <Pressable style={{
+                paddingHorizontal: 8,
+                minWidth: 24,
+              }} onPress={() => {
+                dispatch(increment({ productId: productData.productId }))
+                setItemCount(current => current + 1)
+              }}>
+                <Text style={{ color: Colors.tertiary, fontSize: 20 }}>+</Text>
+              </Pressable>
+            </View>
+            <Pressable style={{
+              flexDirection: "row",
+              padding: 8,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: Colors.tertiary,
+              backgroundColor: Colors.tertiary,
+              width: '49%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 56,
+            }} onPress={() => {
+              props.navigation.navigate('Checkout', {
+                productDetails: productData,
+                productCount: itemCount,
+              })
+            }}>
+              <Text style={{
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: '700',
+              }}>Checkout</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <Buttons text="Buy Now" onPress={() => {
+            dispatch(addToCart({
+              product: productData,
+              productId: productData.productId
+            }))
+            // dispatch({ 
+            //   type: 'ADD_TO_CART', 
+            //   value: {
+            //     product: productData,
+            //     productId: productData.productId
+            //   }
+            // });
+            setItemCount(1)
+            setShowCheckoutButton(true)
+          }} />
+        )}
         <Buttons
           isInverse
           imageIcon={

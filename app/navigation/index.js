@@ -16,6 +16,7 @@ import ClosetScreen from '../screens/Closet';
 import ClosetDetailsFrom from '../screens/Closet/component/closetDetailForm';
 import Menu from '../screens/Menu';
 import Outfits from '../screens/Outfits';
+import Checkout from '../screens/Checkout';
 import {
   getPreferencesAnswers,
   getPreferencesQs,
@@ -58,6 +59,8 @@ import {Colors} from '../colors';
 import {normalize} from '../utils/normalise';
 import {NavigationContainer} from '@react-navigation/native';
 import AiChatScreen from '../screens/AiChatScreen';
+import PlaceOrder from '../screens/Checkout/PlaceOrder';
+import OrderSuccess from '../screens/Checkout/OrderSuccess';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +81,9 @@ function ShopStack() {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="ViewProduct" component={ViewProduct} />
+      <Stack.Screen name="Checkout" component={Checkout} />
+      <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
       <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
       <Stack.Screen name="VideoList" component={VideoList} />
     </Stack.Navigator>
@@ -288,6 +294,7 @@ function AppNavigation() {
             component={ClosetDetailsFrom}
           />
           <Stack.Screen name="ViewProduct" component={ViewProduct} />
+          <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="ClosetCategory" component={ClosetCategory} />
           <Stack.Screen name="ClosetInfo" component={ClosetInfo} />
           <Stack.Screen name="EditCloset" component={EditCloset} />
