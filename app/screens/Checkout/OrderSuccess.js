@@ -44,12 +44,18 @@ import ProductCard from './Components/ProductCard';
 import CityCreditCard from '../../assets/citiCreditCard.png';
 import GooglePay from '../../assets/googlePay.png';
 import ApplePay from '../../assets/applePay.png';
+import {Styles} from './styles';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
 
 const OrderSuccess = props => {
   const [loader, setLoader] = useState(false);
+  const productDetails = props?.route?.params?.productDetails;
+  const [productCount, setProductCount] = useState(
+    props?.route?.params?.productCount,
+  );
+
   return (
     <VView
       style={{
@@ -72,6 +78,59 @@ const OrderSuccess = props => {
           <Text style={Colors.black}>
             Confirmation will be sent by the email.
           </Text>
+        </View>
+        <View
+          style={{marginTop: 4, padding: 16, backgroundColor: Colors.white}}>
+          <View style={{marginBottom: 16}}>
+            <Text style={{color: Colors.black60, marginBottom: 4}}>
+              Order ID: 8476523{' '}
+            </Text>
+            <Text style={{color: Colors.black60}}>
+              Placed on 10/4/23 at 10:21am
+            </Text>
+          </View>
+          <View>
+            <Text style={{color: Colors.black, marginBottom: 4}}>
+              Delivery address{' '}
+            </Text>
+            <Text style={{color: Colors.black60}}>
+              30 E 62nd St 9DE New York 100658 NY
+            </Text>
+          </View>
+        </View>
+        <View style={Styles.btncontainer}>
+          <TouchableOpacity style={Styles.reOrderBtn}>
+            <Image
+              style={Styles.icon}
+              source={require('../../assets/reorder.webp')}
+            />
+            <Text style={Styles.btnText}>{'Reorder'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={Styles.reOrderBtn}>
+            <Image
+              style={Styles.icon}
+              source={require('../../assets/down.webp')}
+            />
+            <Text style={Styles.btnText}>{'Invoice'}</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 4,
+            padding: 16,
+            backgroundColor: Colors.white,
+            alignItems: 'center',
+          }}>
+          <Image
+            source={{uri: productDetails?.imageUrls?.[0]}}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <View style={styles.flexRow}>
+            <Text style={styles.text}>Estimated delivery by </Text>
+            <Text style={styles.boldText}>Tomorrow</Text>
+          </View>
         </View>
       </ScrollView>
       {loader && <Loader />}
@@ -105,6 +164,7 @@ const styles = StyleSheet.create({
   image: {
     width: 48,
     height: 64,
+    marginRight: 16,
   },
   dotStyle: {
     width: 10,
@@ -155,5 +215,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 4,
     textAlign: 'auto',
+  },
+  flexRow: {
+    flexDirection: 'row',
+  },
+  text: {
+    color: Colors.black,
+    lineHeight: 24,
+  },
+  boldText: {
+    color: Colors.black,
+    fontWeight: '700',
+    lineHeight: 24,
   },
 });

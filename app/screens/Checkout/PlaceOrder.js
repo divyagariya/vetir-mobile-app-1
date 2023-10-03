@@ -145,7 +145,9 @@ const PlaceOrder = props => {
             }}>
             <Buttons
               onPress={() => {
-                props.navigation.navigate('OrderSuccess');
+                props.navigation.navigate('OrderSuccess', {
+                  productDetails,
+                });
               }}
               text={`Pay \$${
                 productDetails?.productPrice * productCount - 130 - 5 - 35
