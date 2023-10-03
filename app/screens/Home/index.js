@@ -40,13 +40,13 @@ const storiesData = [
   },
   {
     imageUrl: Images.story3,
-    description: '45 New Arrivals to Shop Now -Fresh De...',
-    webViewURL: 'https://www.vogue.com/affordable-fashion-edit',
+    description: '60+ minimalist fashion and accessories to ge...',
+    webViewURL: 'https://www.vogue.com/the-minimalist-edit',
   },
   {
     imageUrl: Images.story1,
-    description: '45 New Arrivals to Shop Now -Fresh De...',
-    webViewURL: 'https://www.vogue.com/the-minimalist-edit',
+    description: 'The Best of Womens Workwear, All in On...',
+    webViewURL: 'https://www.vogue.com/shopping/the-workwear-edit',
   },
 ];
 
@@ -354,7 +354,7 @@ const Home = props => {
                   style={{
                     borderWidth: 1,
                     borderColor: 'rgba(0,0,0,0.08)',
-                    marginRight: 12,
+                    marginRight: 8,
                     width: 165,
                   }}>
                   <Image
@@ -367,12 +367,14 @@ const Home = props => {
                   />
                   <View
                     style={{
-                      padding: 16,
+                      padding: 8,
                     }}>
                     <Text
                       numberOfLines={2}
                       style={{
                         fontSize: FONTS_SIZES.s4,
+                        lineHeight: 20,
+                        color: Colors.black,
                       }}>
                       {item.description}
                     </Text>
