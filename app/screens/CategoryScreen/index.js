@@ -55,7 +55,7 @@ export const ClientList = ({
         alignItems: 'center',
         marginVertical: 8,
       }}
-      onPress={() => selectClient(item)}>
+      onPress={() => onPressChat(item)}>
       <View style={{flexDirection: 'row'}}>
         {item.profilePicUrl ? (
           <Image
@@ -758,8 +758,6 @@ const CategoryScreen = props => {
               navigation={props.navigation}
               setShowClientModalForChat={setShowClientModalForChat}
               selectedProductData={selectedProductData}
-              selectedClients={selectedClients}
-              selectedProductImg={selectedProductImg}
             />
           }
         />

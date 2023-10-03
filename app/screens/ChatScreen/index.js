@@ -14,30 +14,13 @@ import {
   onSnapshot,
   query,
   orderBy,
-  initializeFirestore,
-  getFirestore,
   doc,
-  getDoc,
-  update,
-  getDocs,
   setDoc,
-  updateDoc,
 } from '@firebase/firestore';
-import {
-  getDatabase,
-  ref,
-  orderByChild,
-  onValue,
-  child,
-  get,
-} from 'firebase/database';
-import {getAuth} from '@firebase/auth';
-import {initializeApp} from 'firebase/app';
 import {
   TouchableOpacity,
   ActionSheetIOS,
   View,
-  Keyboard,
   ActivityIndicator,
   Text,
 } from 'react-native';
@@ -58,6 +41,7 @@ import RNFetchBlob from 'react-native-blob-util';
 import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 import {addDataInCloset, getClosetData} from '../../redux/actions/closetAction';
+import {addOutfit} from '../../redux/actions/outfitActions';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -65,7 +49,7 @@ const ChatScreen = props => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // To keep track of the currently displayed image
   const [myRef, setMyRef] = useState(null);
 
-  const {receiverDetails, selectedProductData, comingFromProduct} =
+  const {receiverDetails, selectedProductData, comingFromProduct, isOutfit} =
     props?.route?.params || {};
   console.log('selectedProductData', selectedProductData);
   const [firstTime, setFirstTime] = useState(true);
@@ -91,25 +75,31 @@ const ChatScreen = props => {
   const addClosetResponse = useSelector(
     state => state.ClosetReducer.addClosetResponse,
   );
+  const addOutfitReponse = useSelector(
+    state => state.OutfitReducer.addOutfitReponse,
+  );
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
-        // let prod = productList;
-        // prod.map(product => {
-        //   if (product?.productId === currentProdID) {
-        //     product.addedToCloset = true;
-        //     product.closetItemId = addClosetResponse.closetItemId;
-        //   }
-        // });
-        // // setProducts([]);
-        // setProducts(prod);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         Toast.show('Added to closet');
         dispatch(getClosetData());
       }
     }
   }, [addClosetResponse, dispatch]);
+
+  useEffect(() => {
+    if (Object.keys(addOutfitReponse).length) {
+      dispatch({type: 'ADD_OUTFIT', value: {}});
+      if (addOutfitReponse.statusCode === 200) {
+        Toast.show('Outfit successfully created');
+        // dispatch(getOutfitsList());
+        // props.navigation.navigate('Outfit');
+      } else {
+      }
+    }
+  }, [addOutfitReponse, dispatch]);
 
   useEffect(() => {
     signInWithEmailAndPassword(auth, userEmail, userEmail)
@@ -134,29 +124,6 @@ const ChatScreen = props => {
     },
     [onSendImage],
   );
-
-  // const showActionSheet = ref => {
-  //   ActionSheetIOS.showActionSheetWithOptions(
-  //     {
-  //       options: ['Gallery', 'Camera', 'Video Recorder', 'Cancel'],
-  //       destructiveButtonIndex: 3,
-  //       cancelButtonIndex: 3,
-  //       title: 'Pick the media',
-  //     },
-  //     buttonIndex => {
-  //       if (buttonIndex === 0) {
-  //         onSendImage(buttonIndex, ref);
-  //         // delete action
-  //       } else if (buttonIndex === 1) {
-  //         onSendImage(buttonIndex, ref);
-  //         // share action
-  //       } else if (buttonIndex === 2) {
-  //         onSendImage(buttonIndex, ref);
-  //         // share action
-  //       }
-  //     },
-  //   );
-  // };
 
   useLayoutEffect(() => {
     const chatId = generateChatId(
@@ -191,6 +158,12 @@ const ChatScreen = props => {
             colorCode: doc.data().colorCode,
             itemImageUrl: doc.data().itemImageUrl,
             productId: doc.data().productId,
+            isOutfit: doc.data().isOutfit,
+            closetItemIds: doc.data().closetItemIds,
+            outfitImageType: doc.data().outfitImageType,
+            name: doc.data().name,
+            description: doc.data().description,
+            imageData: doc.data().imageData,
           };
         }),
       );
@@ -213,13 +186,15 @@ const ChatScreen = props => {
   useEffect(() => {
     if (firstTime && myRef?.current && comingFromProduct) {
       console.log('selectedProductData', selectedProductData);
-      // debugger;
       myRef.current.onSend(
         {
           image: selectedProductData?.imageUrls[0],
           imageCaptionTitle: selectedProductData?.brandName,
           imageCaptionSubTitle: selectedProductData?.productName,
-          imageCaptionPrice: selectedProductData?.productPrice.toString(),
+          ...(selectedProductData?.productPrice
+            ? {imageCaptionPrice: selectedProductData?.productPrice.toString()}
+            : {}),
+          // imageCaptionPrice: selectedProductData?.productPrice.toString(),
           isClosetItem: false,
           categoryId: selectedProductData?.categoryId,
           subCategoryId: selectedProductData?.subCategoryId,
@@ -228,11 +203,24 @@ const ChatScreen = props => {
             ? {season: selectedProductData?.seasons}
             : {}),
           colorCode: selectedProductData?.productColorCode,
-          itemImageUrl: selectedProductData?.imageUrls[0],
+          ...(!isOutfit
+            ? {itemImageUrl: selectedProductData?.imageUrls[0]}
+            : undefined),
           isImageBase64: false,
           ...(selectedProductData?.productId
             ? {productId: selectedProductData?.productId}
             : {}),
+          ...(isOutfit ? {isOutfit: isOutfit} : {}),
+          ...(isOutfit
+            ? {closetItemIds: selectedProductData?.closetItemIds}
+            : {}),
+          ...(isOutfit
+            ? {outfitImageType: selectedProductData?.outfitImageType}
+            : {}),
+          ...(isOutfit ? {name: selectedProductData?.name} : {}),
+          ...(isOutfit ? {description: selectedProductData?.description} : {}),
+          // ...(isOutfit ? {seasons: selectedProductData?.seasons} : {}),
+          ...(isOutfit ? {imageData: selectedProductData?.imageData} : {}),
         },
         true,
       );
@@ -241,6 +229,7 @@ const ChatScreen = props => {
   }, [
     comingFromProduct,
     firstTime,
+    isOutfit,
     myRef,
     selectedProductData,
     selectedProductData?.imageUrls,
@@ -275,6 +264,13 @@ const ChatScreen = props => {
         colorCode,
         itemImageUrl,
         productId,
+        isOutfit,
+        closetItemIds,
+        outfitImageType,
+        name,
+        description,
+        seasons,
+        imageData,
       } = messages[0];
       try {
         const chatId = generateChatId(
@@ -323,6 +319,16 @@ const ChatScreen = props => {
               ...(colorCode ? {colorCode: colorCode} : undefined),
               ...(itemImageUrl ? {itemImageUrl: itemImageUrl} : undefined),
               ...(productId ? {productId: productId} : undefined),
+              ...(isOutfit ? {isOutfit: isOutfit} : undefined),
+
+              ...(closetItemIds ? {closetItemIds: closetItemIds} : undefined),
+              ...(outfitImageType
+                ? {outfitImageType: outfitImageType}
+                : undefined),
+              ...(name ? {name: name} : undefined),
+              ...(description ? {description: description} : undefined),
+              ...(seasons ? {seasons: seasons} : undefined),
+              ...(imageData ? {imageData: imageData} : undefined),
             });
           } else if (message.video) {
             // Handle image messages
@@ -365,15 +371,7 @@ const ChatScreen = props => {
         console.error('Error writing document: ', error);
       }
     },
-    [
-      clientUserId,
-      comingFromProduct,
-      firstTime,
-      isStylistUser,
-      personalStylistId,
-      receiverDetails,
-      selectedProductData?.productId,
-    ],
+    [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
   const renderMessageVideo = useCallback(props => {
@@ -590,6 +588,7 @@ const ChatScreen = props => {
   //   }
   // };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const addToCloset = async currentMessage => {
     console.log('currentMessage', currentMessage);
     // const {_id} = currentMessage;
@@ -630,24 +629,38 @@ const ChatScreen = props => {
     //   sent: true,
     //   received: '',
     // });
-    let data = {
-      userId: isStylistUser ? personalStylistId : clientUserId,
-      categoryId: currentMessage?.categoryId,
-      subCategoryId: currentMessage?.subCategoryId,
-      brandId: currentMessage?.brandId,
-      season: currentMessage?.seasons,
-      colorCode: currentMessage?.colorCode,
-      itemImageUrl: currentMessage?.itemImageUrl,
-      isImageBase64: false,
-      productId: currentMessage?.productId,
-    };
-    dispatch(addDataInCloset(data));
+    if (currentMessage?.isOutfit) {
+      let data = {
+        userId: isStylistUser ? personalStylistId : clientUserId,
+        closetItemIds: currentMessage?.closetItemIds,
+        outfitImageType: currentMessage?.outfitImageType,
+        name: currentMessage?.name,
+        description: currentMessage?.description,
+        seasons: currentMessage?.selectedSeason,
+        imageData: currentMessage?.imageData,
+      };
+      dispatch(addOutfit(data));
+    } else {
+      let data = {
+        userId: isStylistUser ? personalStylistId : clientUserId,
+        categoryId: currentMessage?.categoryId,
+        subCategoryId: currentMessage?.subCategoryId,
+        brandId: currentMessage?.brandId,
+        season: currentMessage?.seasons,
+        colorCode: [currentMessage?.colorCode],
+        itemImageUrl: currentMessage?.itemImageUrl,
+        isImageBase64: false,
+        productId: currentMessage?.productId,
+      };
+      dispatch(addDataInCloset(data));
+    }
   };
 
   const renderMessageImage = useCallback(
     props => {
       let {currentMessage} = props;
       const imageUrl = currentMessage.image;
+      const isOutfitItem = currentMessage?.isOutfit;
       console.log('currentMessage', currentMessage);
       const images = messages
         .filter(message => message.image) // Filter out messages without images
@@ -672,10 +685,10 @@ const ChatScreen = props => {
               resizeMode={'cover'}
             />
           </TouchableOpacity>
-          {currentMessage.imageCaptionTitle && (
+          {(currentMessage?.imageCaptionTitle || currentMessage?.name) && (
             <View style={{padding: 5}}>
               <TouchableOpacity onPress={() => addToCloset(currentMessage)}>
-                {true ? (
+                {!isOutfitItem ? (
                   <Image
                     source={require('../../assets/Closet.webp')}
                     style={{
@@ -702,7 +715,9 @@ const ChatScreen = props => {
                   fontSize: FONTS_SIZES.s4,
                   color: Colors.black,
                 }}>
-                {currentMessage?.imageCaptionTitle}
+                {isOutfitItem
+                  ? currentMessage?.name
+                  : currentMessage?.imageCaptionTitle}
               </Text>
               {currentMessage?.imageCaptionSubTitle && (
                 <Text
@@ -732,7 +747,7 @@ const ChatScreen = props => {
         </View>
       );
     },
-    [messages],
+    [addToCloset, messages],
   );
 
   const closeModal = () => {

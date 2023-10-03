@@ -50,7 +50,18 @@ export const ClientModelChat = ({
                 });
               }}
               index={index}
-              selectedClients={{}}
+              selectedClients={() => {
+                setShowClientModalForChat(false);
+                navigation.navigate('ChatScreen', {
+                  selectedProductData: selectedProductData,
+                  comingFromProduct: true,
+                  receiverDetails: {
+                    emailId: item?.emailId,
+                    name: item?.name,
+                    userId: item?.userId,
+                  },
+                });
+              }}
             />
           );
         })}
