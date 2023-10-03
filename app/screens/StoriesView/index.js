@@ -4,7 +4,10 @@ import {ActivityIndicator, Image, TouchableOpacity, View} from 'react-native';
 
 import WebView from 'react-native-webview';
 
-const StoriesView = () => {
+const StoriesView = props => {
+  let {webViewURL} = props?.route?.params;
+  console.log('Props----------', webViewURL);
+
   const navigation = useNavigation();
   const [isLoader, setIsLoader] = useState(false);
 
@@ -46,7 +49,7 @@ const StoriesView = () => {
         onLoad={() => hideLoader()}
         onLoadProgress={() => hideLoader()}
         source={{
-          uri: 'https://www.vogue.com/shopping/new-arrivals',
+          uri: webViewURL,
         }}
         style={{flex: 1}}
       />

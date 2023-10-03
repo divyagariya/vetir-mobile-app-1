@@ -36,14 +36,17 @@ const storiesData = [
   {
     imageUrl: Images.story2,
     description: '45 New Arrivals to Shop Now -Fresh De...',
+    webViewURL: 'https://www.vogue.com/shopping/new-arrivals',
   },
   {
     imageUrl: Images.story3,
     description: '45 New Arrivals to Shop Now -Fresh De...',
+    webViewURL: 'https://www.vogue.com/affordable-fashion-edit',
   },
   {
     imageUrl: Images.story1,
     description: '45 New Arrivals to Shop Now -Fresh De...',
+    webViewURL: 'https://www.vogue.com/the-minimalist-edit',
   },
 ];
 
@@ -323,7 +326,7 @@ const Home = props => {
         <>
           <View
             style={{
-              padding: 16,
+              paddingHorizontal: 16,
             }}>
             <Text
               style={{
@@ -345,7 +348,7 @@ const Home = props => {
             {storiesData.map((item, index) => {
               return (
                 <TouchableOpacity
-                  onPress={() => props.navigation.navigate('StoriesView')}
+                  onPress={() => props.navigation.navigate('StoriesView', item)}
                   key={index}
                   style={{
                     borderWidth: 1,
@@ -358,8 +361,6 @@ const Home = props => {
                     style={{
                       height: 123,
                       width: '100%',
-                      borderTopLeftRadius: 8,
-                      borderTopRightRadius: 8,
                     }}
                     resizeMode="contain"
                   />
