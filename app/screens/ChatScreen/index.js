@@ -501,7 +501,6 @@ const ChatScreen = props => {
                 id: isStylistUser ? personalStylistId : clientUserId,
                 type: isStylistUser ? 'personalStylistId' : 'userId',
               });
-              console.log('s3UploadUrl', s3UploadUrl);
               RNFetchBlob.fetch(
                 'PUT',
                 s3UploadUrl,
@@ -511,7 +510,6 @@ const ChatScreen = props => {
                 RNFetchBlob.wrap(media.path),
               )
                 .then(m => {
-                  console.log('upload finish');
                   if (ref) {
                     ref.onSend({video: media.path}, true);
                   }

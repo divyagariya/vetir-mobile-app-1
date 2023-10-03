@@ -11,4 +11,6 @@ export const Colors = {
   blue: '#217AFF',
   greyText: '#21242799',
   purple: '#5C0FD7',
+  tertiary: '#712BCA',
+  tertiaryLight: '#F8F3FF',
 };
