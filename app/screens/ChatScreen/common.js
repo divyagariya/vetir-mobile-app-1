@@ -51,10 +51,6 @@ export const getPreSignedUrl = async ({id, type}) => {
       return response.json();
     })
     .then(responseData => {
-      console.log(
-        'responseData?.data?.presignedUrl',
-        responseData?.data?.presignedUrl,
-      );
       return responseData?.data?.presignedUrl;
     })
     .catch(error => {

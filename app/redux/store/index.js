@@ -10,13 +10,14 @@ import OutfitReducer from '../reducers/outfitReducer';
 import CommonLoaderReducer from '../reducers/loaderReducer';
 import HomeReducer from '../reducers/homeReducers';
 import StylistReducer from '../reducers/stylistReducer';
+import CartReducer from '../reducers/cartReducer';
 
 const persistConfig = {
   key: 'root',
   // Storage Method (React Native)
   storage: AsyncStorage,
   // Whitelist (Save Specific Reducers)
-  whitelist: ['AuthReducer', 'ProfileReducer', 'ClosetReducer', 'HomeReducer'],
+  whitelist: ['AuthReducer', 'ProfileReducer', 'ClosetReducer', 'HomeReducer', 'CartReducer'],
 };
 
 const rootReducer = combineReducers({
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   CommonLoaderReducer,
   HomeReducer,
   StylistReducer,
+  CartReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

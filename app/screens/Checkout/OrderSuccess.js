@@ -65,7 +65,7 @@ const OrderSuccess = props => {
       />
       <ScrollView bounces={false}>
         <Text>
-            Order placed
+            Order placed, thanks.
         </Text>
       </ScrollView>
       {loader && <Loader />}
