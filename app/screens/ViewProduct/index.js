@@ -54,6 +54,7 @@ const ViewProduct = props => {
   const [productData, setProductData] = useState({});
   const [showCheckoutButton, setShowCheckoutButton] = useState(false);
   const [itemCount, setItemCount] = useState(1);
+  const [showCartModal, setShowCartModal] = useState(false);
   const addClosetResponse = useSelector(
     state => state.ClosetReducer.addClosetResponse,
   );
@@ -219,7 +220,9 @@ const ViewProduct = props => {
       isImageBase64: false,
       productId: productData.productId,
     };
-    alert('add to cart only');
+    setTimeout(() => {
+      setShowCartModal(true);
+    }, 1000);
 
     dispatch(addDataInCloset(data));
   };
@@ -626,6 +629,23 @@ const ViewProduct = props => {
         />
       )}
       {loader && <Loader />}
+      {/* {!showCartModal && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModal}
+          component={
+            <View
+              style={{
+                backgroundColor: 'green',
+                height: 100,
+                width: '100%',
+                zIndex: 999,
+              }}>
+              <Text>Modal</Text>
+            </View>
+          }
+        />
+      )} */}
     </VView>
   );
 };
