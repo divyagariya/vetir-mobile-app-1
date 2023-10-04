@@ -8,4 +8,9 @@ export const Images = {
   chaticon: require('./chaticon.webp'),
   offIcon: require('./off.webp'),
   onIcon: require('./on.webp'),
+  story1: require('./story1.webp'),
+  story2: require('./story2.webp'),
+  story3: require('./story3.webp'),
+  footware: require('./footware.webp'),
+  dress: require('./dress.webp'),
 };

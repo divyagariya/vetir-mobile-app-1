@@ -16,6 +16,7 @@ import ClosetScreen from '../screens/Closet';
 import ClosetDetailsFrom from '../screens/Closet/component/closetDetailForm';
 import Menu from '../screens/Menu';
 import Outfits from '../screens/Outfits';
+import Checkout from '../screens/Checkout';
 import {
   getPreferencesAnswers,
   getPreferencesQs,
@@ -40,6 +41,7 @@ import ClosetFilter from '../screens/ClosetFilter';
 import {getHomePageData, getVideoList} from '../redux/actions/homeActions';
 import {NoAuthAPI} from '../services';
 import YourPreferences from '../screens/YourPreferences';
+import AddProducts from '../screens/AddProducts';
 import Search from '../screens/Search';
 import Clients from '../screens/Clients';
 import {getAllClients} from '../redux/actions/stylistAction';
@@ -57,6 +59,9 @@ import {Colors} from '../colors';
 import {normalize} from '../utils/normalise';
 import {NavigationContainer} from '@react-navigation/native';
 import AiChatScreen from '../screens/AiChatScreen';
+import StoriesView from '../screens/StoriesView';
+import PlaceOrder from '../screens/Checkout/PlaceOrder';
+import OrderSuccess from '../screens/Checkout/OrderSuccess';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +82,9 @@ function ShopStack() {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="ViewProduct" component={ViewProduct} />
+      <Stack.Screen name="Checkout" component={Checkout} />
+      <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
       <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
       <Stack.Screen name="VideoList" component={VideoList} />
     </Stack.Navigator>
@@ -287,6 +295,7 @@ function AppNavigation() {
             component={ClosetDetailsFrom}
           />
           <Stack.Screen name="ViewProduct" component={ViewProduct} />
+          <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="ClosetCategory" component={ClosetCategory} />
           <Stack.Screen name="ClosetInfo" component={ClosetInfo} />
           <Stack.Screen name="EditCloset" component={EditCloset} />
@@ -295,6 +304,7 @@ function AppNavigation() {
           <Stack.Screen name="SubmitOutfit" component={SubmitOutfit} />
           <Stack.Screen name="OutfitDetail" component={OutfitDetail} />
           <Stack.Screen name="YourPreferences" component={YourPreferences} />
+          <Stack.Screen name="AddProducts" component={AddProducts} />
           <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="ClientDetails" component={ClientDetails} />
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
@@ -302,6 +312,7 @@ function AppNavigation() {
           <Stack.Screen name="ItemsByCategory" component={ItemsByCategory} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
+          <Stack.Screen name="StoriesView" component={StoriesView} />
           <Stack.Screen
             name="OrderHistoryDetails"
             component={OrderHistoryDetails}

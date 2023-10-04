@@ -63,6 +63,7 @@ const Styles = StyleSheet.create({
     fontWeight: 'bold',
     width: '55%',
     fontSize: FONTS_SIZES.s3,
+    flex: 1,
   },
   rightBtn: {
     width: wp(110),

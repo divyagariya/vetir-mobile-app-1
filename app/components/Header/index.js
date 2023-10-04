@@ -90,7 +90,7 @@ const Header = ({
               fontSize: FONTS_SIZES.s3,
               fontWeight: '900',
               color: '#212427',
-              textTransform: 'uppercase',
+              textTransform: 'capitalize',
               // width: 200,
             }}
           />

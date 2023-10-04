@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Alert,
+  Linking,
 } from 'react-native';
 import {Colors} from '../../colors';
 import {Buttons, Header, Input, OverlayModal} from '../../components';
@@ -18,6 +19,7 @@ import {
   addStylistAction,
   deleteStylistAction,
 } from '../../redux/actions/stylistAction';
+import WebView from 'react-native-webview';
 
 const Menu = props => {
   const [stylistEmail, setStylistEmail] = useState('');
@@ -42,10 +44,16 @@ const Menu = props => {
   const [showModal, setModal] = useState(false);
   const menuData = [
     {
+      icon: require('../../assets/addproducts.webp'),
+      manuName: 'Add Products',
+      route: 'AddProducts',
+    },
+    {
       icon: require('../../assets/myprofile.png'),
       manuName: 'My Profile',
       route: 'ProfileSetup',
     },
+
     {
       icon: require('../../assets/preferences.png'),
       manuName: 'Your Preferences',
@@ -158,6 +166,7 @@ const Menu = props => {
         },
       ]);
     }
+
     if (item.route) {
       props.navigation.navigate(item.route);
     }
@@ -337,6 +346,9 @@ const Menu = props => {
         <View>
           {menuData.map(item => {
             if (isStylistUser && item.route === 'YourPreferences') {
+              return null;
+            }
+            if (!isStylistUser && item.route === 'AddProducts') {
               return null;
             }
             return (
