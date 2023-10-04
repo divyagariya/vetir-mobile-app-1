@@ -221,9 +221,6 @@ const ViewProduct = props => {
       isImageBase64: false,
       productId: productData.productId,
     };
-    setTimeout(() => {
-      setShowCartModal(true);
-    }, 1000);
 
     dispatch(addDataInCloset(data));
   };
@@ -591,6 +588,9 @@ const ViewProduct = props => {
                   productId: productData.productId,
                 }),
               );
+              setTimeout(() => {
+                setShowCartModal(true);
+              }, 800);
               // dispatch({
               //   type: 'ADD_TO_CART',
               //   value: {
