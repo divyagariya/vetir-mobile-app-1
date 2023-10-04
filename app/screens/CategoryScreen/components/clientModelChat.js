@@ -11,11 +11,11 @@ export const ClientModelChat = ({
   setShowClientModalForChat = () => {},
   selectedProductData = {},
   navigation,
+  isFromOutfit = false,
 }) => {
   const allClientDataRespo = useSelector(
     state => state.StylistReducer.allClientDataRespo,
   );
-
   return (
     <View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -42,6 +42,7 @@ export const ClientModelChat = ({
                 navigation.navigate('ChatScreen', {
                   selectedProductData: selectedProductData,
                   comingFromProduct: true,
+                  isOutfit: isFromOutfit ? true : false,
                   receiverDetails: {
                     emailId: item?.emailId,
                     name: item?.name,
@@ -55,6 +56,7 @@ export const ClientModelChat = ({
                 navigation.navigate('ChatScreen', {
                   selectedProductData: selectedProductData,
                   comingFromProduct: true,
+                  isOutfit: isFromOutfit ? true : false,
                   receiverDetails: {
                     emailId: item?.emailId,
                     name: item?.name,

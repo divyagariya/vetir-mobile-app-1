@@ -125,7 +125,6 @@ const Outfits = props => {
                 },
               });
             }
-            setSelectedProductData(data);
           }}>
           <Image
             source={require('../../assets/send_to_chat.webp')}
@@ -317,6 +316,7 @@ const Outfits = props => {
               navigation={props.navigation}
               setShowClientModalForChat={setShowClientModalForChat}
               selectedProductData={selectedProductData}
+              isFromOutfit
             />
           }
         />

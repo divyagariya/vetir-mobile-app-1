@@ -669,6 +669,7 @@ const CategoryScreen = props => {
                 } else {
                   props.navigation.navigate('ChatScreen', {
                     selectedProductData: item,
+                    isOutfit: false,
                     comingFromProduct: true,
                     receiverDetails: {
                       emailId: emailId,

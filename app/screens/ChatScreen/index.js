@@ -52,7 +52,6 @@ const ChatScreen = props => {
 
   const {receiverDetails, selectedProductData, comingFromProduct, isOutfit} =
     props?.route?.params || {};
-  console.log('selectedProductData', selectedProductData);
   const [firstTime, setFirstTime] = useState(true);
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -787,7 +786,7 @@ const ChatScreen = props => {
         outfitImageType: currentMessage?.outfitImageType,
         name: currentMessage?.name,
         description: currentMessage?.description,
-        seasons: currentMessage?.selectedSeason,
+        seasons: currentMessage?.season,
         imageData: currentMessage?.imageData,
       };
       dispatch(addOutfit(data));
@@ -838,23 +837,18 @@ const ChatScreen = props => {
           </TouchableOpacity>
           {(currentMessage?.imageCaptionTitle || currentMessage?.name) && (
             <View style={{padding: 5}}>
-              <TouchableOpacity
-                style={Styles.closetBtn}
-                onPress={() => addToCloset(currentMessage)}>
-                {!isOutfitItem ? (
+              {isOutfitItem ? null : (
+                <TouchableOpacity
+                  style={Styles.closetBtn}
+                  onPress={() => addToCloset(currentMessage)}>
                   <Image
                     source={require('../../assets/Closet.webp')}
                     style={Styles.closetIcon}
                     resizeMode="contain"
                   />
-                ) : (
-                  <Image
-                    source={require('../../assets/iAdd.webp')}
-                    style={Styles.closetIcon}
-                    resizeMode="contain"
-                  />
-                )}
-              </TouchableOpacity>
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
                 onPress={() => {
                   if (
@@ -987,10 +981,7 @@ const ChatScreen = props => {
               <Send {...props}>
                 <Image
                   source={require('../../assets/chatSend.webp')}
-                  style={{
-                    width: 30,
-                    height: 30,
-                  }}
+                  style={Styles.crossIcon}
                 />
               </Send>
             )}
@@ -999,7 +990,7 @@ const ChatScreen = props => {
               _id: isStylistUser ? personalStylistId : clientUserId,
               email: userEmail,
               name: userName,
-              avatar: profilePic || '',
+              // avatar: profilePic || '',
             }}
           />
           <ImageModal />
