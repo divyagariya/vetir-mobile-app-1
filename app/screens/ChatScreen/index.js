@@ -808,7 +808,7 @@ const ChatScreen = props => {
 
   const renderMessageImage = useCallback(
     props => {
-      let {currentMessage} = props;
+      let {currentMessage, position} = props;
       const imageUrl = currentMessage.image;
       const isOutfitItem = currentMessage?.isOutfit;
       const images = messages
@@ -817,10 +817,6 @@ const ChatScreen = props => {
           url: message.image,
         }));
       const imageIndex = images.findIndex(image => image.url === imageUrl);
-      const isSentMessage =
-        currentMessage.user._id === isStylistUser
-          ? personalStylistId
-          : clientUserId;
       return (
         <View>
           <TouchableOpacity
@@ -870,7 +866,7 @@ const ChatScreen = props => {
                     fontWeight: '700',
                     marginTop: 5,
                     fontSize: FONTS_SIZES.s4,
-                    color: isSentMessage ? Colors.white : Colors.black,
+                    color: position == 'right' ? Colors.white : Colors.black,
                   }}>
                   {isOutfitItem
                     ? currentMessage?.name
@@ -881,7 +877,10 @@ const ChatScreen = props => {
                     numberOfLines={2}
                     style={[
                       Styles.captionPriceText,
-                      {color: isSentMessage ? Colors.white : Colors.black},
+                      {
+                        color:
+                          position == 'right' ? Colors.white : Colors.black,
+                      },
                     ]}>
                     {currentMessage?.imageCaptionSubTitle}
                   </Text>
@@ -892,7 +891,8 @@ const ChatScreen = props => {
                       Styles.captionPriceText,
                       {
                         marginBottom: 5,
-                        color: isSentMessage ? Colors.white : Colors.black,
+                        color:
+                          position == 'right' ? Colors.white : Colors.black,
                       },
                     ]}>
                     {`$${currentMessage?.imageCaptionPrice}`}
