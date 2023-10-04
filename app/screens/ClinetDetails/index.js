@@ -261,6 +261,7 @@ const ClientDetails = props => {
           <View
             style={{
               flexDirection: 'row',
+              flex: 1,
             }}>
             {clinetData.profilePicUrl ? (
               <Image
@@ -273,7 +274,7 @@ const ClientDetails = props => {
                 style={{width: 32, height: 32}}
               />
             )}
-            <View style={{marginLeft: 8, width: '68%'}}>
+            <View style={{marginLeft: 8, flex: 1}}>
               <Text>{clinetData.name}</Text>
               <Text style={{color: Colors.black30}}>{clinetData.emailId}</Text>
             </View>

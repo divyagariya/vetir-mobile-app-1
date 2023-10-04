@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import {Image} from 'react-native';
 import {useChat} from '../../hooks/useChat';
 import ChatBotPNG from '../../assets/aiBot.png';
+import { Header } from '../../components';
 
 const AiChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -67,9 +68,11 @@ const AiChatScreen = props => {
 
   return (
     <View style={Styles.container}>
-      <View style={Styles.headerContainer}>
-        <Text style={Styles.headerText}>AI Stylist</Text>
-      </View>
+      <Header
+        showBack
+        title="AI Stylist"
+        {...props}
+      />
       {loadingMessages ? (
         <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
           <ActivityIndicator size="large" color="grey" />

@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import {Bubble, GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar, Send, Bubble} from 'react-native-gifted-chat';
 import Toast from 'react-native-simple-toast';
 
 import {
@@ -398,7 +398,7 @@ const ChatScreen = props => {
             style={{
               width: normalize(225),
               height: normalize(300),
-              borderRadius: 10,
+              borderRadius: 8,
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
@@ -576,7 +576,6 @@ const ChatScreen = props => {
                 id: isStylistUser ? personalStylistId : clientUserId,
                 type: isStylistUser ? 'personalStylistId' : 'userId',
               });
-              console.log('s3UploadUrl', s3UploadUrl);
               RNFetchBlob.fetch(
                 'PUT',
                 s3UploadUrl,
@@ -586,7 +585,6 @@ const ChatScreen = props => {
                 RNFetchBlob.wrap(media.path),
               )
                 .then(m => {
-                  console.log('upload finish');
                   if (ref) {
                     ref.onSend({video: media.path}, true);
                   }
@@ -833,19 +831,29 @@ const ChatScreen = props => {
               resizeMode={'cover'}
             />
           </TouchableOpacity>
-          {(currentMessage?.imageCaptionTitle || currentMessage?.name) && (
-            <View style={{padding: 5}}>
-              {isOutfitItem ? null : (
-                <TouchableOpacity
-                  style={Styles.closetBtn}
-                  onPress={() => addToCloset(currentMessage)}>
+          {currentMessage.imageCaptionTitle && (
+            <View style={{padding: 8}}>
+              <TouchableOpacity onPress={() => addToCloset(currentMessage)}>
+                {true ? (
                   <Image
-                    source={require('../../assets/Closet.webp')}
-                    style={Styles.closetIcon}
+                    source={require('../../assets/Closet.png')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
                     resizeMode="contain"
                   />
-                </TouchableOpacity>
-              )}
+                ) : (
+                  <Image
+                    source={require('../../assets/addedCloset.png')}
+                    style={{
+                      height: 24,
+                      width: 24,
+                    }}
+                    resizeMode="contain"
+                  />
+                )}
+              </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => {
@@ -899,6 +907,39 @@ const ChatScreen = props => {
                   </Text>
                 )}
               </TouchableOpacity>
+              {/* <Text
+                style={{
+                  fontWeight: '700',
+                  marginTop: 8,
+                  fontSize: FONTS_SIZES.s4,
+                  color: Colors.black,
+                }}>
+                {currentMessage?.imageCaptionTitle}
+              </Text>
+              {currentMessage?.imageCaptionSubTitle && (
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontWeight: '400',
+                    width: '100%',
+                    fontSize: FONTS_SIZES.s4,
+                    color: Colors.black,
+                    marginTop: 4,
+                  }}>
+                  {currentMessage?.imageCaptionSubTitle}
+                </Text>
+              )}
+              {currentMessage?.imageCaptionPrice && (
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    fontSize: FONTS_SIZES.s4,
+                    color: Colors.black,
+                    marginTop: 4,
+                  }}>
+                  {`$${currentMessage?.imageCaptionPrice}`}
+                </Text>
+              )} */}
             </View>
           )}
         </View>
@@ -970,6 +1011,37 @@ const ChatScreen = props => {
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
+  const renderBubble = props => {
+    return (
+      <Bubble
+        {...props}
+        textStyle={{
+          right: {color: Colors.white},
+          left: {color: Colors.black},
+        }}
+        wrapperStyle={{
+          right: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: 'rgba(33, 122, 255, 1)',
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 0,
+            borderBottomLeftRadius: 8,
+          },
+          left: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: Colors.grey1,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 8,
+            borderBottomLeftRadius: 0,
+          },
+        }}
+      />
+    );
+  };
 
   return (
     <View style={Styles.container}>
@@ -985,11 +1057,11 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{flex: 0.97}}>
+        <View style={{flex: 0.94}}>
           <GiftedChat
             ref={giftedChatRef}
             messages={messages}
-            alwaysShowSend
+            renderBubble={renderBubble}
             // messageContainerRef={giftedChatRef}
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
@@ -1002,7 +1074,11 @@ const ChatScreen = props => {
               <Send {...props}>
                 <Image
                   source={require('../../assets/chatSend.webp')}
-                  style={Styles.crossIcon}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    marginBottom: 6,
+                  }}
                 />
               </Send>
             )}

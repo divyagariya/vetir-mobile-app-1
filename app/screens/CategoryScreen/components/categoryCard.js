@@ -54,7 +54,7 @@ export default ({
                   }}>
                   {item.addedToCloset ? (
                     <Image
-                      source={require('../../../assets/addedCloset.webp')}
+                      source={require('../../../assets/addedCloset.png')}
                       style={{
                         height: 24,
                         width: 24,
@@ -88,7 +88,7 @@ export default ({
                   style={{padding: 8}}
                   onPress={() => onPressChat(item)}>
                   <Image
-                    source={require('../../../assets/chat.webp')}
+                    source={require('../../../assets/send_to_chat.webp')}
                     style={{width: 24, height: 24}}
                     resizeMode="contain"
                   />
@@ -101,7 +101,7 @@ export default ({
                   style={{padding: 8}}>
                   {item.addedToCloset ? (
                     <Image
-                      source={require('../../../assets/addedCloset.webp')}
+                      source={require('../../../assets/addedCloset.png')}
                       style={{
                         height: 24,
                         width: 24,
@@ -123,7 +123,7 @@ export default ({
                   style={{padding: 8}}
                   onPress={() => onPressChat(item)}>
                   <Image
-                    source={require('../../../assets/chat.webp')}
+                    source={require('../../../assets/send_to_chat.webp')}
                     style={{width: 24, height: 24}}
                     resizeMode="contain"
                   />
