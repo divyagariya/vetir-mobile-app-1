@@ -27,6 +27,7 @@ import CategoryCard from '../CategoryScreen/components/categoryCard';
 import {FilterModal} from '../Closet';
 import {debounce} from '../../utils/common';
 import {returnFilterParams} from '../CategoryScreen/common';
+import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
 
 const Search = props => {
   const sortingData = [
@@ -62,6 +63,8 @@ const Search = props => {
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [currentProdID, setcurrentProdID] = useState('');
   const [isFromPagination, setIsFromPagination] = useState(false);
+  const [selectedProductData, setSelectedProductData] = useState({});
+  const [showClientModalForChat, setShowClientModalForChat] = useState(false);
 
   const [totalDataCount, setTotalDataCount] = useState(0);
   const filteredProducts = useSelector(
@@ -81,6 +84,14 @@ const Search = props => {
   const userId = useSelector(state => state.AuthReducer.userId);
   const [filterParams, setFilterParametrs] = useState({});
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const personalStylistDetails = useSelector(
+    state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
+  );
+  const {
+    emailId = '',
+    name = '',
+    _id = '',
+  } = (personalStylistDetails && personalStylistDetails[0]) || {};
 
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
@@ -412,6 +423,23 @@ const Search = props => {
                 <CategoryCard
                   index={index}
                   item={item}
+                  onPressChat={() => {
+                    if (isStylistUser) {
+                      setSelectedProductData(item);
+                      setShowClientModalForChat(true);
+                    } else {
+                      props.navigation.navigate('ChatScreen', {
+                        selectedProductData: item,
+                        isOutfit: false,
+                        comingFromProduct: true,
+                        receiverDetails: {
+                          emailId: emailId,
+                          name: name,
+                          userId: _id,
+                        },
+                      });
+                    }
+                  }}
                   getProductDetails={() => getProductDetails(item.productId)}
                   addToCloset={() => addToCloset(item)}
                   deletFromClost={() => deletFromClost(item)}
@@ -465,6 +493,19 @@ const Search = props => {
           />
         }
       />
+      {showClientModalForChat && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModalForChat}
+          component={
+            <ClientModelChat
+              navigation={props.navigation}
+              setShowClientModalForChat={setShowClientModalForChat}
+              selectedProductData={selectedProductData}
+            />
+          }
+        />
+      )}
     </View>
   );
 };
