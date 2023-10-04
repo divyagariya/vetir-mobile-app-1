@@ -55,7 +55,7 @@ export const ClientList = ({
         alignItems: 'center',
         marginVertical: 8,
       }}
-      onPress={() => selectClient(item)}>
+      onPress={() => onPressChat(item)}>
       <View style={{flexDirection: 'row'}}>
         {item.profilePicUrl ? (
           <Image
@@ -669,6 +669,7 @@ const CategoryScreen = props => {
                 } else {
                   props.navigation.navigate('ChatScreen', {
                     selectedProductData: item,
+                    isOutfit: false,
                     comingFromProduct: true,
                     receiverDetails: {
                       emailId: emailId,
@@ -758,8 +759,6 @@ const CategoryScreen = props => {
               navigation={props.navigation}
               setShowClientModalForChat={setShowClientModalForChat}
               selectedProductData={selectedProductData}
-              selectedClients={selectedClients}
-              selectedProductImg={selectedProductImg}
             />
           }
         />

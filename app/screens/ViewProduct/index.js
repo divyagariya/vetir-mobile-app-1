@@ -325,6 +325,7 @@ const ViewProduct = props => {
           showWhatsapp={productData.vendorWhatsappNumber}
           onWhatsappClick={onWhatsappClick}
           // showAdd={!isStylistUser}
+          onBack={() => props.navigation.goBack()}
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
           showLike={!isStylistUser}
