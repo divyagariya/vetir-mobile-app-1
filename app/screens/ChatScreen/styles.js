@@ -58,6 +58,13 @@ export const Styles = StyleSheet.create({
     fontSize: FONTS_SIZES.s4,
     color: Colors.black,
   },
+  captionPriceText2: {
+    fontWeight: '400',
+    width: '100%',
+    fontSize: FONTS_SIZES.s4,
+    color: Colors.black,
+    marginBottom: 4,
+  },
   closetBtn: {
     width: 24,
     alignItems: 'center',
