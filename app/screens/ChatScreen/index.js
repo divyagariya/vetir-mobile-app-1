@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
+import {Bubble, GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
 import Toast from 'react-native-simple-toast';
 
 import {
@@ -811,14 +811,16 @@ const ChatScreen = props => {
       let {currentMessage} = props;
       const imageUrl = currentMessage.image;
       const isOutfitItem = currentMessage?.isOutfit;
-      console.log('currentMessage', currentMessage);
       const images = messages
         .filter(message => message.image) // Filter out messages without images
         .map(message => ({
           url: message.image,
         }));
       const imageIndex = images.findIndex(image => image.url === imageUrl);
-
+      const isSentMessage =
+        currentMessage.user._id === isStylistUser
+          ? personalStylistId
+          : clientUserId;
       return (
         <View>
           <TouchableOpacity
@@ -868,19 +870,31 @@ const ChatScreen = props => {
                     fontWeight: '700',
                     marginTop: 5,
                     fontSize: FONTS_SIZES.s4,
-                    color: Colors.black,
+                    color: isSentMessage ? Colors.white : Colors.black,
                   }}>
                   {isOutfitItem
                     ? currentMessage?.name
                     : currentMessage?.imageCaptionTitle}
                 </Text>
                 {currentMessage?.imageCaptionSubTitle && (
-                  <Text numberOfLines={2} style={Styles.captionPriceText}>
+                  <Text
+                    numberOfLines={2}
+                    style={[
+                      Styles.captionPriceText,
+                      {color: isSentMessage ? Colors.white : Colors.black},
+                    ]}>
                     {currentMessage?.imageCaptionSubTitle}
                   </Text>
                 )}
                 {currentMessage?.imageCaptionPrice && (
-                  <Text style={[Styles.captionPriceText, {marginBottom: 5}]}>
+                  <Text
+                    style={[
+                      Styles.captionPriceText,
+                      {
+                        marginBottom: 5,
+                        color: isSentMessage ? Colors.white : Colors.black,
+                      },
+                    ]}>
                     {`$${currentMessage?.imageCaptionPrice}`}
                   </Text>
                 )}
@@ -890,7 +904,14 @@ const ChatScreen = props => {
         </View>
       );
     },
-    [addToCloset, dispatch, messages],
+    [
+      addToCloset,
+      clientUserId,
+      dispatch,
+      isStylistUser,
+      messages,
+      personalStylistId,
+    ],
   );
 
   const closeModal = () => {
@@ -984,6 +1005,21 @@ const ChatScreen = props => {
                   style={Styles.crossIcon}
                 />
               </Send>
+            )}
+            renderBubble={props => (
+              <Bubble
+                {...props}
+                wrapperStyle={{
+                  right: {
+                    backgroundColor: 'rgb(53,117,194)',
+                  },
+                }}
+                textStyle={{
+                  right: {
+                    color: 'white', // Change this to the desired text color for sent messages
+                  },
+                }}
+              />
             )}
             textInputProps={{autoCorrect: false}} // Disable autocorrect
             user={{
