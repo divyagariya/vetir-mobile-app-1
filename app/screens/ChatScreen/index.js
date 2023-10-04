@@ -836,11 +836,10 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{flex: 0.96}}>
+        <View style={{flex: 0.94}}>
           <GiftedChat
             ref={giftedChatRef}
             messages={messages}
-            alwaysShowSend
             renderBubble={renderBubble}
             // messageContainerRef={giftedChatRef}
             renderActions={ref => renderActions(ref)}
@@ -855,8 +854,9 @@ const ChatScreen = props => {
                 <Image
                   source={require('../../assets/chatSend.webp')}
                   style={{
-                    width: 30,
-                    height: 30,
+                    width: 32,
+                    height: 32,
+                    marginBottom: 6,
                   }}
                 />
               </Send>

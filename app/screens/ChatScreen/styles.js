@@ -14,16 +14,18 @@ export const Styles = StyleSheet.create({
     backgroundColor: 'red',
   },
   sendIcon: {
-    width: spH(30),
+    width: spH(32),
     // marginBottom: 10,
     // alignSelf: 'center',
-    height: spV(30),
+    height: spV(32),
   },
   textInputStyle: {
     // marginBottom: 10,
     borderRadius: 8,
-    alignItems: 'center',
-    paddingHorizontal: 15,
+    marginRight: 8,
+    paddingLeft: 8,
+    paddingTop: 8,
+    backgroundColor: Colors.grey1,
   },
   messageImage: {
     width: spH(200),
