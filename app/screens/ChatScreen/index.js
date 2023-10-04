@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar, Send, Bubble} from 'react-native-gifted-chat';
 import Toast from 'react-native-simple-toast';
 
 import {
@@ -388,7 +388,7 @@ const ChatScreen = props => {
             style={{
               width: normalize(225),
               height: normalize(300),
-              borderRadius: 10,
+              borderRadius: 8,
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
@@ -671,11 +671,11 @@ const ChatScreen = props => {
             />
           </TouchableOpacity>
           {currentMessage.imageCaptionTitle && (
-            <View style={{padding: 5}}>
+            <View style={{padding: 8}}>
               <TouchableOpacity onPress={() => addToCloset(currentMessage)}>
                 {true ? (
                   <Image
-                    source={require('../../assets/Closet.webp')}
+                    source={require('../../assets/Closet.png')}
                     style={{
                       height: 24,
                       width: 24,
@@ -684,7 +684,7 @@ const ChatScreen = props => {
                   />
                 ) : (
                   <Image
-                    source={require('../../assets/iAdd.webp')}
+                    source={require('../../assets/addedCloset.png')}
                     style={{
                       height: 24,
                       width: 24,
@@ -696,7 +696,7 @@ const ChatScreen = props => {
               <Text
                 style={{
                   fontWeight: '700',
-                  marginTop: 5,
+                  marginTop: 8,
                   fontSize: FONTS_SIZES.s4,
                   color: Colors.black,
                 }}>
@@ -704,12 +704,13 @@ const ChatScreen = props => {
               </Text>
               {currentMessage?.imageCaptionSubTitle && (
                 <Text
-                  numberOfLines={2}
+                  numberOfLines={1}
                   style={{
                     fontWeight: '400',
                     width: '100%',
                     fontSize: FONTS_SIZES.s4,
                     color: Colors.black,
+                    marginTop: 4,
                   }}>
                   {currentMessage?.imageCaptionSubTitle}
                 </Text>
@@ -720,7 +721,7 @@ const ChatScreen = props => {
                     fontWeight: '400',
                     fontSize: FONTS_SIZES.s4,
                     color: Colors.black,
-                    marginBottom: 5,
+                    marginTop: 4,
                   }}>
                   {`$${currentMessage?.imageCaptionPrice}`}
                 </Text>
@@ -789,6 +790,37 @@ const ChatScreen = props => {
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
+  const renderBubble = props => {
+    return (
+      <Bubble
+        {...props}
+        textStyle={{
+          right: {color: Colors.white},
+          left: {color: Colors.black},
+        }}
+        wrapperStyle={{
+          right: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: 'rgba(33, 122, 255, 1)',
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 0,
+            borderBottomLeftRadius: 8,
+          },
+          left: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: Colors.grey1,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 8,
+            borderBottomLeftRadius: 0,
+          },
+        }}
+      />
+    );
+  };
 
   return (
     <View style={Styles.container}>
@@ -804,11 +836,12 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{flex: 0.97}}>
+        <View style={{flex: 0.96}}>
           <GiftedChat
             ref={giftedChatRef}
             messages={messages}
             alwaysShowSend
+            renderBubble={renderBubble}
             // messageContainerRef={giftedChatRef}
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar

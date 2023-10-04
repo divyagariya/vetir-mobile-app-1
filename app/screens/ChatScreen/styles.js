@@ -26,10 +26,9 @@ export const Styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   messageImage: {
-    margin: 3,
     width: spH(200),
     height: spV(200),
-    borderRadius: 13,
+    borderRadius: 8,
   },
   modalView: {
     margin: 0,
