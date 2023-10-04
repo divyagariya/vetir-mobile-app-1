@@ -42,6 +42,7 @@ import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 import {addDataInCloset, getClosetData} from '../../redux/actions/closetAction';
 import {addOutfit} from '../../redux/actions/outfitActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -78,6 +79,9 @@ const ChatScreen = props => {
   const addOutfitReponse = useSelector(
     state => state.OutfitReducer.addOutfitReponse,
   );
+  const productDetailResponse = useSelector(
+    state => state.HomeReducer.productDetailResponse,
+  );
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
@@ -100,6 +104,15 @@ const ChatScreen = props => {
       }
     }
   }, [addOutfitReponse, dispatch]);
+
+  useEffect(() => {
+    if (Object.keys(productDetailResponse).length) {
+      props.navigation.navigate('ViewProduct', {
+        data: productDetailResponse.productDetails,
+      });
+      dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
+    }
+  }, [dispatch, productDetailResponse, props.navigation]);
 
   useEffect(() => {
     signInWithEmailAndPassword(auth, userEmail, userEmail)
@@ -399,74 +412,153 @@ const ChatScreen = props => {
     return null;
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onSendImage = (index, ref) => {
-    let imageURL = {};
-    if (index === 0) {
-      ImagePicker.openPicker({
-        mediaType: 'any',
-        width: 300,
-        height: 400,
-        compressVideoPreset: 'MediumQuality',
-        includeBase64: true,
-      }).then(async media => {
-        let dataToSend = {};
-        if (media.mime && (media.data || media.path)) {
-          //Upload image
-          if (media.mime.startsWith('image')) {
-            const imagePath = `data:${media.mime};base64,${media.data}`;
-            dataToSend = {
-              base64MediaString: imagePath,
-              ...(isStylistUser
-                ? {personalStylistId: personalStylistId}
-                : {userId: clientUserId}),
-            };
+  // const onSendImage = (index, ref) => {
+  //   let imageURL = {};
+  //   if (index === 0) {
+  //     ImagePicker.openPicker({
+  //       mediaType: 'any',
+  //       width: 300,
+  //       height: 400,
+  //       compressVideoPreset: 'MediumQuality',
+  //       includeBase64: true,
+  //     }).then(async media => {
+  //       let dataToSend = {};
+  //       if (media.mime && (media.data || media.path)) {
+  //         //Upload image
+  //         if (media.mime.startsWith('image')) {
+  //           const imagePath = `data:${media.mime};base64,${media.data}`;
+  //           dataToSend = {
+  //             base64MediaString: imagePath,
+  //             ...(isStylistUser
+  //               ? {personalStylistId: personalStylistId}
+  //               : {userId: clientUserId}),
+  //           };
 
-            uploadMediaOnS3(dataToSend, imageURL, ref);
-          } else if (media.mime.startsWith('video')) {
-            let s3UploadUrl = await getPreSignedUrl({
-              id: isStylistUser ? personalStylistId : clientUserId,
-              type: isStylistUser ? 'personalStylistId' : 'userId',
-            });
-            console.log('s3UploadUrl', s3UploadUrl);
-            RNFetchBlob.fetch(
-              'PUT',
-              s3UploadUrl,
-              {
-                'Content-Type': undefined,
-              },
-              RNFetchBlob.wrap(media.path),
-            )
-              .then(m => {
-                console.log('upload finish');
-                if (ref) {
-                  ref.onSend({video: media.path}, true);
-                }
-              })
-              .catch(error => {
-                console.log('upload error', error);
-              });
-            // Handle video
-            // const videoPath = `data:${media.mime};base64,${media.path}`;
-            // dataToSend = {
-            //   base64MediaString: videoPath,
-            //   ...(isStylistUser
-            //     ? {personalStylistId: personalStylistId}
-            //     : {userId: clientUserId}),
-            // };
-            // Rest of your video handling code
-            // ...
-          }
-        }
-      });
-    } else if (index === 1) {
-      ImagePicker.openCamera({
-        mediaType: 'any',
-        width: 300,
-        height: 400,
-        includeBase64: true,
-      })
-        .then(media => {
+  //           uploadMediaOnS3(dataToSend, imageURL, ref);
+  //         } else if (media.mime.startsWith('video')) {
+  //           let s3UploadUrl = await getPreSignedUrl({
+  //             id: isStylistUser ? personalStylistId : clientUserId,
+  //             type: isStylistUser ? 'personalStylistId' : 'userId',
+  //           });
+  //           console.log('s3UploadUrl', s3UploadUrl);
+  //           RNFetchBlob.fetch(
+  //             'PUT',
+  //             s3UploadUrl,
+  //             {
+  //               'Content-Type': undefined,
+  //             },
+  //             RNFetchBlob.wrap(media.path),
+  //           )
+  //             .then(m => {
+  //               console.log('upload finish');
+  //               if (ref) {
+  //                 ref.onSend({video: media.path}, true);
+  //               }
+  //             })
+  //             .catch(error => {
+  //               console.log('upload error', error);
+  //             });
+  //           // Handle video
+  //           // const videoPath = `data:${media.mime};base64,${media.path}`;
+  //           // dataToSend = {
+  //           //   base64MediaString: videoPath,
+  //           //   ...(isStylistUser
+  //           //     ? {personalStylistId: personalStylistId}
+  //           //     : {userId: clientUserId}),
+  //           // };
+  //           // Rest of your video handling code
+  //           // ...
+  //         }
+  //       }
+  //     });
+  //   } else if (index === 1) {
+  //     ImagePicker.openCamera({
+  //       mediaType: 'any',
+  //       width: 300,
+  //       height: 400,
+  //       includeBase64: true,
+  //     })
+  //       .then(media => {
+  //         let dataToSend = {};
+  //         if (media.mime && (media.data || media.path)) {
+  //           //Upload image
+  //           if (media.mime.startsWith('image')) {
+  //             const imagePath = `data:${media.mime};base64,${media.data}`;
+  //             dataToSend = {
+  //               base64MediaString: imagePath,
+  //               ...(isStylistUser
+  //                 ? {personalStylistId: personalStylistId}
+  //                 : {userId: clientUserId}),
+  //             };
+  //             uploadMediaOnS3(dataToSend, imageURL, ref);
+  //           }
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.log('Error in openCamera:', error);
+  //       });
+  //   } else if (index === 2) {
+  //     ImagePicker.openCamera({
+  //       mediaType: 'video',
+  //       videoQuality: 'medium',
+  //       // compressVideoPreset: 'MediumQuality',
+  //     })
+  //       .then(async media => {
+  //         let dataToSend = {};
+  //         if (media.mime && (media.data || media.path)) {
+  //           if (media.mime.startsWith('video')) {
+  //             let s3UploadUrl = await getPreSignedUrl({
+  //               id: isStylistUser ? personalStylistId : clientUserId,
+  //               type: isStylistUser ? 'personalStylistId' : 'userId',
+  //             });
+  //             console.log('s3UploadUrl', s3UploadUrl);
+  //             RNFetchBlob.fetch(
+  //               'PUT',
+  //               s3UploadUrl,
+  //               {
+  //                 'Content-Type': undefined,
+  //               },
+  //               RNFetchBlob.wrap(media.path),
+  //             )
+  //               .then(m => {
+  //                 console.log('upload finish');
+  //                 if (ref) {
+  //                   ref.onSend({video: media.path}, true);
+  //                 }
+  //               })
+  //               .catch(error => {
+  //                 console.log('upload error', error);
+  //               });
+  //             // Handle video
+  //             // const videoPath = `data:${media.mime};base64,${media.path}`;
+  //             // dataToSend = {
+  //             //   base64MediaString: videoPath,
+  //             //   ...(isStylistUser
+  //             //     ? {personalStylistId: personalStylistId}
+  //             //     : {userId: clientUserId}),
+  //             // };
+  //             // Rest of your video handling code
+  //             // ...
+  //           }
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.log('Error in openCamera:', error);
+  //       });
+  //   }
+  // };
+
+  const onSendImage = useCallback(
+    (index, ref) => {
+      let imageURL = {};
+      if (index === 0) {
+        ImagePicker.openPicker({
+          mediaType: 'any',
+          width: 300,
+          height: 400,
+          compressVideoPreset: 'MediumQuality',
+          includeBase64: true,
+        }).then(async media => {
           let dataToSend = {};
           if (media.mime && (media.data || media.path)) {
             //Upload image
@@ -478,23 +570,9 @@ const ChatScreen = props => {
                   ? {personalStylistId: personalStylistId}
                   : {userId: clientUserId}),
               };
+
               uploadMediaOnS3(dataToSend, imageURL, ref);
-            }
-          }
-        })
-        .catch(error => {
-          console.log('Error in openCamera:', error);
-        });
-    } else if (index === 2) {
-      ImagePicker.openCamera({
-        mediaType: 'video',
-        videoQuality: 'medium',
-        // compressVideoPreset: 'MediumQuality',
-      })
-        .then(async media => {
-          let dataToSend = {};
-          if (media.mime && (media.data || media.path)) {
-            if (media.mime.startsWith('video')) {
+            } else if (media.mime.startsWith('video')) {
               let s3UploadUrl = await getPreSignedUrl({
                 id: isStylistUser ? personalStylistId : clientUserId,
                 type: isStylistUser ? 'personalStylistId' : 'userId',
@@ -529,12 +607,85 @@ const ChatScreen = props => {
               // ...
             }
           }
-        })
-        .catch(error => {
-          console.log('Error in openCamera:', error);
         });
-    }
-  };
+      } else if (index === 1) {
+        ImagePicker.openCamera({
+          mediaType: 'any',
+          width: 300,
+          height: 400,
+          includeBase64: true,
+        })
+          .then(media => {
+            let dataToSend = {};
+            if (media.mime && (media.data || media.path)) {
+              //Upload image
+              if (media.mime.startsWith('image')) {
+                const imagePath = `data:${media.mime};base64,${media.data}`;
+                dataToSend = {
+                  base64MediaString: imagePath,
+                  ...(isStylistUser
+                    ? {personalStylistId: personalStylistId}
+                    : {userId: clientUserId}),
+                };
+                uploadMediaOnS3(dataToSend, imageURL, ref);
+              }
+            }
+          })
+          .catch(error => {
+            console.log('Error in openCamera:', error);
+          });
+      } else if (index === 2) {
+        ImagePicker.openCamera({
+          mediaType: 'video',
+          videoQuality: 'medium',
+          // compressVideoPreset: 'MediumQuality',
+        })
+          .then(async media => {
+            let dataToSend = {};
+            if (media.mime && (media.data || media.path)) {
+              if (media.mime.startsWith('video')) {
+                let s3UploadUrl = await getPreSignedUrl({
+                  id: isStylistUser ? personalStylistId : clientUserId,
+                  type: isStylistUser ? 'personalStylistId' : 'userId',
+                });
+                console.log('s3UploadUrl', s3UploadUrl);
+                RNFetchBlob.fetch(
+                  'PUT',
+                  s3UploadUrl,
+                  {
+                    'Content-Type': undefined,
+                  },
+                  RNFetchBlob.wrap(media.path),
+                )
+                  .then(m => {
+                    console.log('upload finish');
+                    if (ref) {
+                      ref.onSend({video: media.path}, true);
+                    }
+                  })
+                  .catch(error => {
+                    console.log('upload error', error);
+                  });
+                // Handle video
+                // const videoPath = `data:${media.mime};base64,${media.path}`;
+                // dataToSend = {
+                //   base64MediaString: videoPath,
+                //   ...(isStylistUser
+                //     ? {personalStylistId: personalStylistId}
+                //     : {userId: clientUserId}),
+                // };
+                // Rest of your video handling code
+                // ...
+              }
+            }
+          })
+          .catch(error => {
+            console.log('Error in openCamera:', error);
+          });
+      }
+    },
+    [isStylistUser, personalStylistId, clientUserId],
+  );
 
   const renderActions = useCallback(
     ref => {
@@ -687,67 +838,65 @@ const ChatScreen = props => {
           </TouchableOpacity>
           {(currentMessage?.imageCaptionTitle || currentMessage?.name) && (
             <View style={{padding: 5}}>
-              <TouchableOpacity onPress={() => addToCloset(currentMessage)}>
+              <TouchableOpacity
+                style={Styles.closetBtn}
+                onPress={() => addToCloset(currentMessage)}>
                 {!isOutfitItem ? (
                   <Image
                     source={require('../../assets/Closet.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
+                    style={Styles.closetIcon}
                     resizeMode="contain"
                   />
                 ) : (
                   <Image
                     source={require('../../assets/iAdd.webp')}
-                    style={{
-                      height: 24,
-                      width: 24,
-                    }}
+                    style={Styles.closetIcon}
                     resizeMode="contain"
                   />
                 )}
               </TouchableOpacity>
-              <Text
-                style={{
-                  fontWeight: '700',
-                  marginTop: 5,
-                  fontSize: FONTS_SIZES.s4,
-                  color: Colors.black,
+              <TouchableOpacity
+                onPress={() => {
+                  if (
+                    currentMessage?.imageCaptionSubTitle &&
+                    currentMessage?.imageCaptionPrice
+                  ) {
+                    dispatch(getProductDetailsApi(currentMessage?.productId));
+                  }
                 }}>
-                {isOutfitItem
-                  ? currentMessage?.name
-                  : currentMessage?.imageCaptionTitle}
-              </Text>
-              {currentMessage?.imageCaptionSubTitle && (
                 <Text
-                  numberOfLines={2}
                   style={{
-                    fontWeight: '400',
-                    width: '100%',
+                    textDecorationLine:
+                      currentMessage?.imageCaptionSubTitle &&
+                      currentMessage?.imageCaptionPrice
+                        ? 'underline'
+                        : 'none',
+                    fontWeight: '700',
+                    marginTop: 5,
                     fontSize: FONTS_SIZES.s4,
                     color: Colors.black,
                   }}>
-                  {currentMessage?.imageCaptionSubTitle}
+                  {isOutfitItem
+                    ? currentMessage?.name
+                    : currentMessage?.imageCaptionTitle}
                 </Text>
-              )}
-              {currentMessage?.imageCaptionPrice && (
-                <Text
-                  style={{
-                    fontWeight: '400',
-                    fontSize: FONTS_SIZES.s4,
-                    color: Colors.black,
-                    marginBottom: 5,
-                  }}>
-                  {`$${currentMessage?.imageCaptionPrice}`}
-                </Text>
-              )}
+                {currentMessage?.imageCaptionSubTitle && (
+                  <Text numberOfLines={2} style={Styles.captionPriceText}>
+                    {currentMessage?.imageCaptionSubTitle}
+                  </Text>
+                )}
+                {currentMessage?.imageCaptionPrice && (
+                  <Text style={[Styles.captionPriceText, {marginBottom: 5}]}>
+                    {`$${currentMessage?.imageCaptionPrice}`}
+                  </Text>
+                )}
+              </TouchableOpacity>
             </View>
           )}
         </View>
       );
     },
-    [addToCloset, messages],
+    [addToCloset, dispatch, messages],
   );
 
   const closeModal = () => {

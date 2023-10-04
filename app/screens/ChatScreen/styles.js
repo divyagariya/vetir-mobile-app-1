@@ -51,4 +51,19 @@ export const Styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
   },
+  captionPriceText: {
+    fontWeight: '400',
+    width: '100%',
+    fontSize: FONTS_SIZES.s4,
+    color: Colors.black,
+  },
+  closetBtn: {
+    width: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closetIcon: {
+    height: 24,
+    width: 24,
+  },
 });
