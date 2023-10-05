@@ -150,6 +150,7 @@ const Home = props => {
     }
     return (
       <Categories
+        key={item.optionName}
         data={item}
         {...props}
         isStylistUser={isStylistUser}
@@ -297,6 +298,7 @@ const Home = props => {
               if (index < 3) {
                 return (
                   <Videos
+                    key={index}
                     item={item}
                     runVideoVideos={() => runVideoVideos(item)}
                   />
