@@ -604,6 +604,7 @@ const ViewProduct = props => {
             }}
           />
         )}
+        {/* <Buttons text="Buy Now" onPress={openLink} /> */}
         <Buttons
           isInverse
           imageIcon={
