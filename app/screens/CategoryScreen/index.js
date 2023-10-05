@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -333,6 +333,7 @@ const CategoryScreen = props => {
   const productDetailResponse = useSelector(
     state => state.HomeReducer.productDetailResponse,
   );
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
@@ -461,6 +462,13 @@ const CategoryScreen = props => {
     setSelectedSortIndex(index);
   };
 
+  // Function to scroll the FlatList to the top
+  const scrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({animated: true, offset: 0});
+    }
+  };
+
   const handleSorting = () => {
     setSortModal(false);
     let data = productList;
@@ -473,6 +481,7 @@ const CategoryScreen = props => {
         return moment(a.createdOn) < moment(b.createdOn) ? 1 : -1;
       }
     });
+    scrollToTop();
     setProducts(data);
   };
 
@@ -657,6 +666,7 @@ const CategoryScreen = props => {
         <FlatList
           data={productList}
           numColumns={2}
+          ref={flatListRef}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
             <CategoryCard

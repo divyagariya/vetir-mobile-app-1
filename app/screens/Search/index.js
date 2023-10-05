@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   TextInput,
   View,
@@ -81,6 +81,7 @@ const Search = props => {
   const userId = useSelector(state => state.AuthReducer.userId);
   const [filterParams, setFilterParametrs] = useState({});
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
@@ -122,6 +123,13 @@ const Search = props => {
     setSelectedSortIndex(index);
   };
 
+  // Function to scroll the FlatList to the top
+  const scrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({animated: true, offset: 0});
+    }
+  };
+
   const handleSorting = () => {
     setSortModal(false);
     let data = productList;
@@ -134,6 +142,7 @@ const Search = props => {
         return moment(a.createdOn) < moment(b.createdOn) ? 1 : -1;
       }
     });
+    scrollToTop();
     setProducts(data);
   };
 
@@ -397,6 +406,7 @@ const Search = props => {
             <FlatList
               data={productList}
               numColumns={2}
+              ref={flatListRef}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item, index}) => (
                 <CategoryCard
