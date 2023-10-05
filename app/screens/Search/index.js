@@ -124,7 +124,7 @@ const Search = props => {
 
   const handleSorting = () => {
     setSortModal(false);
-    let data = filteredProducts?.productDetails;
+    let data = productList;
     data = data.sort((a, b) => {
       if (selectedSort.type === 'asc') {
         return a.productPrice > b.productPrice ? 1 : -1;
@@ -156,15 +156,6 @@ const Search = props => {
     }
   }, [dispatch, filteredProducts, isFromPagination, productList]);
 
-  // useEffect(() => {
-  //   if (Object.keys(filteredProducts).length) {
-  //     setProducts(filteredProducts?.productDetails);
-  //     // setProducts([...productList, ...filteredProducts?.productDetails]);
-  //     setLoader(false);
-  //     setTotalDataCount(filteredProducts?.total);
-  //   }
-  // }, [filteredProducts, productList]);
-
   useEffect(() => {
     if (Object.keys(productDetailResponse).length) {
       dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
@@ -178,7 +169,6 @@ const Search = props => {
     if (searchKey.length && !isFromPagination) {
       setSearch(false);
       dispatch({type: 'GET_SEARCH_RESULT', value: []});
-
       const data1 = {};
       const data = returnFilterParams(filterParams);
       data1.key = searchKey;
