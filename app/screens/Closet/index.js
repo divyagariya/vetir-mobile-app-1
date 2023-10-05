@@ -642,7 +642,7 @@ export const FilterModal = ({
   const [sizeFilter, setSizeFilter] = useState([]);
   const filterKeys =
     from !== 'closet'
-      ? ['Gender', 'Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
+      ? ['Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
       : ['Category', 'Brand', 'Season', 'Color'];
   const [priceFilterObj, setPriceObj] = useState([]);
 
