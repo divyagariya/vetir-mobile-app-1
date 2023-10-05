@@ -447,9 +447,9 @@ const ViewProduct = props => {
 
             <Text style={styles.titleStyle}>Size</Text>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-              {productData.productSizes.map(item => {
+              {productData.productSizes.map((item, index) => {
                 return (
-                  <Text style={[styles.subitleStyle, {marginRight: 4}]}>
+                  <Text key={index} style={[styles.subitleStyle, {marginRight: 4}]}>
                     {item}
                   </Text>
                 );

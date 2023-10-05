@@ -11,9 +11,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		270EF4AA149F59BADBCD6966 /* Pods_Closet_ClosetTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E730CE2082E9E320E32291 /* Pods_Closet_ClosetTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		B130CB92506718A8695BF458 /* libPods-Closet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70DC6D69003C7A83834CA0CB /* libPods-Closet.a */; };
-		BDEC8F2BB2E2B15F759F0084 /* libPods-Closet-ClosetTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F9D809194C15B65424A14AB /* libPods-Closet-ClosetTests.a */; };
+		C11FF60293FB57F2D60C9F1F /* Pods_Closet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC851C9E2878796C104EC94C /* Pods_Closet.framework */; };
 		D5B8A2CA2A991ABF00D8602F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5B8A2C92A991ABF00D8602F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +31,7 @@
 		00E356EE1AD99517003FC87E /* ClosetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClosetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ClosetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClosetTests.m; sourceTree = "<group>"; };
+		04E730CE2082E9E320E32291 /* Pods_Closet_ClosetTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Closet_ClosetTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Closet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Closet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Closet/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Closet/AppDelegate.mm; sourceTree = "<group>"; };
@@ -40,11 +41,10 @@
 		3B4392A12AC88292D35C810B /* Pods-Closet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Closet.debug.xcconfig"; path = "Target Support Files/Pods-Closet/Pods-Closet.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-Closet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Closet.release.xcconfig"; path = "Target Support Files/Pods-Closet/Pods-Closet.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Closet-ClosetTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Closet-ClosetTests.debug.xcconfig"; path = "Target Support Files/Pods-Closet-ClosetTests/Pods-Closet-ClosetTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6F9D809194C15B65424A14AB /* libPods-Closet-ClosetTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Closet-ClosetTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		70DC6D69003C7A83834CA0CB /* libPods-Closet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Closet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Closet/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Closet-ClosetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Closet-ClosetTests.release.xcconfig"; path = "Target Support Files/Pods-Closet-ClosetTests/Pods-Closet-ClosetTests.release.xcconfig"; sourceTree = "<group>"; };
 		B7B20286290B0DEA00B5C99D /* Closet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Closet.entitlements; path = Closet/Closet.entitlements; sourceTree = "<group>"; };
+		BC851C9E2878796C104EC94C /* Pods_Closet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Closet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5B8A2C92A991ABF00D8602F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Closet/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDEC8F2BB2E2B15F759F0084 /* libPods-Closet-ClosetTests.a in Frameworks */,
+				270EF4AA149F59BADBCD6966 /* Pods_Closet_ClosetTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B130CB92506718A8695BF458 /* libPods-Closet.a in Frameworks */,
+				C11FF60293FB57F2D60C9F1F /* Pods_Closet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				70DC6D69003C7A83834CA0CB /* libPods-Closet.a */,
-				6F9D809194C15B65424A14AB /* libPods-Closet-ClosetTests.a */,
+				BC851C9E2878796C104EC94C /* Pods_Closet.framework */,
+				04E730CE2082E9E320E32291 /* Pods_Closet_ClosetTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -190,6 +190,7 @@
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				645255958B597516C05211A3 /* [CP-User] [RNFB] Core Configuration */,
+				E2B7B37350CB78CAC7F201BA /* [CP-User] [RNFB] Crashlytics Configuration */,
 			);
 			buildRules = (
 			);
@@ -380,6 +381,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Closet/Pods-Closet-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		E2B7B37350CB78CAC7F201BA /* [CP-User] [RNFB] Crashlytics Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Crashlytics Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

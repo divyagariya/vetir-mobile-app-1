@@ -353,6 +353,7 @@ const Menu = props => {
             }
             return (
               <TouchableOpacity
+                key={item.manuName}
                 onPress={() => menuClick(item)}
                 style={styles.menuContainer}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
