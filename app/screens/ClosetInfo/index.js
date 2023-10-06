@@ -115,12 +115,7 @@ const ClosetInfo = props => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header
-        showBack
-        {...props}
-        showVerticalMenu={!isStylistUser}
-        openMenu={openMenu}
-      />
+      <Header showBack {...props} showVerticalMenu openMenu={openMenu} />
       <ScrollView>
         <View>
           <View style={{alignItems: 'center'}}>
@@ -260,12 +255,10 @@ const ClosetInfo = props => {
               </View>
             )}
 
-            {!isStylistUser && (
-              <Buttons
-                text="Create Outfit"
-                onPress={() => props.navigation.navigate('AddOutfit')}
-              />
-            )}
+            <Buttons
+              text="Create Outfit"
+              onPress={() => props.navigation.navigate('AddOutfit')}
+            />
           </View>
         </View>
         {showModal && (

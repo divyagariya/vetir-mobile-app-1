@@ -343,7 +343,7 @@ export default props => {
                         subCategoryId: item?.subCategoryId,
                         brandId: item?.brandId,
                         season: item?.seasons,
-                        productColorCode: item?.colorCode.join(),
+                        productColorCode: item?.colorCode,
                         isImageBase64: false,
                       };
                       setSelectedProductData(item1);
