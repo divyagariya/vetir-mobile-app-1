@@ -47,6 +47,8 @@ export const ITEM_WIDTH = SLIDER_WIDTH;
 const Checkout = props => {
   const [loader, setLoader] = useState(false);
   const productDetails = props?.route?.params?.productDetails;
+  const {currentSize} = props?.route?.params;
+
   const [productCount, setProductCount] = useState(
     props?.route?.params?.productCount,
   );
@@ -100,6 +102,7 @@ const Checkout = props => {
       <Header showBack title="Checkout" {...props} />
       <ScrollView bounces={false}>
         <ProductCard
+          currentSize={currentSize}
           productDetails={productDetails}
           productCount={productCount}
           onDecrement={() => {
@@ -134,6 +137,7 @@ const Checkout = props => {
             <Text style={styles.text}>Discount</Text>
             <Text style={styles.greenText}>-$130</Text>
           </View>
+
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Handling Charge</Text>
             <Text style={styles.text}>$5</Text>

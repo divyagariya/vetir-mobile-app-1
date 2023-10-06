@@ -1,36 +1,39 @@
-
-export function addToCart({ product, productId }) {
-  console.log('in action, ', product, productId)
+export function addToCart({product, productId, size}) {
+  console.log('in action, ', product, productId);
   return async dispatch => {
     dispatch({
-      type: 'ADD_TO_CART', value: {
+      type: 'ADD_TO_CART',
+      value: {
         product,
-        productId
-      }
+        productId,
+        size,
+      },
     });
   };
 }
 
-export function increment({ product, productId }) {
-  console.log('in action increment ', product, productId)
+export function increment({product, productId}) {
+  console.log('in action increment ', product, productId);
   return dispatch => {
     dispatch({
-      type: 'CART_INCREMENT', value: {
+      type: 'CART_INCREMENT',
+      value: {
         product,
-        productId
-      }
+        productId,
+      },
     });
   };
 }
 
-export function decrement({ product, productId }) {
-  console.log('in action decrement ', product, productId)
+export function decrement({product, productId}) {
+  console.log('in action decrement ', product, productId);
   return dispatch => {
     dispatch({
-      type: 'CART_DECREMENT', value: {
+      type: 'CART_DECREMENT',
+      value: {
         product,
-        productId
-      }
+        productId,
+      },
     });
   };
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
@@ -10,6 +11,7 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  LayoutAnimation,
 } from 'react-native';
 import {Colors} from '../../colors';
 import {
@@ -43,9 +45,24 @@ import {cartUtil} from '../../hooks/cart';
 import {useCart} from '../../hooks/useCart';
 import {addToCart, decrement, increment} from '../../redux/actions/cartAction';
 import {Images} from '../../assets';
+import {normalize, spV} from '../../utils/normalise';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
+
+const sizeArray = [
+  {id: 1, value: 'US 37'},
+  {id: 2, value: 'US 37.5'},
+  {id: 3, value: 'US 38'},
+  {id: 4, value: 'US 38.5'},
+  {id: 5, value: 'US 39'},
+  {id: 6, value: 'US 39.5'},
+  {id: 7, value: 'US 40'},
+  {id: 8, value: 'US 40.5'},
+  {id: 9, value: 'US 41'},
+  {id: 10, value: 'US 41.5'},
+  {id: 11, value: 'US 42'},
+];
 
 const ViewProduct = props => {
   const [loader, setLoader] = useState(false);
@@ -60,7 +77,7 @@ const ViewProduct = props => {
     state => state.ClosetReducer.addClosetResponse,
   );
   const cartData = useSelector(state => state.CartReducer);
-  console.log('cartData', cartData);
+  console.warn('cartData', cartData);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const userId = useSelector(state => state.AuthReducer.userId);
   const deleteClosetResponse = useSelector(
@@ -76,6 +93,9 @@ const ViewProduct = props => {
   const [recommendedProductId, setRecommendedProductId] = useState('');
   const [showModal, setModal] = useState(false);
   const [showClientModal, setShowClientModal] = useState(false);
+  const [showSizeModal, setshowSizeModal] = useState(false);
+  const [currentSize, setcurrentSize] = useState('');
+
   const recommendedToClientsRes = useSelector(
     state => state.StylistReducer.recommendedToClientsRes,
   );
@@ -404,6 +424,35 @@ const ViewProduct = props => {
                 marginBottom: 8,
               }}
             />
+            <TouchableOpacity
+              onPress={() => {
+                setshowSizeModal(true);
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+              }}
+              style={{
+                width: '100%',
+                height: spV(50),
+                borderRadius: 4,
+                paddingHorizontal: 15,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderColor: Colors.greyBorder,
+                borderWidth: 1,
+                marginBottom: spV(10),
+              }}>
+              <Text
+                style={{
+                  color: currentSize ? Colors.black : Colors.greyText,
+                  fontSize: 15,
+                }}>
+                {currentSize ? currentSize : 'Select Size'}
+              </Text>
+              <Image
+                style={{height: 10, width: 10}}
+                source={require('../../assets/drop.webp')}
+              />
+            </TouchableOpacity>
             <Text style={styles.titleStyle}>Color</Text>
             <View
               style={{
@@ -585,6 +634,7 @@ const ViewProduct = props => {
                 props.navigation.navigate('Checkout', {
                   productDetails: productData,
                   productCount: itemCount,
+                  currentSize: currentSize,
                 });
               }}>
               <Text
@@ -601,15 +651,22 @@ const ViewProduct = props => {
           <Buttons
             text="Buy Now"
             onPress={() => {
-              dispatch(
-                addToCart({
-                  product: productData,
-                  productId: productData.productId,
-                }),
-              );
-              setTimeout(() => {
-                setShowCartModal(true);
-              }, 800);
+              if (currentSize == '') {
+                Toast.show('Please select size');
+              } else {
+                dispatch(
+                  addToCart({
+                    product: productData,
+                    productId: productData.productId,
+                  }),
+                );
+                setTimeout(() => {
+                  setShowCartModal(true);
+                }, 800);
+                setItemCount(1);
+                setShowCheckoutButton(true);
+              }
+
               // dispatch({
               //   type: 'ADD_TO_CART',
               //   value: {
@@ -617,8 +674,6 @@ const ViewProduct = props => {
               //     productId: productData.productId
               //   }
               // });
-              setItemCount(1);
-              setShowCheckoutButton(true);
             }}
           />
         )}
@@ -765,6 +820,67 @@ const ViewProduct = props => {
           }
         />
       )}
+      {showSizeModal && (
+        <ScrollView
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            height: '40%',
+            padding: 16,
+            width: '95%',
+            borderRadius: 4,
+            marginLeft: normalize(10),
+            position: 'absolute',
+            bottom: normalize(250),
+          }}>
+          <View
+            style={{
+              flexDirection: 'row', // Arrange items horizontally
+              flexWrap: 'wrap', // Allow items to wrap to the next row
+            }}>
+            {sizeArray.map(item => {
+              return (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    setshowSizeModal(false);
+                    setcurrentSize(item.value);
+                  }}
+                  style={{
+                    height: spV(40),
+                    marginLeft: 2,
+                    width: '23%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 10,
+                    backgroundColor: 'white',
+                    borderWidth: 1,
+                    borderColor: Colors.greyBorder,
+                  }}>
+                  <Text style={{fontSize: 15, fontWeight: '400'}}>
+                    {item.value}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      )}
+
+      {/* {showSizeModal && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModal}
+          component={
+            <RenderClients
+              setShowClientModal={setShowClientModal}
+              selectClient={selectClient}
+              selectedClients={selectedClients}
+              recommendToClients={recommendToClients}
+              selectedProductImg={selectedProductImg}
+            />
+          }
+        />
+      )} */}
       {loader && <Loader />}
     </VView>
   );

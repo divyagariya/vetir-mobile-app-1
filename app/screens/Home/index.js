@@ -97,6 +97,10 @@ const Home = props => {
     ) || false;
   const [videoLink, setVideoLink] = useState('');
 
+  const cartData = useSelector(state => state.cartReducer?.cartItems);
+
+  // console.warn('homeResponse', homeResponse);
+
   useEffect(() => {
     if (Object.keys(productDetailResponse).length && showProducts) {
       setShowProducts(false);

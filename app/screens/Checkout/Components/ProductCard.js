@@ -20,6 +20,7 @@ export const ITEM_WIDTH = SLIDER_WIDTH;
 const ProductCard = ({
   productDetails,
   productCount,
+  currentSize,
   removeItemFromCart = () => {},
   onIncrement = () => {},
   onDecrement = () => {},
@@ -38,6 +39,18 @@ const ProductCard = ({
         <Text style={styles.boldText}>{productDetails?.brandName}</Text>
         <Text style={styles.text}>{productDetails?.productName}</Text>
         <Text style={styles.text}>{'$' + productDetails?.productPrice}</Text>
+        <View
+          style={{
+            width: '30%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginVertical: 5,
+            height: 30,
+            borderWidth: 1,
+            borderColor: Colors.greyBorder,
+          }}>
+          <Text>{currentSize}</Text>
+        </View>
         <View style={{...styles.flexRow, marginBottom: 8}}>
           <Text style={styles.textLightBlack}>{'Estimated delivery by '}</Text>
           <Text style={styles.boldText}>{'Tomorrow'}</Text>
