@@ -51,6 +51,7 @@ export const ITEM_WIDTH = SLIDER_WIDTH;
 const PlaceOrder = props => {
   const productDetails = props?.route?.params?.productDetails;
   const productCount = props?.route?.params?.productCount;
+  const itemTotal = props?.route?.params?.itemTotal;
   const [loader, setLoader] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(-1);
   return (
@@ -72,7 +73,7 @@ const PlaceOrder = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Item Total</Text>
             <Text style={styles.text}>
-              ${productDetails?.productPrice * productCount}
+              ${itemTotal}
             </Text>
           </View>
           <View style={styles.justifyBetween}>
@@ -90,7 +91,7 @@ const PlaceOrder = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
             <Text style={styles.text}>
-              ${productDetails?.productPrice * productCount - 130 - 5 - 35}
+              ${itemTotal - 130 - 5 - 35}
             </Text>
           </View>
         </View>
@@ -155,7 +156,7 @@ const PlaceOrder = props => {
                 });
               }}
               text={`Pay \$${
-                productDetails?.productPrice * productCount - 130 - 5 - 35
+                itemTotal - 130 - 5 - 35
               }`}
             />
           </View>

@@ -45,6 +45,7 @@ import CityCreditCard from '../../assets/citiCreditCard.png';
 import GooglePay from '../../assets/googlePay.png';
 import ApplePay from '../../assets/applePay.png';
 import {Styles} from './styles';
+import { resetCart } from '../../redux/actions/cartAction';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -55,7 +56,15 @@ const OrderSuccess = props => {
   const [productCount, setProductCount] = useState(
     props?.route?.params?.productCount,
   );
+  const dispatch = useDispatch()
 
+  const state = useSelector(state => state.CartReducer)
+
+  const productImages = Object.values(state).map(item => {
+    if(item?.data?.productId) {
+      return item?.data?.imageUrls?.[0]
+    }
+  }).filter(item => !!item)
   return (
     <VView
       style={{
@@ -122,7 +131,7 @@ const OrderSuccess = props => {
             alignItems: 'center',
           }}>
           <Image
-            source={{uri: productDetails?.imageUrls?.[0]}}
+            source={{uri: productImages[0]}}
             style={styles.image}
             resizeMode="contain"
           />
@@ -140,7 +149,10 @@ const OrderSuccess = props => {
         }}>
         <Buttons
           text="Go to home"
-          onPress={() => props.navigation.navigate('Home')}
+          onPress={() => {
+            dispatch(resetCart())
+            props.navigation.navigate('Home')
+          }}
         />
       </View>
       {loader && <Loader />}

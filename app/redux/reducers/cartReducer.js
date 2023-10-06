@@ -1,54 +1,37 @@
-const cartItems = [];
+const cartItems = {};
 
-const initialState = {
-  cartItems,
-};
+const initialState = {};
 
 const CartReducer = (state = initialState, action) => {
-  console.log('in reducer', action);
   switch (action.type) {
     case 'ADD_TO_CART': {
-      console.log('ADD_TO_CART', action.value);
-      let {product, productId} = action.value;
-      let cartItemsCopy = [...cartItems];
-      if (cartItemsCopy.find(prod => prod.product.id === productId)) {
-      } else {
-        cartItemsCopy.push({
-          product,
-          count: 1,
-        });
+      let { product, productId, size } = action.value;
+      const copyState = {...state}
+      copyState[productId] = {
+        data: product,
+        size: size,
+        count: 1
       }
-      return {
-        ...state,
-        cartItems: cartItemsCopy,
-      };
+      return copyState
     }
     case 'CART_INCREMENT': {
-      console.log('CART_INCREMENT', action.value);
       let {product, productId} = action.value;
-      return {
-        ...state,
-        [productId]: {
-          ...state[productId],
-          count: state[productId].count + 1,
-        },
-      };
+      let copyState = {...state}
+      copyState[productId].count = copyState[productId].count + 1
+      return copyState
     }
     case 'CART_DECREMENT': {
-      console.log('CART_DECREMENT', action.value);
       let {product, productId} = action.value;
-      if (state[productId].count === 1) {
-        let copyCartData = {...state};
-        Reflect.deleteProperty(copyCartData, productId);
-        return copyCartData;
+      let copyState = {...state}
+      copyState[productId].count = copyState[productId].count - 1
+      if(copyState[productId].count < 1 ) {
+        Reflect.deleteProperty(copyState, productId)
       }
-      return {
-        ...state,
-        [productId]: {
-          ...state[productId],
-          count: state[productId].count - 1,
-        },
-      };
+      return copyState
+    }
+    case 'CART_RESET': {
+      console.log('herer in cart reset')
+      return {...initialState}
     }
     default:
       return state;

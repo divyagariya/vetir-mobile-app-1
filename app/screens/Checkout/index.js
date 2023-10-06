@@ -48,12 +48,19 @@ const Checkout = props => {
   const [loader, setLoader] = useState(false);
   const productDetails = props?.route?.params?.productDetails;
   const {currentSize} = props?.route?.params;
+  const cartData = props?.route?.params?.cartData ?? {}
+
+  let itemTotal = 0
+  Object.values(cartData).forEach(item => {
+    if(item?.data?.productId) {
+      itemTotal += item?.data?.productPrice
+    }
+  })
 
   const [productCount, setProductCount] = useState(
     props?.route?.params?.productCount,
   );
 
-  console.log('productDetails', productDetails);
 
   //   {
   //     "addedToCloset": true,
@@ -99,19 +106,26 @@ const Checkout = props => {
         paddingTop: 16,
       }}>
       <Header showBack title="Checkout" {...props} />
-      <ScrollView bounces={false}>
-        <ProductCard
-          currentSize={currentSize}
-          productDetails={productDetails}
-          productCount={productCount}
-          onDecrement={() => {
-            setProductCount(previous => previous - 1);
-          }}
-          onIncrement={() => {
-            setProductCount(previous => previous + 1);
-          }}
-          removeItemFromCart={() => {}}
-        />
+      <ScrollView>
+        {Object.keys(cartData).map(productDetails => {
+          let pd = cartData[productDetails]
+          if (!pd?.data?.productId) return null
+          return (
+            <ProductCard
+              currentSize={pd?.size}
+              productDetails={pd.data}
+              productCount={pd?.count}
+              onDecrement={() => {
+                setProductCount(previous => previous - 1);
+              }}
+              onIncrement={() => {
+                setProductCount(previous => previous + 1);
+              }}
+              removeItemFromCart={() => { }}
+            />
+          )
+        })}
+        
         <View
           testID="deliveryAddress"
           style={{padding: 16, marginTop: 4, backgroundColor: 'white'}}>
@@ -129,7 +143,7 @@ const Checkout = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Item Total</Text>
             <Text style={styles.text}>
-              ${productDetails?.productPrice * productCount}
+              ${itemTotal}
             </Text>
           </View>
           <View style={styles.justifyBetween}>
@@ -148,7 +162,7 @@ const Checkout = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
             <Text style={styles.text}>
-              ${productDetails?.productPrice * productCount - 130 - 5 - 35}
+              ${itemTotal- 130 - 5 - 35}
             </Text>
           </View>
         </View>
@@ -159,8 +173,7 @@ const Checkout = props => {
           <Buttons
             onPress={() => {
               props.navigation.navigate('PlaceOrder', {
-                productDetails,
-                productCount,
+                itemTotal
               });
             }}
             text={'Place order'}
