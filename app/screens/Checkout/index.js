@@ -96,7 +96,6 @@ const Checkout = props => {
       style={{
         backgroundColor: Colors.grey1,
         flex: 1,
-        paddingBottom: 140,
         paddingTop: 16,
       }}>
       <Header showBack title="Checkout" {...props} />
