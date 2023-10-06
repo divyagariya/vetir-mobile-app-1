@@ -642,7 +642,7 @@ export const FilterModal = ({
   const [sizeFilter, setSizeFilter] = useState([]);
   const filterKeys =
     from !== 'closet'
-      ? ['Gender', 'Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
+      ? ['Category', 'Brand', 'Season', 'Color', 'Size', 'Price']
       : ['Category', 'Brand', 'Season', 'Color'];
   const [priceFilterObj, setPriceObj] = useState([]);
 
@@ -849,45 +849,7 @@ export const FilterModal = ({
             </View>
             <View style={{width: '70%'}}>
               <ScrollView>
-                {selectedFilter === 'Gender' ? (
-                  <>
-                    <Text style={{marginVertical: 8, fontWeight: 'bold'}}>
-                      Gender
-                    </Text>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                      {['Male', 'Female'].map((item, index) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => setGenderDataFunction(item)}
-                            style={{
-                              borderWidth: 1,
-                              padding: 8,
-                              marginRight: 8,
-                              borderColor: Colors.greyBorder,
-                              marginBottom: 8,
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              backgroundColor: genderData.includes(item)
-                                ? '#DBDBDB'
-                                : 'transparent',
-                              alignItems: 'center',
-                            }}>
-                            <VText
-                              style={{textTransform: 'capitalize'}}
-                              text={item}
-                            />
-                            {genderData.includes(item) ? (
-                              <Image
-                                source={require('../../assets/crossIcon.png')}
-                                style={{width: 12, height: 12, marginLeft: 8}}
-                              />
-                            ) : null}
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  </>
-                ) : selectedFilter === 'Category' ? (
+                {selectedFilter === 'Category' ? (
                   <View>
                     {categoryData.map(item => {
                       return (
