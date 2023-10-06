@@ -869,10 +869,11 @@ const ChatScreen = props => {
                     textDecorationLine:
                       currentMessage?.imageCaptionSubTitle &&
                       currentMessage?.imageCaptionPrice
-                        ? 'underline'
+                        ? 'none'
                         : 'none',
                     fontWeight: '700',
-                    marginTop: 5,
+                    marginTop: 8,
+                    marginBottom: 4,
                     fontSize: FONTS_SIZES.s4,
                     color: position == 'right' ? Colors.white : Colors.black,
                   }}>
@@ -882,9 +883,9 @@ const ChatScreen = props => {
                 </Text>
                 {currentMessage?.imageCaptionSubTitle && (
                   <Text
-                    numberOfLines={2}
+                    numberOfLines={1}
                     style={[
-                      Styles.captionPriceText,
+                      Styles.captionPriceText2,
                       {
                         color:
                           position == 'right' ? Colors.white : Colors.black,
@@ -898,7 +899,6 @@ const ChatScreen = props => {
                     style={[
                       Styles.captionPriceText,
                       {
-                        marginBottom: 5,
                         color:
                           position == 'right' ? Colors.white : Colors.black,
                       },
@@ -1081,21 +1081,6 @@ const ChatScreen = props => {
                   }}
                 />
               </Send>
-            )}
-            renderBubble={props => (
-              <Bubble
-                {...props}
-                wrapperStyle={{
-                  right: {
-                    backgroundColor: 'rgb(53,117,194)',
-                  },
-                }}
-                textStyle={{
-                  right: {
-                    color: 'white', // Change this to the desired text color for sent messages
-                  },
-                }}
-              />
             )}
             textInputProps={{autoCorrect: false}} // Disable autocorrect
             user={{

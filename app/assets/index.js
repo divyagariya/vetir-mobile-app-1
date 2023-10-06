@@ -11,6 +11,7 @@ export const Images = {
   story1: require('./story1.webp'),
   story2: require('./story2.webp'),
   story3: require('./story3.webp'),
+  story4: require('./story4.png'),
   footware: require('./footware.webp'),
   dress: require('./dress.webp'),
 };
