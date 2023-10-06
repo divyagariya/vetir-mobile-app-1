@@ -473,7 +473,7 @@ const Home = props => {
           />
         </View>
       )}
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           bottom: spV(10),
@@ -481,7 +481,7 @@ const Home = props => {
           marginHorizontal: 16,
         }}>
         <CartItemsCard count={1} />
-      </View>
+      </View> */}
     </VView>
   );
 };
