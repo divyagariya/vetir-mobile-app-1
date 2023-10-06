@@ -100,7 +100,7 @@ const Home = props => {
   const [videoLink, setVideoLink] = useState('');
 
   const cartData = useSelector(state => state.CartReducer) ?? {};
-  const cartItemsLength = Object.keys(cartData).length
+  const cartItemsLength = Object.values(cartData).filter(item => item?.data?.productId).length
 
   // console.warn('homeResponse', homeResponse);
 

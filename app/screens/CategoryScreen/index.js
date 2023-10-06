@@ -324,7 +324,7 @@ const CategoryScreen = props => {
   );
   const flatListRef = useRef(null);
   const cartData = useSelector(state => state.CartReducer) ?? {};
-  const cartItemsLength = Object.keys(cartData).length
+  const cartItemsLength = Object.values(cartData).filter(item => item?.data?.productId).length
 
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
