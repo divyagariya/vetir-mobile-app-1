@@ -12,6 +12,8 @@ const CartItemsCard = props => {
       <Text
         style={{
           width: '40%',
+          fontSize: FONTS_SIZES.s4,
+          fontWeight: '700',
         }}>{`${count} item in cart`}</Text>
       <TouchableOpacity
         style={{
@@ -54,33 +56,9 @@ const Styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowRadius: 4,
-    shadowOpacity: 0.16,
-    borderWidth: 1,
-    borderColor: Colors.greyBorder,
-  },
-  titleAndColorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  colorBlock: {
-    width: 24,
-    height: 24,
-    borderWidth: 1,
-    marginRight: wp(8),
-    borderColor: Colors.greyBorder,
-  },
-  titleText: {
-    fontWeight: '400',
-    fontSize: FONTS_SIZES.s4,
-  },
-  countText: {
-    fontWeight: '400',
-    fontSize: FONTS_SIZES.s4,
-    color: Colors.greyText,
   },
   crossicon: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
   },
 });
