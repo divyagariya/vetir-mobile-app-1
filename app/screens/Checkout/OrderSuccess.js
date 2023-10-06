@@ -59,13 +59,12 @@ const OrderSuccess = props => {
   return (
     <VView
       style={{
-        backgroundColor: Colors.grey1,
+        backgroundColor: Colors.white,
         flex: 1,
-        paddingBottom: 140,
         paddingTop: 16,
       }}>
       <Header showBack title="Checkout" {...props} />
-      <ScrollView bounces={false}>
+      <ScrollView bounces={false} style={{backgroundColor: Colors.grey1}}>
         <View style={styles.orderSuccess}>
           <View style={{flexDirection: 'row', marginBottom: 4}}>
             <Image
@@ -133,6 +132,17 @@ const OrderSuccess = props => {
           </View>
         </View>
       </ScrollView>
+      <View
+        style={{
+          padding: 16,
+          flexDirection: 'column',
+          backgroundColor: Colors.white,
+        }}>
+        <Buttons
+          text="Go to home"
+          onPress={() => props.navigation.navigate('Home')}
+        />
+      </View>
       {loader && <Loader />}
     </VView>
   );

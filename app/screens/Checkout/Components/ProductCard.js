@@ -49,8 +49,7 @@ const ProductCard = ({
             borderRadius: 4,
             gap: 16,
             borderWidth: 1,
-            borderColor: Colors.tertiary,
-            backgroundColor: Colors.tertiaryLight,
+            borderColor: Colors.black,
             width: 80,
             justifyContent: 'center',
             alignItems: 'center',
@@ -70,14 +69,21 @@ const ProductCard = ({
               setCount(current => current - 1);
               onDecrement(count);
             }}>
-            <Text style={{color: Colors.tertiary, fontSize: 20}}>-</Text>
+            <Text style={{color: Colors.black, fontSize: 20, lineHeight: 20}}>
+              -
+            </Text>
           </Pressable>
           <View
             style={{
               paddingHorizontal: 8,
             }}>
             <Text
-              style={{color: Colors.tertiary, fontSize: 15, fontWeight: '700'}}>
+              style={{
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: '700',
+                lineHeight: 15,
+              }}>
               {count}
             </Text>
           </View>
@@ -90,7 +96,9 @@ const ProductCard = ({
               setCount(current => current + 1);
               onIncrement(count);
             }}>
-            <Text style={{color: Colors.tertiary, fontSize: 20}}>+</Text>
+            <Text style={{color: Colors.black, fontSize: 20, lineHeight: 20}}>
+              +
+            </Text>
           </Pressable>
         </View>
       </View>

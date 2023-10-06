@@ -448,7 +448,9 @@ const ViewProduct = props => {
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {productData.productSizes.map((item, index) => {
                 return (
-                  <Text key={index} style={[styles.subitleStyle, {marginRight: 4}]}>
+                  <Text
+                    key={index}
+                    style={[styles.subitleStyle, {marginRight: 4}]}>
                     {item}
                   </Text>
                 );
@@ -507,8 +509,8 @@ const ViewProduct = props => {
                 borderRadius: 8,
                 gap: 16,
                 borderWidth: 1,
-                borderColor: Colors.tertiary,
-                backgroundColor: Colors.tertiaryLight,
+                borderColor: Colors.black,
+                backgroundColor: Colors.white,
                 width: '49%',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -528,13 +530,22 @@ const ViewProduct = props => {
                   setItemCount(current => current - 1);
                   dispatch(decrement({productId: productData.productId}));
                 }}>
-                <Text style={{color: Colors.tertiary, fontSize: 20}}>-</Text>
+                <Text
+                  style={{color: Colors.black, fontSize: 24, lineHeight: 24}}>
+                  -
+                </Text>
               </Pressable>
               <View
                 style={{
                   paddingHorizontal: 8,
                 }}>
-                <Text style={{color: Colors.tertiary, fontSize: 20}}>
+                <Text
+                  style={{
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: '700',
+                    lineHeight: 18,
+                  }}>
                   {itemCount}
                 </Text>
               </View>
@@ -547,7 +558,14 @@ const ViewProduct = props => {
                   dispatch(increment({productId: productData.productId}));
                   setItemCount(current => current + 1);
                 }}>
-                <Text style={{color: Colors.tertiary, fontSize: 20}}>+</Text>
+                <Text
+                  style={{
+                    color: Colors.black,
+                    fontSize: 24,
+                    lineHeight: 24,
+                  }}>
+                  +
+                </Text>
               </Pressable>
             </View>
             <Pressable
@@ -556,8 +574,8 @@ const ViewProduct = props => {
                 padding: 8,
                 borderRadius: 8,
                 borderWidth: 1,
-                borderColor: Colors.tertiary,
-                backgroundColor: Colors.tertiary,
+                borderColor: Colors.black,
+                backgroundColor: Colors.black,
                 width: '49%',
                 justifyContent: 'center',
                 alignItems: 'center',
