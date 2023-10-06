@@ -82,7 +82,7 @@ const ClosetDetailsFrom = props => {
         categorySelected: categorySelected1,
       });
     }
-  }, [props.route?.params?.editClosetData, state]);
+  }, []);
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
