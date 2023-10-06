@@ -307,6 +307,7 @@ const Search = props => {
   const userId = useSelector(state => state.AuthReducer.userId);
   const [filterParams, setFilterParametrs] = useState({});
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
+  const flatListRef = useRef(null);
   const personalStylistDetails = useSelector(
     state => state.ProfileReducer?.userProfileResponse.personalStylistDetails,
   );
