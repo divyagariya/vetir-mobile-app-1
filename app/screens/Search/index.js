@@ -12,7 +12,13 @@ import {
 import Toast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {Colors} from '../../colors';
-import {Header, OverlayModal, SortComponent} from '../../components';
+import {
+  Buttons,
+  Header,
+  Input,
+  OverlayModal,
+  SortComponent,
+} from '../../components';
 import {FONTS_SIZES} from '../../fonts';
 import {
   addDataInCloset,
@@ -28,6 +34,219 @@ import {FilterModal} from '../Closet';
 import {debounce} from '../../utils/common';
 import {returnFilterParams} from '../CategoryScreen/common';
 import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
+import {recommendedAction} from '../../redux/actions/stylistAction';
+
+export const ClientList = ({
+  item,
+  index,
+  selectClient,
+  selectedClients,
+  onPressChat,
+  showChatIcon,
+}) => {
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 8,
+      }}
+      onPress={() => (showChatIcon ? onPressChat(item) : selectClient(item))}>
+      <View style={{flexDirection: 'row'}}>
+        {item.profilePicUrl ? (
+          <Image
+            source={{uri: item.profilePicUrl}}
+            style={{width: 40, height: 40, borderRadius: 20}}
+          />
+        ) : (
+          <Image
+            source={require('../../assets/iProfile.png')}
+            style={{width: 40, height: 40}}
+          />
+        )}
+        <View style={{marginLeft: 8, width: '70%'}}>
+          <Text>{item.name}</Text>
+          <Text style={{color: Colors.black30}}>{item.emailId}</Text>
+        </View>
+      </View>
+      {showChatIcon && (
+        <TouchableOpacity onPress={() => onPressChat(item)}>
+          <Image
+            source={require('../../assets/send_to_chat.webp')}
+            style={{width: 20, height: 20}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      )}
+      {!showChatIcon && (
+        <View>
+          <Image
+            source={
+              selectedClients.includes(item.userId)
+                ? require('../../assets/iSelectedCheck.png')
+                : require('../../assets/iCheck.png')
+            }
+            style={{width: 16, height: 16}}
+            resizeMode="contain"
+          />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+export const RenderClients = ({
+  setShowClientModal = () => {},
+  selectClient = () => {},
+  selectedClients,
+  recommendToClients = () => {},
+  selectedProductImg = '',
+  selectedProductData = {},
+  navigation,
+}) => {
+  const [noteUi, setNoteUi] = useState(false);
+  const [note, setNote] = useState('');
+  const allClientDataRespo = useSelector(
+    state => state.StylistReducer.allClientDataRespo,
+  );
+
+  const addNote = () => {
+    if (selectedClients.length === 0) {
+      Toast.show('Please select atleast one client');
+      return;
+    }
+    setNoteUi(true);
+  };
+
+  const back = () => {
+    setNoteUi(false);
+  };
+
+  if (noteUi) {
+    return (
+      <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={back}>
+              <Image
+                resizeMode="contain"
+                source={require('../../assets/iBack.webp')}
+                style={{width: 32, height: 32}}
+              />
+            </TouchableOpacity>
+            <View>
+              <Text
+                style={{
+                  fontSize: FONTS_SIZES.s3,
+                  fontWeight: 'bold',
+                  paddingLeft: 8,
+                }}>
+                Recommend to {selectedClients.length} clients
+              </Text>
+              <View style={{flexDirection: 'row', overflow: 'hidden'}}>
+                {selectedClients.length &&
+                  selectedClients.map(item => {
+                    return allClientDataRespo.map(i => {
+                      if (i.userId === item) {
+                        return (
+                          <Text style={{color: Colors.black60, marginLeft: 4}}>
+                            {i.name + ', '}
+                          </Text>
+                        );
+                      }
+                    });
+                  })}
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity onPress={() => setShowClientModal(false)}>
+            <Image
+              source={require('../../assets/cross.webp')}
+              style={{width: 32, height: 32}}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            width: 56,
+            height: 74,
+            alignItems: 'center',
+            backgroundColor: Colors.grey1,
+            justifyContent: 'center',
+            marginTop: 16,
+          }}>
+          <Image
+            source={{uri: selectedProductImg}}
+            style={{width: 50, height: 50}}
+          />
+          <View style={{position: 'absolute', right: 0, top: 0}}>
+            <Image
+              source={require('../../assets/iSelectedCheck.png')}
+              style={{width: 16, height: 16}}
+              resizeMode="contain"
+            />
+          </View>
+        </View>
+
+        <Input
+          placeholder="Type your note that you want to send to your clients... "
+          multiline
+          propStyle={{
+            height: 200,
+            backgroundColor: Colors.grey1,
+            marginBottom: 8,
+            textAlignVertical: 'top',
+            marginTop: 16,
+          }}
+          onChangeText={e => setNote(e)}
+          value={note}
+        />
+
+        <Buttons
+          text="recommend with note"
+          onPress={() => recommendToClients(note)}
+        />
+      </View>
+    );
+  }
+  return (
+    <View>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View>
+          <Text style={{fontSize: FONTS_SIZES.s3, fontWeight: 'bold'}}>
+            Recommend to your clients
+          </Text>
+        </View>
+        <TouchableOpacity onPress={() => setShowClientModal(false)}>
+          <Image
+            source={require('../../assets/cross.webp')}
+            style={{width: 32, height: 32}}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={{marginVertical: 16}}>
+        {allClientDataRespo.map((item, index) => {
+          return (
+            <ClientList
+              item={item}
+              index={index}
+              selectClient={selectClient}
+              selectedClients={selectedClients}
+            />
+          );
+        })}
+      </View>
+      <Buttons text="recommend" onPress={() => recommendToClients(note)} />
+      <Buttons text="add note (optional)" isInverse onPress={addNote} />
+    </View>
+  );
+};
 
 const Search = props => {
   const sortingData = [
@@ -65,6 +284,10 @@ const Search = props => {
   const [isFromPagination, setIsFromPagination] = useState(false);
   const [selectedProductData, setSelectedProductData] = useState({});
   const [showClientModalForChat, setShowClientModalForChat] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
+  const [recommendedProductId, setRecommendedProductId] = useState('');
+  const [selectedProductImg, setSelectedProductImg] = useState('');
+  const [selectedClients, setSelectedClients] = useState([]);
 
   const [totalDataCount, setTotalDataCount] = useState(0);
   const filteredProducts = useSelector(
@@ -92,6 +315,10 @@ const Search = props => {
     name = '',
     _id = '',
   } = (personalStylistDetails && personalStylistDetails[0]) || {};
+
+  const recommendedToClientsRes = useSelector(
+    state => state.StylistReducer.recommendedToClientsRes,
+  );
 
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
@@ -166,6 +393,16 @@ const Search = props => {
       dispatch({type: 'FILTERED_PRODUCTS', value: {}});
     }
   }, [dispatch, filteredProducts, isFromPagination, productList]);
+
+  useEffect(() => {
+    if (Object.keys(recommendedToClientsRes).length) {
+      if (recommendedToClientsRes.statusCode === 200) {
+        setSelectedClients([]);
+        dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
+        Toast.show('Recommended to client');
+      }
+    }
+  }, [recommendedToClientsRes, dispatch]);
 
   // useEffect(() => {
   //   if (Object.keys(filteredProducts).length) {
@@ -252,6 +489,41 @@ const Search = props => {
     });
     setProducts(prod);
     dispatch(deleteClosetData(data));
+  };
+
+  const recommentToClient = item => {
+    setShowClientModal(true);
+    setSelectedProductData(item);
+    setRecommendedProductId(item.productId);
+    setSelectedProductImg(item.imageUrls[0]);
+  };
+
+  const selectClient = item => {
+    let selectedClients1 = [...selectedClients];
+    if (!selectedClients1.includes(item.userId)) {
+      selectedClients1.push(item.userId);
+    } else {
+      selectedClients1 = selectedClients1.filter(id => id !== item.userId);
+    }
+    setSelectedClients(selectedClients1);
+  };
+
+  const recommendToClients = (note = '') => {
+    if (!selectedClients.length) {
+      Toast.show('Please select atleast one client');
+      return;
+    }
+    const data = {
+      personalStylistId: userId,
+      userIds: selectedClients,
+      productId: recommendedProductId,
+    };
+    if (note) {
+      data.note = note;
+    }
+    console.log('data', data);
+    setShowClientModal(false);
+    dispatch(recommendedAction(data));
   };
 
   const setFilter = data => {
@@ -443,6 +715,7 @@ const Search = props => {
                   getProductDetails={() => getProductDetails(item.productId)}
                   addToCloset={() => addToCloset(item)}
                   deletFromClost={() => deletFromClost(item)}
+                  recommentToClient={() => recommentToClient(item)}
                   isStylistUser={isStylistUser}
                 />
               )}
@@ -493,6 +766,23 @@ const Search = props => {
           />
         }
       />
+      {showClientModal && (
+        <OverlayModal
+          isScrollEnabled={false}
+          showModal={showClientModal}
+          component={
+            <RenderClients
+              navigation={props.navigation}
+              setShowClientModal={setShowClientModal}
+              selectClient={selectClient}
+              selectedProductData={selectedProductData}
+              selectedClients={selectedClients}
+              recommendToClients={recommendToClients}
+              selectedProductImg={selectedProductImg}
+            />
+          }
+        />
+      )}
       {showClientModalForChat && (
         <OverlayModal
           isScrollEnabled={false}
