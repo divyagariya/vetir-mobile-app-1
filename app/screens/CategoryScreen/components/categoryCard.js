@@ -54,7 +54,7 @@ export default ({
                   }}>
                   {item.addedToCloset ? (
                     <Image
-                      source={require('../../../assets/addedCloset.webp')}
+                      source={require('../../../assets/addedCloset.png')}
                       style={{
                         height: 24,
                         width: 24,
@@ -101,7 +101,7 @@ export default ({
                   style={{padding: 8}}>
                   {item.addedToCloset ? (
                     <Image
-                      source={require('../../../assets/addedCloset.webp')}
+                      source={require('../../../assets/addedCloset.png')}
                       style={{
                         height: 24,
                         width: 24,

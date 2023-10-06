@@ -14,22 +14,23 @@ export const Styles = StyleSheet.create({
     backgroundColor: 'red',
   },
   sendIcon: {
-    width: spH(30),
+    width: spH(32),
     // marginBottom: 10,
     // alignSelf: 'center',
-    height: spV(30),
+    height: spV(32),
   },
   textInputStyle: {
     // marginBottom: 10,
     borderRadius: 8,
-    alignItems: 'center',
-    paddingHorizontal: 15,
+    marginRight: 8,
+    paddingLeft: 8,
+    paddingTop: 8,
+    backgroundColor: Colors.grey1,
   },
   messageImage: {
-    margin: 3,
     width: spH(200),
     height: spV(200),
-    borderRadius: 13,
+    borderRadius: 8,
   },
   modalView: {
     margin: 0,
@@ -50,5 +51,20 @@ export const Styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     alignSelf: 'center',
+  },
+  captionPriceText: {
+    fontWeight: '400',
+    width: '100%',
+    fontSize: FONTS_SIZES.s4,
+    color: Colors.black,
+  },
+  closetBtn: {
+    width: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closetIcon: {
+    height: 24,
+    width: 24,
   },
 });

@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
-import {GiftedChat, InputToolbar, Send} from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar, Send, Bubble} from 'react-native-gifted-chat';
 import Toast from 'react-native-simple-toast';
 
 import {
@@ -14,30 +14,13 @@ import {
   onSnapshot,
   query,
   orderBy,
-  initializeFirestore,
-  getFirestore,
   doc,
-  getDoc,
-  update,
-  getDocs,
   setDoc,
-  updateDoc,
 } from '@firebase/firestore';
-import {
-  getDatabase,
-  ref,
-  orderByChild,
-  onValue,
-  child,
-  get,
-} from 'firebase/database';
-import {getAuth} from '@firebase/auth';
-import {initializeApp} from 'firebase/app';
 import {
   TouchableOpacity,
   ActionSheetIOS,
   View,
-  Keyboard,
   ActivityIndicator,
   Text,
 } from 'react-native';
@@ -58,6 +41,8 @@ import RNFetchBlob from 'react-native-blob-util';
 import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 import {addDataInCloset, getClosetData} from '../../redux/actions/closetAction';
+import {addOutfit} from '../../redux/actions/outfitActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 
 const ChatScreen = props => {
   const giftedChatRef = useRef(null);
@@ -65,9 +50,8 @@ const ChatScreen = props => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // To keep track of the currently displayed image
   const [myRef, setMyRef] = useState(null);
 
-  const {receiverDetails, selectedProductData, comingFromProduct} =
+  const {receiverDetails, selectedProductData, comingFromProduct, isOutfit} =
     props?.route?.params || {};
-  console.log('selectedProductData', selectedProductData);
   const [firstTime, setFirstTime] = useState(true);
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -91,25 +75,43 @@ const ChatScreen = props => {
   const addClosetResponse = useSelector(
     state => state.ClosetReducer.addClosetResponse,
   );
+  const addOutfitReponse = useSelector(
+    state => state.OutfitReducer.addOutfitReponse,
+  );
+  const productDetailResponse = useSelector(
+    state => state.HomeReducer.productDetailResponse,
+  );
 
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
-        // let prod = productList;
-        // prod.map(product => {
-        //   if (product?.productId === currentProdID) {
-        //     product.addedToCloset = true;
-        //     product.closetItemId = addClosetResponse.closetItemId;
-        //   }
-        // });
-        // // setProducts([]);
-        // setProducts(prod);
         dispatch({type: 'ADD_TO_CLOSET', value: {}});
         Toast.show('Added to closet');
         dispatch(getClosetData());
       }
     }
   }, [addClosetResponse, dispatch]);
+
+  useEffect(() => {
+    if (Object.keys(addOutfitReponse).length) {
+      dispatch({type: 'ADD_OUTFIT', value: {}});
+      if (addOutfitReponse.statusCode === 200) {
+        Toast.show('Outfit successfully created');
+        // dispatch(getOutfitsList());
+        // props.navigation.navigate('Outfit');
+      } else {
+      }
+    }
+  }, [addOutfitReponse, dispatch]);
+
+  useEffect(() => {
+    if (Object.keys(productDetailResponse).length) {
+      props.navigation.navigate('ViewProduct', {
+        data: productDetailResponse.productDetails,
+      });
+      dispatch({type: 'GET_PRODUCT_DETAILS', value: {}});
+    }
+  }, [dispatch, productDetailResponse, props.navigation]);
 
   useEffect(() => {
     signInWithEmailAndPassword(auth, userEmail, userEmail)
@@ -134,29 +136,6 @@ const ChatScreen = props => {
     },
     [onSendImage],
   );
-
-  // const showActionSheet = ref => {
-  //   ActionSheetIOS.showActionSheetWithOptions(
-  //     {
-  //       options: ['Gallery', 'Camera', 'Video Recorder', 'Cancel'],
-  //       destructiveButtonIndex: 3,
-  //       cancelButtonIndex: 3,
-  //       title: 'Pick the media',
-  //     },
-  //     buttonIndex => {
-  //       if (buttonIndex === 0) {
-  //         onSendImage(buttonIndex, ref);
-  //         // delete action
-  //       } else if (buttonIndex === 1) {
-  //         onSendImage(buttonIndex, ref);
-  //         // share action
-  //       } else if (buttonIndex === 2) {
-  //         onSendImage(buttonIndex, ref);
-  //         // share action
-  //       }
-  //     },
-  //   );
-  // };
 
   useLayoutEffect(() => {
     const chatId = generateChatId(
@@ -191,6 +170,12 @@ const ChatScreen = props => {
             colorCode: doc.data().colorCode,
             itemImageUrl: doc.data().itemImageUrl,
             productId: doc.data().productId,
+            isOutfit: doc.data().isOutfit,
+            closetItemIds: doc.data().closetItemIds,
+            outfitImageType: doc.data().outfitImageType,
+            name: doc.data().name,
+            description: doc.data().description,
+            imageData: doc.data().imageData,
           };
         }),
       );
@@ -213,13 +198,15 @@ const ChatScreen = props => {
   useEffect(() => {
     if (firstTime && myRef?.current && comingFromProduct) {
       console.log('selectedProductData', selectedProductData);
-      // debugger;
       myRef.current.onSend(
         {
           image: selectedProductData?.imageUrls[0],
           imageCaptionTitle: selectedProductData?.brandName,
           imageCaptionSubTitle: selectedProductData?.productName,
-          imageCaptionPrice: selectedProductData?.productPrice.toString(),
+          ...(selectedProductData?.productPrice
+            ? {imageCaptionPrice: selectedProductData?.productPrice.toString()}
+            : {}),
+          // imageCaptionPrice: selectedProductData?.productPrice.toString(),
           isClosetItem: false,
           categoryId: selectedProductData?.categoryId,
           subCategoryId: selectedProductData?.subCategoryId,
@@ -228,11 +215,24 @@ const ChatScreen = props => {
             ? {season: selectedProductData?.seasons}
             : {}),
           colorCode: selectedProductData?.productColorCode,
-          itemImageUrl: selectedProductData?.imageUrls[0],
+          ...(!isOutfit
+            ? {itemImageUrl: selectedProductData?.imageUrls[0]}
+            : undefined),
           isImageBase64: false,
           ...(selectedProductData?.productId
             ? {productId: selectedProductData?.productId}
             : {}),
+          ...(isOutfit ? {isOutfit: isOutfit} : {}),
+          ...(isOutfit
+            ? {closetItemIds: selectedProductData?.closetItemIds}
+            : {}),
+          ...(isOutfit
+            ? {outfitImageType: selectedProductData?.outfitImageType}
+            : {}),
+          ...(isOutfit ? {name: selectedProductData?.name} : {}),
+          ...(isOutfit ? {description: selectedProductData?.description} : {}),
+          // ...(isOutfit ? {seasons: selectedProductData?.seasons} : {}),
+          ...(isOutfit ? {imageData: selectedProductData?.imageData} : {}),
         },
         true,
       );
@@ -241,6 +241,7 @@ const ChatScreen = props => {
   }, [
     comingFromProduct,
     firstTime,
+    isOutfit,
     myRef,
     selectedProductData,
     selectedProductData?.imageUrls,
@@ -275,6 +276,13 @@ const ChatScreen = props => {
         colorCode,
         itemImageUrl,
         productId,
+        isOutfit,
+        closetItemIds,
+        outfitImageType,
+        name,
+        description,
+        seasons,
+        imageData,
       } = messages[0];
       try {
         const chatId = generateChatId(
@@ -323,6 +331,16 @@ const ChatScreen = props => {
               ...(colorCode ? {colorCode: colorCode} : undefined),
               ...(itemImageUrl ? {itemImageUrl: itemImageUrl} : undefined),
               ...(productId ? {productId: productId} : undefined),
+              ...(isOutfit ? {isOutfit: isOutfit} : undefined),
+
+              ...(closetItemIds ? {closetItemIds: closetItemIds} : undefined),
+              ...(outfitImageType
+                ? {outfitImageType: outfitImageType}
+                : undefined),
+              ...(name ? {name: name} : undefined),
+              ...(description ? {description: description} : undefined),
+              ...(seasons ? {seasons: seasons} : undefined),
+              ...(imageData ? {imageData: imageData} : undefined),
             });
           } else if (message.video) {
             // Handle image messages
@@ -365,15 +383,7 @@ const ChatScreen = props => {
         console.error('Error writing document: ', error);
       }
     },
-    [
-      clientUserId,
-      comingFromProduct,
-      firstTime,
-      isStylistUser,
-      personalStylistId,
-      receiverDetails,
-      selectedProductData?.productId,
-    ],
+    [clientUserId, isStylistUser, personalStylistId, receiverDetails],
   );
 
   const renderMessageVideo = useCallback(props => {
@@ -388,7 +398,7 @@ const ChatScreen = props => {
             style={{
               width: normalize(225),
               height: normalize(300),
-              borderRadius: 10,
+              borderRadius: 8,
             }}
             controls={true}
             onError={error => console.error('Video error:', error)}
@@ -401,74 +411,153 @@ const ChatScreen = props => {
     return null;
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onSendImage = (index, ref) => {
-    let imageURL = {};
-    if (index === 0) {
-      ImagePicker.openPicker({
-        mediaType: 'any',
-        width: 300,
-        height: 400,
-        compressVideoPreset: 'MediumQuality',
-        includeBase64: true,
-      }).then(async media => {
-        let dataToSend = {};
-        if (media.mime && (media.data || media.path)) {
-          //Upload image
-          if (media.mime.startsWith('image')) {
-            const imagePath = `data:${media.mime};base64,${media.data}`;
-            dataToSend = {
-              base64MediaString: imagePath,
-              ...(isStylistUser
-                ? {personalStylistId: personalStylistId}
-                : {userId: clientUserId}),
-            };
+  // const onSendImage = (index, ref) => {
+  //   let imageURL = {};
+  //   if (index === 0) {
+  //     ImagePicker.openPicker({
+  //       mediaType: 'any',
+  //       width: 300,
+  //       height: 400,
+  //       compressVideoPreset: 'MediumQuality',
+  //       includeBase64: true,
+  //     }).then(async media => {
+  //       let dataToSend = {};
+  //       if (media.mime && (media.data || media.path)) {
+  //         //Upload image
+  //         if (media.mime.startsWith('image')) {
+  //           const imagePath = `data:${media.mime};base64,${media.data}`;
+  //           dataToSend = {
+  //             base64MediaString: imagePath,
+  //             ...(isStylistUser
+  //               ? {personalStylistId: personalStylistId}
+  //               : {userId: clientUserId}),
+  //           };
 
-            uploadMediaOnS3(dataToSend, imageURL, ref);
-          } else if (media.mime.startsWith('video')) {
-            let s3UploadUrl = await getPreSignedUrl({
-              id: isStylistUser ? personalStylistId : clientUserId,
-              type: isStylistUser ? 'personalStylistId' : 'userId',
-            });
-            console.log('s3UploadUrl', s3UploadUrl);
-            RNFetchBlob.fetch(
-              'PUT',
-              s3UploadUrl,
-              {
-                'Content-Type': undefined,
-              },
-              RNFetchBlob.wrap(media.path),
-            )
-              .then(m => {
-                console.log('upload finish');
-                if (ref) {
-                  ref.onSend({video: media.path}, true);
-                }
-              })
-              .catch(error => {
-                console.log('upload error', error);
-              });
-            // Handle video
-            // const videoPath = `data:${media.mime};base64,${media.path}`;
-            // dataToSend = {
-            //   base64MediaString: videoPath,
-            //   ...(isStylistUser
-            //     ? {personalStylistId: personalStylistId}
-            //     : {userId: clientUserId}),
-            // };
-            // Rest of your video handling code
-            // ...
-          }
-        }
-      });
-    } else if (index === 1) {
-      ImagePicker.openCamera({
-        mediaType: 'any',
-        width: 300,
-        height: 400,
-        includeBase64: true,
-      })
-        .then(media => {
+  //           uploadMediaOnS3(dataToSend, imageURL, ref);
+  //         } else if (media.mime.startsWith('video')) {
+  //           let s3UploadUrl = await getPreSignedUrl({
+  //             id: isStylistUser ? personalStylistId : clientUserId,
+  //             type: isStylistUser ? 'personalStylistId' : 'userId',
+  //           });
+  //           console.log('s3UploadUrl', s3UploadUrl);
+  //           RNFetchBlob.fetch(
+  //             'PUT',
+  //             s3UploadUrl,
+  //             {
+  //               'Content-Type': undefined,
+  //             },
+  //             RNFetchBlob.wrap(media.path),
+  //           )
+  //             .then(m => {
+  //               console.log('upload finish');
+  //               if (ref) {
+  //                 ref.onSend({video: media.path}, true);
+  //               }
+  //             })
+  //             .catch(error => {
+  //               console.log('upload error', error);
+  //             });
+  //           // Handle video
+  //           // const videoPath = `data:${media.mime};base64,${media.path}`;
+  //           // dataToSend = {
+  //           //   base64MediaString: videoPath,
+  //           //   ...(isStylistUser
+  //           //     ? {personalStylistId: personalStylistId}
+  //           //     : {userId: clientUserId}),
+  //           // };
+  //           // Rest of your video handling code
+  //           // ...
+  //         }
+  //       }
+  //     });
+  //   } else if (index === 1) {
+  //     ImagePicker.openCamera({
+  //       mediaType: 'any',
+  //       width: 300,
+  //       height: 400,
+  //       includeBase64: true,
+  //     })
+  //       .then(media => {
+  //         let dataToSend = {};
+  //         if (media.mime && (media.data || media.path)) {
+  //           //Upload image
+  //           if (media.mime.startsWith('image')) {
+  //             const imagePath = `data:${media.mime};base64,${media.data}`;
+  //             dataToSend = {
+  //               base64MediaString: imagePath,
+  //               ...(isStylistUser
+  //                 ? {personalStylistId: personalStylistId}
+  //                 : {userId: clientUserId}),
+  //             };
+  //             uploadMediaOnS3(dataToSend, imageURL, ref);
+  //           }
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.log('Error in openCamera:', error);
+  //       });
+  //   } else if (index === 2) {
+  //     ImagePicker.openCamera({
+  //       mediaType: 'video',
+  //       videoQuality: 'medium',
+  //       // compressVideoPreset: 'MediumQuality',
+  //     })
+  //       .then(async media => {
+  //         let dataToSend = {};
+  //         if (media.mime && (media.data || media.path)) {
+  //           if (media.mime.startsWith('video')) {
+  //             let s3UploadUrl = await getPreSignedUrl({
+  //               id: isStylistUser ? personalStylistId : clientUserId,
+  //               type: isStylistUser ? 'personalStylistId' : 'userId',
+  //             });
+  //             console.log('s3UploadUrl', s3UploadUrl);
+  //             RNFetchBlob.fetch(
+  //               'PUT',
+  //               s3UploadUrl,
+  //               {
+  //                 'Content-Type': undefined,
+  //               },
+  //               RNFetchBlob.wrap(media.path),
+  //             )
+  //               .then(m => {
+  //                 console.log('upload finish');
+  //                 if (ref) {
+  //                   ref.onSend({video: media.path}, true);
+  //                 }
+  //               })
+  //               .catch(error => {
+  //                 console.log('upload error', error);
+  //               });
+  //             // Handle video
+  //             // const videoPath = `data:${media.mime};base64,${media.path}`;
+  //             // dataToSend = {
+  //             //   base64MediaString: videoPath,
+  //             //   ...(isStylistUser
+  //             //     ? {personalStylistId: personalStylistId}
+  //             //     : {userId: clientUserId}),
+  //             // };
+  //             // Rest of your video handling code
+  //             // ...
+  //           }
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.log('Error in openCamera:', error);
+  //       });
+  //   }
+  // };
+
+  const onSendImage = useCallback(
+    (index, ref) => {
+      let imageURL = {};
+      if (index === 0) {
+        ImagePicker.openPicker({
+          mediaType: 'any',
+          width: 300,
+          height: 400,
+          compressVideoPreset: 'MediumQuality',
+          includeBase64: true,
+        }).then(async media => {
           let dataToSend = {};
           if (media.mime && (media.data || media.path)) {
             //Upload image
@@ -480,23 +569,9 @@ const ChatScreen = props => {
                   ? {personalStylistId: personalStylistId}
                   : {userId: clientUserId}),
               };
+
               uploadMediaOnS3(dataToSend, imageURL, ref);
-            }
-          }
-        })
-        .catch(error => {
-          console.log('Error in openCamera:', error);
-        });
-    } else if (index === 2) {
-      ImagePicker.openCamera({
-        mediaType: 'video',
-        videoQuality: 'medium',
-        // compressVideoPreset: 'MediumQuality',
-      })
-        .then(async media => {
-          let dataToSend = {};
-          if (media.mime && (media.data || media.path)) {
-            if (media.mime.startsWith('video')) {
+            } else if (media.mime.startsWith('video')) {
               let s3UploadUrl = await getPreSignedUrl({
                 id: isStylistUser ? personalStylistId : clientUserId,
                 type: isStylistUser ? 'personalStylistId' : 'userId',
@@ -529,12 +604,85 @@ const ChatScreen = props => {
               // ...
             }
           }
-        })
-        .catch(error => {
-          console.log('Error in openCamera:', error);
         });
-    }
-  };
+      } else if (index === 1) {
+        ImagePicker.openCamera({
+          mediaType: 'any',
+          width: 300,
+          height: 400,
+          includeBase64: true,
+        })
+          .then(media => {
+            let dataToSend = {};
+            if (media.mime && (media.data || media.path)) {
+              //Upload image
+              if (media.mime.startsWith('image')) {
+                const imagePath = `data:${media.mime};base64,${media.data}`;
+                dataToSend = {
+                  base64MediaString: imagePath,
+                  ...(isStylistUser
+                    ? {personalStylistId: personalStylistId}
+                    : {userId: clientUserId}),
+                };
+                uploadMediaOnS3(dataToSend, imageURL, ref);
+              }
+            }
+          })
+          .catch(error => {
+            console.log('Error in openCamera:', error);
+          });
+      } else if (index === 2) {
+        ImagePicker.openCamera({
+          mediaType: 'video',
+          videoQuality: 'medium',
+          // compressVideoPreset: 'MediumQuality',
+        })
+          .then(async media => {
+            let dataToSend = {};
+            if (media.mime && (media.data || media.path)) {
+              if (media.mime.startsWith('video')) {
+                let s3UploadUrl = await getPreSignedUrl({
+                  id: isStylistUser ? personalStylistId : clientUserId,
+                  type: isStylistUser ? 'personalStylistId' : 'userId',
+                });
+                console.log('s3UploadUrl', s3UploadUrl);
+                RNFetchBlob.fetch(
+                  'PUT',
+                  s3UploadUrl,
+                  {
+                    'Content-Type': undefined,
+                  },
+                  RNFetchBlob.wrap(media.path),
+                )
+                  .then(m => {
+                    console.log('upload finish');
+                    if (ref) {
+                      ref.onSend({video: media.path}, true);
+                    }
+                  })
+                  .catch(error => {
+                    console.log('upload error', error);
+                  });
+                // Handle video
+                // const videoPath = `data:${media.mime};base64,${media.path}`;
+                // dataToSend = {
+                //   base64MediaString: videoPath,
+                //   ...(isStylistUser
+                //     ? {personalStylistId: personalStylistId}
+                //     : {userId: clientUserId}),
+                // };
+                // Rest of your video handling code
+                // ...
+              }
+            }
+          })
+          .catch(error => {
+            console.log('Error in openCamera:', error);
+          });
+      }
+    },
+    [isStylistUser, personalStylistId, clientUserId],
+  );
 
   const renderActions = useCallback(
     ref => {
@@ -588,6 +736,7 @@ const ChatScreen = props => {
   //   }
   // };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const addToCloset = async currentMessage => {
     console.log('currentMessage', currentMessage);
     // const {_id} = currentMessage;
@@ -628,32 +777,44 @@ const ChatScreen = props => {
     //   sent: true,
     //   received: '',
     // });
-    let data = {
-      userId: isStylistUser ? personalStylistId : clientUserId,
-      categoryId: currentMessage?.categoryId,
-      subCategoryId: currentMessage?.subCategoryId,
-      brandId: currentMessage?.brandId,
-      season: currentMessage?.seasons,
-      colorCode: currentMessage?.colorCode,
-      itemImageUrl: currentMessage?.itemImageUrl,
-      isImageBase64: false,
-      productId: currentMessage?.productId,
-    };
-    dispatch(addDataInCloset(data));
+    if (currentMessage?.isOutfit) {
+      let data = {
+        userId: isStylistUser ? personalStylistId : clientUserId,
+        closetItemIds: currentMessage?.closetItemIds,
+        outfitImageType: currentMessage?.outfitImageType,
+        name: currentMessage?.name,
+        description: currentMessage?.description,
+        seasons: currentMessage?.season,
+        imageData: currentMessage?.imageData,
+      };
+      dispatch(addOutfit(data));
+    } else {
+      let data = {
+        userId: isStylistUser ? personalStylistId : clientUserId,
+        categoryId: currentMessage?.categoryId,
+        subCategoryId: currentMessage?.subCategoryId,
+        brandId: currentMessage?.brandId,
+        season: currentMessage?.seasons,
+        colorCode: [currentMessage?.colorCode],
+        itemImageUrl: currentMessage?.itemImageUrl,
+        isImageBase64: false,
+        productId: currentMessage?.productId,
+      };
+      dispatch(addDataInCloset(data));
+    }
   };
 
   const renderMessageImage = useCallback(
     props => {
-      let {currentMessage} = props;
+      let {currentMessage, position} = props;
       const imageUrl = currentMessage.image;
-      console.log('currentMessage', currentMessage);
+      const isOutfitItem = currentMessage?.isOutfit;
       const images = messages
         .filter(message => message.image) // Filter out messages without images
         .map(message => ({
           url: message.image,
         }));
       const imageIndex = images.findIndex(image => image.url === imageUrl);
-
       return (
         <View>
           <TouchableOpacity
@@ -671,11 +832,11 @@ const ChatScreen = props => {
             />
           </TouchableOpacity>
           {currentMessage.imageCaptionTitle && (
-            <View style={{padding: 5}}>
+            <View style={{padding: 8}}>
               <TouchableOpacity onPress={() => addToCloset(currentMessage)}>
                 {true ? (
                   <Image
-                    source={require('../../assets/Closet.webp')}
+                    source={require('../../assets/Closet.png')}
                     style={{
                       height: 24,
                       width: 24,
@@ -684,7 +845,7 @@ const ChatScreen = props => {
                   />
                 ) : (
                   <Image
-                    source={require('../../assets/iAdd.webp')}
+                    source={require('../../assets/addedCloset.png')}
                     style={{
                       height: 24,
                       width: 24,
@@ -693,10 +854,63 @@ const ChatScreen = props => {
                   />
                 )}
               </TouchableOpacity>
-              <Text
+
+              <TouchableOpacity
+                onPress={() => {
+                  if (
+                    currentMessage?.imageCaptionSubTitle &&
+                    currentMessage?.imageCaptionPrice
+                  ) {
+                    dispatch(getProductDetailsApi(currentMessage?.productId));
+                  }
+                }}>
+                <Text
+                  style={{
+                    textDecorationLine:
+                      currentMessage?.imageCaptionSubTitle &&
+                      currentMessage?.imageCaptionPrice
+                        ? 'underline'
+                        : 'none',
+                    fontWeight: '700',
+                    marginTop: 5,
+                    fontSize: FONTS_SIZES.s4,
+                    color: position == 'right' ? Colors.white : Colors.black,
+                  }}>
+                  {isOutfitItem
+                    ? currentMessage?.name
+                    : currentMessage?.imageCaptionTitle}
+                </Text>
+                {currentMessage?.imageCaptionSubTitle && (
+                  <Text
+                    numberOfLines={2}
+                    style={[
+                      Styles.captionPriceText,
+                      {
+                        color:
+                          position == 'right' ? Colors.white : Colors.black,
+                      },
+                    ]}>
+                    {currentMessage?.imageCaptionSubTitle}
+                  </Text>
+                )}
+                {currentMessage?.imageCaptionPrice && (
+                  <Text
+                    style={[
+                      Styles.captionPriceText,
+                      {
+                        marginBottom: 5,
+                        color:
+                          position == 'right' ? Colors.white : Colors.black,
+                      },
+                    ]}>
+                    {`$${currentMessage?.imageCaptionPrice}`}
+                  </Text>
+                )}
+              </TouchableOpacity>
+              {/* <Text
                 style={{
                   fontWeight: '700',
-                  marginTop: 5,
+                  marginTop: 8,
                   fontSize: FONTS_SIZES.s4,
                   color: Colors.black,
                 }}>
@@ -704,12 +918,13 @@ const ChatScreen = props => {
               </Text>
               {currentMessage?.imageCaptionSubTitle && (
                 <Text
-                  numberOfLines={2}
+                  numberOfLines={1}
                   style={{
                     fontWeight: '400',
                     width: '100%',
                     fontSize: FONTS_SIZES.s4,
                     color: Colors.black,
+                    marginTop: 4,
                   }}>
                   {currentMessage?.imageCaptionSubTitle}
                 </Text>
@@ -720,17 +935,24 @@ const ChatScreen = props => {
                     fontWeight: '400',
                     fontSize: FONTS_SIZES.s4,
                     color: Colors.black,
-                    marginBottom: 5,
+                    marginTop: 4,
                   }}>
                   {`$${currentMessage?.imageCaptionPrice}`}
                 </Text>
-              )}
+              )} */}
             </View>
           )}
         </View>
       );
     },
-    [messages],
+    [
+      addToCloset,
+      clientUserId,
+      dispatch,
+      isStylistUser,
+      messages,
+      personalStylistId,
+    ],
   );
 
   const closeModal = () => {
@@ -789,6 +1011,37 @@ const ChatScreen = props => {
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
+  const renderBubble = props => {
+    return (
+      <Bubble
+        {...props}
+        textStyle={{
+          right: {color: Colors.white},
+          left: {color: Colors.black},
+        }}
+        wrapperStyle={{
+          right: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: 'rgba(33, 122, 255, 1)',
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 0,
+            borderBottomLeftRadius: 8,
+          },
+          left: {
+            maxWidth: '68%',
+            padding: 4,
+            backgroundColor: Colors.grey1,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 8,
+            borderBottomLeftRadius: 0,
+          },
+        }}
+      />
+    );
+  };
 
   return (
     <View style={Styles.container}>
@@ -804,11 +1057,11 @@ const ChatScreen = props => {
         </View>
       ) : (
         // Display a loader while messages are being fetched
-        <View style={{flex: 0.97}}>
+        <View style={{flex: 0.94}}>
           <GiftedChat
             ref={giftedChatRef}
             messages={messages}
-            alwaysShowSend
+            renderBubble={renderBubble}
             // messageContainerRef={giftedChatRef}
             renderActions={ref => renderActions(ref)}
             // renderInputToolbar={props => <CustomInputToolbar {...props} />} // Use your custom input toolbar
@@ -822,18 +1075,34 @@ const ChatScreen = props => {
                 <Image
                   source={require('../../assets/chatSend.webp')}
                   style={{
-                    width: 30,
-                    height: 30,
+                    width: 32,
+                    height: 32,
+                    marginBottom: 6,
                   }}
                 />
               </Send>
+            )}
+            renderBubble={props => (
+              <Bubble
+                {...props}
+                wrapperStyle={{
+                  right: {
+                    backgroundColor: 'rgb(53,117,194)',
+                  },
+                }}
+                textStyle={{
+                  right: {
+                    color: 'white', // Change this to the desired text color for sent messages
+                  },
+                }}
+              />
             )}
             textInputProps={{autoCorrect: false}} // Disable autocorrect
             user={{
               _id: isStylistUser ? personalStylistId : clientUserId,
               email: userEmail,
               name: userName,
-              avatar: profilePic || '',
+              // avatar: profilePic || '',
             }}
           />
           <ImageModal />

@@ -42,6 +42,7 @@ import {RenderClients} from '../CategoryScreen';
 import {cartUtil} from '../../hooks/cart';
 import {useCart} from '../../hooks/useCart';
 import {addToCart, decrement, increment} from '../../redux/actions/cartAction';
+import {Images} from '../../assets';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -220,9 +221,6 @@ const ViewProduct = props => {
       isImageBase64: false,
       productId: productData.productId,
     };
-    setTimeout(() => {
-      setShowCartModal(true);
-    }, 1000);
 
     dispatch(addDataInCloset(data));
   };
@@ -327,6 +325,7 @@ const ViewProduct = props => {
           showWhatsapp={productData.vendorWhatsappNumber}
           onWhatsappClick={onWhatsappClick}
           // showAdd={!isStylistUser}
+          onBack={() => props.navigation.goBack()}
           recommendClients={recommentToClient}
           showRecommend={isStylistUser}
           showLike={!isStylistUser}
@@ -493,7 +492,119 @@ const ViewProduct = props => {
           shadowRadius: 4,
           shadowOpacity: 0.16,
         }}>
-        <Buttons text="Buy Now" onPress={openLink} />
+        {showCheckoutButton ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 8,
+              gap: 8,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                padding: 8,
+                borderRadius: 8,
+                gap: 16,
+                borderWidth: 1,
+                borderColor: Colors.tertiary,
+                backgroundColor: Colors.tertiaryLight,
+                width: '49%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 56,
+              }}>
+              <Pressable
+                style={{
+                  paddingHorizontal: 8,
+                  minWidth: 24,
+                }}
+                onPress={() => {
+                  if (itemCount <= 1) {
+                    setShowCheckoutButton(false);
+                    setItemCount(0);
+                    return;
+                  }
+                  setItemCount(current => current - 1);
+                  dispatch(decrement({productId: productData.productId}));
+                }}>
+                <Text style={{color: Colors.tertiary, fontSize: 20}}>-</Text>
+              </Pressable>
+              <View
+                style={{
+                  paddingHorizontal: 8,
+                }}>
+                <Text style={{color: Colors.tertiary, fontSize: 20}}>
+                  {itemCount}
+                </Text>
+              </View>
+              <Pressable
+                style={{
+                  paddingHorizontal: 8,
+                  minWidth: 24,
+                }}
+                onPress={() => {
+                  dispatch(increment({productId: productData.productId}));
+                  setItemCount(current => current + 1);
+                }}>
+                <Text style={{color: Colors.tertiary, fontSize: 20}}>+</Text>
+              </Pressable>
+            </View>
+            <Pressable
+              style={{
+                flexDirection: 'row',
+                padding: 8,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: Colors.tertiary,
+                backgroundColor: Colors.tertiary,
+                width: '49%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 56,
+              }}
+              onPress={() => {
+                props.navigation.navigate('Checkout', {
+                  productDetails: productData,
+                  productCount: itemCount,
+                });
+              }}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: '700',
+                }}>
+                Checkout
+              </Text>
+            </Pressable>
+          </View>
+        ) : (
+          <Buttons
+            text="Buy Now"
+            onPress={() => {
+              dispatch(
+                addToCart({
+                  product: productData,
+                  productId: productData.productId,
+                }),
+              );
+              setTimeout(() => {
+                setShowCartModal(true);
+              }, 800);
+              // dispatch({
+              //   type: 'ADD_TO_CART',
+              //   value: {
+              //     product: productData,
+              //     productId: productData.productId
+              //   }
+              // });
+              setItemCount(1);
+              setShowCheckoutButton(true);
+            }}
+          />
+        )}
+        {/* <Buttons text="Buy Now" onPress={openLink} /> */}
         <Buttons
           isInverse
           imageIcon={
@@ -505,6 +616,122 @@ const ViewProduct = props => {
           text={productData.addedToCloset ? 'Added to closet' : 'Add to closet'}
         />
       </View>
+
+      {/* Suggestion Modal */}
+      {/* {!showCartModal && ( */}
+      <OverlayModal
+        isScrollEnabled={false}
+        showModal={showCartModal}
+        component={
+          <>
+            {/* main product view */}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                flex: 1,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={{uri: productData.imageUrls[0]}}
+                  style={{
+                    height: 50,
+                    width: 50,
+                    marginRight: 20,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text style={{fontSize: 18}}>Item added to bag </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => setShowCartModal(false)}
+                style={{flex: 0.2}}>
+                <Image
+                  resizeMode="contain"
+                  source={require('../../assets/cross.webp')}
+                  style={{width: 32, height: 32}}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* suggested product */}
+            <View
+              style={{
+                marginTop: 16,
+                borderTopWidth: 1,
+                paddingTop: 16,
+                borderColor: 'rgba(0,0,0,0.1)',
+              }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: '600',
+                }}>
+                Complete the Look
+              </Text>
+              {[
+                {
+                  name: 'Alessandra Rich',
+                  description: 'Printed Silk Twill Mini Dress',
+                  price: '$1860',
+                  imageUrl: Images.dress,
+                },
+                {
+                  name: 'Gucci',
+                  description: 'Gucci 10mm Tao Leather Sandals',
+                  price: '$850',
+                  imageUrl: Images.footware,
+                },
+              ].map((item, index) => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      paddingVertical: 16,
+                    }}>
+                    <View
+                      style={{
+                        backgroundColor: 'rgba(0,0,0,0.05)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: 20,
+                        paddingHorizontal: 10,
+                      }}>
+                      <Image
+                        source={item?.imageUrl}
+                        style={{
+                          height: 50,
+                          width: 50,
+                        }}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '600',
+                          marginBottom: 2,
+                        }}>
+                        {item?.name}
+                      </Text>
+                      <Text style={{fontSize: 14, marginBottom: 2}}>
+                        {item?.description}
+                      </Text>
+                      <Text style={{fontSize: 14}}>{item?.price}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </>
+        }
+      />
+      {/* )} */}
       {showClientModal && (
         <OverlayModal
           isScrollEnabled={false}
@@ -521,23 +748,6 @@ const ViewProduct = props => {
         />
       )}
       {loader && <Loader />}
-      {/* {!showCartModal && (
-        <OverlayModal
-          isScrollEnabled={false}
-          showModal={showClientModal}
-          component={
-            <View
-              style={{
-                backgroundColor: 'green',
-                height: 100,
-                width: '100%',
-                zIndex: 999,
-              }}>
-              <Text>Modal</Text>
-            </View>
-          }
-        />
-      )} */}
     </VView>
   );
 };

@@ -55,7 +55,7 @@ export const ClientList = ({
         alignItems: 'center',
         marginVertical: 8,
       }}
-      onPress={() => selectClient(item)}>
+      onPress={() => (showChatIcon ? onPressChat(item) : selectClient(item))}>
       <View style={{flexDirection: 'row'}}>
         {item.profilePicUrl ? (
           <Image
@@ -238,18 +238,6 @@ export const RenderClients = ({
           return (
             <ClientList
               item={item}
-              // onPressChat={() => {
-              //   setShowClientModal(false);
-              //   navigation.navigate('ChatScreen', {
-              //     selectedProductData: selectedProductData,
-              //     comingFromProduct: true,
-              //     receiverDetails: {
-              //       emailId: item?.emailId,
-              //       name: item?.name,
-              //       userId: item?.userId,
-              //     },
-              //   });
-              // }}
               index={index}
               selectClient={selectClient}
               selectedClients={selectedClients}
@@ -669,6 +657,7 @@ const CategoryScreen = props => {
                 } else {
                   props.navigation.navigate('ChatScreen', {
                     selectedProductData: item,
+                    isOutfit: false,
                     comingFromProduct: true,
                     receiverDetails: {
                       emailId: emailId,
@@ -758,8 +747,6 @@ const CategoryScreen = props => {
               navigation={props.navigation}
               setShowClientModalForChat={setShowClientModalForChat}
               selectedProductData={selectedProductData}
-              selectedClients={selectedClients}
-              selectedProductImg={selectedProductImg}
             />
           }
         />

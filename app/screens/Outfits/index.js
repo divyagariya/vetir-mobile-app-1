@@ -95,24 +95,28 @@ const Outfits = props => {
             top: normalize(5),
           }}
           onPress={() => {
-            const item1 = {
-              imageUrls: [item?.itemImageUrl],
-              brandName: item?.brandName,
-              productName: '',
-              productPrice: '',
-              categoryId: item?.categoryId,
-              subCategoryId: item?.subCategoryId,
-              brandId: item?.brandId,
-              season: item?.seasons,
-              productColorCode: item?.colorCode,
-              isImageBase64: false,
+            console.log('vinay', item);
+            let closetIds = [];
+            item?.imageData?.map(item => {
+              closetIds.push(item.closetItemId);
+            });
+            let data = {
+              closetItemIds: closetIds,
+              imageUrls: [item?.outfitImageType],
+              outfitImageType: item?.outfitImageType,
+              name: item?.name,
+              description: item?.description,
+              seasons: item?.seasons,
+              imageData: item?.imageData,
             };
-            setSelectedProductData(item1);
+
+            setSelectedProductData(data);
             if (isStylistUser) {
               setShowClientModalForChat(true);
             } else {
               props.navigation.navigate('ChatScreen', {
-                selectedProductData: item1,
+                selectedProductData: data,
+                isOutfit: true,
                 comingFromProduct: true,
                 receiverDetails: {
                   emailId: emailId,
@@ -121,7 +125,6 @@ const Outfits = props => {
                 },
               });
             }
-            setSelectedProductData(item1);
           }}>
           <Image
             source={require('../../assets/send_to_chat.webp')}
@@ -314,6 +317,7 @@ const Outfits = props => {
               navigation={props.navigation}
               setShowClientModalForChat={setShowClientModalForChat}
               selectedProductData={selectedProductData}
+              isFromOutfit
             />
           }
         />
