@@ -40,6 +40,7 @@ import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
 import {NoAuthAPI} from '../../services';
 import {RenderClients} from '../CategoryScreen';
 import ProductCard from './Components/ProductCard';
+import { decrement, increment } from '../../redux/actions/cartAction';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -48,12 +49,14 @@ const Checkout = props => {
   const [loader, setLoader] = useState(false);
   const productDetails = props?.route?.params?.productDetails;
   const {currentSize} = props?.route?.params;
-  const cartData = props?.route?.params?.cartData ?? {}
-
+  const cartDataRaw = useSelector(state => state.CartReducer)
+  const totalItems = useSelector(state => state.CartReducer.totalItems)
+  const cartData = Object.values(cartDataRaw).filter(item => item?.data?.productId)
+  const dispatch = useDispatch()
   let itemTotal = 0
   Object.values(cartData).forEach(item => {
     if(item?.data?.productId) {
-      itemTotal += item?.data?.productPrice
+      itemTotal += (item.count * item?.data?.productPrice)
     }
   })
 
@@ -116,10 +119,16 @@ const Checkout = props => {
               productDetails={pd.data}
               productCount={pd?.count}
               onDecrement={() => {
-                setProductCount(previous => previous - 1);
+                dispatch(decrement({
+                  product: pd?.data,
+                  productId: pd?.data?.productId
+                }))
               }}
               onIncrement={() => {
-                setProductCount(previous => previous + 1);
+                dispatch(increment({
+                  product: pd?.data,
+                  productId: pd?.data?.productId
+                }))
               }}
               removeItemFromCart={() => { }}
             />

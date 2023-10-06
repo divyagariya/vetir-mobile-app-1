@@ -573,6 +573,7 @@ const ViewProduct = props => {
                   if (itemCount <= 1) {
                     setShowCheckoutButton(false);
                     setItemCount(0);
+                    dispatch(decrement({productId: productData.productId}));
                     return;
                   }
                   setItemCount(current => current - 1);
