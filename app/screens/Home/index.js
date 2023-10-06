@@ -31,6 +31,8 @@ import {
 } from 'firebase/auth';
 import {auth} from '../../firebase';
 import {Images} from '../../assets';
+import CartItemsCard from '../../components/CartItemsCard';
+import {spV} from '../../utils/normalise';
 
 const storiesData = [
   {
@@ -471,6 +473,15 @@ const Home = props => {
           />
         </View>
       )}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: spV(10),
+          width: '100%',
+          marginHorizontal: 16,
+        }}>
+        <CartItemsCard count={1} />
+      </View>
     </VView>
   );
 };
