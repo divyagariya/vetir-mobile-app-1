@@ -1,5 +1,4 @@
 export function addToCart({product, productId, size}) {
-  console.log('in action, ', product, productId);
   return async dispatch => {
     dispatch({
       type: 'ADD_TO_CART',
@@ -36,4 +35,13 @@ export function decrement({product, productId}) {
       },
     });
   };
+}
+
+export function resetCart() {
+  console.log('in action reset')
+  return dispatch => {
+     dispatch({
+      type: 'CART_RESET',
+    });
+  }; 
 }

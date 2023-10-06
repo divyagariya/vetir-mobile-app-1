@@ -43,7 +43,7 @@ import {NoAuthAPI} from '../../services';
 import {RenderClients} from '../CategoryScreen';
 import {cartUtil} from '../../hooks/cart';
 import {useCart} from '../../hooks/useCart';
-import {addToCart, decrement, increment} from '../../redux/actions/cartAction';
+import {addToCart, decrement, increment, resetCart} from '../../redux/actions/cartAction';
 import {Images} from '../../assets';
 import {normalize, spV} from '../../utils/normalise';
 
@@ -77,7 +77,6 @@ const ViewProduct = props => {
     state => state.ClosetReducer.addClosetResponse,
   );
   const cartData = useSelector(state => state.CartReducer);
-  console.warn('cartData', cartData);
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
   const userId = useSelector(state => state.AuthReducer.userId);
   const deleteClosetResponse = useSelector(
@@ -658,6 +657,7 @@ const ViewProduct = props => {
                   addToCart({
                     product: productData,
                     productId: productData.productId,
+                    size: currentSize
                   }),
                 );
                 setTimeout(() => {

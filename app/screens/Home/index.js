@@ -99,7 +99,8 @@ const Home = props => {
     ) || false;
   const [videoLink, setVideoLink] = useState('');
 
-  const cartData = useSelector(state => state.cartReducer?.cartItems);
+  const cartData = useSelector(state => state.CartReducer) ?? {};
+  const cartItemsLength = Object.keys(cartData).length
 
   // console.warn('homeResponse', homeResponse);
 
@@ -473,15 +474,15 @@ const Home = props => {
           />
         </View>
       )}
-      {/* <View
+      <View
         style={{
           position: 'absolute',
           bottom: spV(10),
           width: '100%',
           marginHorizontal: 16,
         }}>
-        <CartItemsCard count={1} />
-      </View> */}
+        <CartItemsCard count={cartItemsLength} cartData={cartData} {...props}/>
+      </View>
     </VView>
   );
 };

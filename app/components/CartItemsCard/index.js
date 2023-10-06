@@ -7,6 +7,10 @@ import {Colors} from '../../colors';
 const CartItemsCard = props => {
   const {count} = props;
 
+  if (count <= 0) {
+    return null
+  }
+
   return (
     <View style={Styles.cardContainer}>
       <Text
@@ -14,7 +18,7 @@ const CartItemsCard = props => {
           width: '40%',
           fontSize: FONTS_SIZES.s4,
           fontWeight: '700',
-        }}>{`${count} item in cart`}</Text>
+        }}>{`${count} items in cart`}</Text>
       <TouchableOpacity
         style={{
           width: spH(135),
@@ -25,7 +29,11 @@ const CartItemsCard = props => {
           backgroundColor: Colors.black,
         }}
         text="Apply"
-        onPress={() => {}}>
+        onPress={() => {
+          props.navigation.navigate('Checkout', {
+            cartData: props.cartData
+          });
+        }}>
         <Text style={{color: Colors.white, fontWeight: '700'}}>
           {'Checkout'}
         </Text>

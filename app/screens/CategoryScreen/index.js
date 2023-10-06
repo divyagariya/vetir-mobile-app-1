@@ -38,6 +38,7 @@ import {
 import {debounce} from '../../utils/common';
 import {returnFilterParams} from './common';
 import {ClientModelChat} from './components/clientModelChat';
+import CartItemsCard from '../../components/CartItemsCard';
 
 export const ClientList = ({
   item,
@@ -322,6 +323,8 @@ const CategoryScreen = props => {
     state => state.HomeReducer.productDetailResponse,
   );
   const flatListRef = useRef(null);
+  const cartData = useSelector(state => state.CartReducer) ?? {};
+  const cartItemsLength = Object.keys(cartData).length
 
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
@@ -761,6 +764,15 @@ const CategoryScreen = props => {
           }
         />
       )}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          width: '100%',
+          marginHorizontal: 16,
+        }}>
+        <CartItemsCard count={cartItemsLength} cartData={cartData} {...props}/>
+      </View>
     </VView>
   );
 };
