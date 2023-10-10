@@ -217,6 +217,23 @@ const ClosetInfo = props => {
                 <Text style={styles.subitleStyle}>
                   {props.route?.params?.apiData?.brandName}
                 </Text>
+                {props.route?.params?.apiData?.price && (
+                  <>
+                    <Text style={styles.titleStyle}>Price</Text>
+                    <Text style={styles.subitleStyle}>
+                      {`$ ${props.route?.params?.apiData?.price}`}
+                    </Text>
+                  </>
+                )}
+                {props.route?.params?.apiData?.notes && (
+                  <>
+                    <Text style={styles.titleStyle}>Notes</Text>
+                    <Text style={styles.subitleStyle}>
+                      {props.route?.params?.apiData?.notes}
+                    </Text>
+                  </>
+                )}
+
                 {props.route?.params?.apiData?.season?.length > 0 && (
                   <>
                     <Text style={styles.titleStyle}>Season</Text>
