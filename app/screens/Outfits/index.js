@@ -8,6 +8,7 @@ import {FONTS_SIZES} from '../../fonts';
 import {getOutfitsList} from '../../redux/actions/outfitActions';
 import {normalize} from '../../utils/normalise';
 import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Outfits = props => {
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ const Outfits = props => {
       isSelected: false,
     },
   ];
+
+  useFocusEffect(() => {
+    dispatch(getOutfitsList())
+  })
 
   const getOutfitData =
     useSelector(state => state.OutfitReducer.getOutfitData) || [];
