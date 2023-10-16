@@ -481,7 +481,7 @@ const Home = props => {
           width: '100%',
           marginHorizontal: 16,
         }}>
-        <CartItemsCard count={cartItemsLength} cartData={cartData} {...props}/>
+        <CartItemsCard count={cartItemsLength} cartData={cartData} {...props} />
       </View>
     </VView>
   );

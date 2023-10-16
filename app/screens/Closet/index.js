@@ -319,7 +319,6 @@ export default props => {
                     margin: 8,
                   }}
                   onPress={() => {
-                    console.log('item', item);
                     openClosetInfo(item.closetItemId);
                   }}>
                   <Image
