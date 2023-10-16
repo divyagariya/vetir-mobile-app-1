@@ -52,7 +52,7 @@ const OrderHistoryDetails = props => {
       />
       <View style={Styles.cardContainer}>
         <ItemPriceCard heading={'Item total'} value={'$2590'} />
-        <ItemPriceCard heading={'Discount'} isGreen value={'-$130'} />
+        {/* <ItemPriceCard heading={'Discount'} isGreen value={'-$130'} /> */}
         <ItemPriceCard heading={'Handling Charge'} value={'$5'} />
         <ItemPriceCard heading={'Delivery Fee'} value={'$35'} />
         <ItemPriceCard marginTop={hp(6)} heading={'Total'} value={'$2500'} />

@@ -115,7 +115,7 @@ const Checkout = props => {
           if (!pd?.data?.productId) return null
           return (
             <ProductCard
-              currentSize={pd?.size}
+              currentSize={'US'+pd?.size}
               productDetails={pd.data}
               productCount={pd?.count}
               onDecrement={() => {
@@ -155,10 +155,10 @@ const Checkout = props => {
               ${itemTotal}
             </Text>
           </View>
-          <View style={styles.justifyBetween}>
+          {/* <View style={styles.justifyBetween}>
             <Text style={styles.text}>Discount</Text>
             <Text style={styles.greenText}>-$130</Text>
-          </View>
+          </View> */}
 
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Handling Charge</Text>
@@ -171,7 +171,7 @@ const Checkout = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
             <Text style={styles.text}>
-              ${itemTotal- 130 - 5 - 35}
+              ${itemTotal + 5 + 35}
             </Text>
           </View>
         </View>

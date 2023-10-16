@@ -76,10 +76,10 @@ const PlaceOrder = props => {
               ${itemTotal}
             </Text>
           </View>
-          <View style={styles.justifyBetween}>
+          {/* <View style={styles.justifyBetween}>
             <Text style={styles.text}>Discount</Text>
             <Text style={styles.greenText}>-$130</Text>
-          </View>
+          </View> */}
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Handling Charge</Text>
             <Text style={styles.text}>$5</Text>
@@ -91,7 +91,7 @@ const PlaceOrder = props => {
           <View style={styles.justifyBetween}>
             <Text style={styles.text}>Total</Text>
             <Text style={styles.text}>
-              ${itemTotal - 130 - 5 - 35}
+              ${itemTotal + 5 + 35}
             </Text>
           </View>
         </View>

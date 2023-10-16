@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {wp, hp, spV, spH} from '../../utils/normalise';
 import {FONTS_SIZES} from '../../fonts';
@@ -6,10 +6,17 @@ import {Colors} from '../../colors';
 
 const CartItemsCard = props => {
   const {count} = props;
+  const [show, setShow] = useState(true)
 
   if (count <= 0) {
     return null
   }
+
+  useEffect(() => {
+    if (count > 0) setShow(true)
+  }, [count])
+
+  if (!show) return null
 
   return (
     <View style={Styles.cardContainer}>
@@ -38,7 +45,7 @@ const CartItemsCard = props => {
           {'Checkout'}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setShow(false)}>
         <Image
           style={Styles.crossicon}
           source={require('../../assets/cross.webp')}
