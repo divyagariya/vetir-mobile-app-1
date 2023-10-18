@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {wp, hp, spV, spH} from '../../utils/normalise';
-import {FONTS_SIZES} from '../../fonts';
-import {Colors} from '../../colors';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { wp, hp, spV, spH } from '../../utils/normalise';
+import { FONTS_SIZES } from '../../fonts';
+import { Colors } from '../../colors';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '../../redux/actions/cartAction';
+
 
 const CartItemsCard = props => {
-  const {count} = props;
-  const [show, setShow] = useState(true)
-
+  const { count } = props;
+  const dispatch = useDispatch()
   if (count <= 0) {
     return null
   }
-
-  useEffect(() => {
-    if (count > 0) setShow(true)
-  }, [count])
-
-  if (!show) return null
 
   return (
     <View style={Styles.cardContainer}>
@@ -41,11 +37,13 @@ const CartItemsCard = props => {
             cartData: props.cartData
           });
         }}>
-        <Text style={{color: Colors.white, fontWeight: '700'}}>
+        <Text style={{ color: Colors.white, fontWeight: '700' }}>
           {'Checkout'}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setShow(false)}>
+      <TouchableOpacity onPress={() => {
+        dispatch(resetCart())
+      }}>
         <Image
           style={Styles.crossicon}
           source={require('../../assets/cross.webp')}

@@ -12,7 +12,6 @@ export function addToCart({product, productId, size}) {
 }
 
 export function increment({product, productId}) {
-  console.log('in action increment ', product, productId);
   return dispatch => {
     dispatch({
       type: 'CART_INCREMENT',
@@ -25,7 +24,6 @@ export function increment({product, productId}) {
 }
 
 export function decrement({product, productId}) {
-  console.log('in action decrement ', product, productId);
   return dispatch => {
     dispatch({
       type: 'CART_DECREMENT',
@@ -38,7 +36,6 @@ export function decrement({product, productId}) {
 }
 
 export function resetCart() {
-  console.log('in action reset')
   return dispatch => {
      dispatch({
       type: 'CART_RESET',
