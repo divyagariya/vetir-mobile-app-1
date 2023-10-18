@@ -50,7 +50,7 @@ import { normalize, spV } from '../../utils/normalise';
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
 
-const sizeArray = [
+const sizeArrayClothing = [
   '00',
   '0',
   '2',
@@ -63,6 +63,26 @@ const sizeArray = [
   '16',
   '18',
 ];
+
+const sizeArrayShoes = [
+  '4',
+  '4.5',
+  '5',
+  '5.5',
+  '6',
+  '6.5',
+  '7',
+  '7.5',
+  '8',
+  '8.5',
+  '9',
+  '9.5',
+  '10',
+  '10.5',
+  '11',
+  '11.5',
+  '12',
+]
 
 const ViewProduct = props => {
   const [loader, setLoader] = useState(false);
@@ -331,6 +351,8 @@ const ViewProduct = props => {
   if (Object.keys(productData).length === 0) {
     return null;
   }
+
+  const sizeArray = productData?.categoryName === 'Clothing' ? sizeArrayClothing : productData?.categoryName === 'Shoes' ? sizeArrayShoes : []
   return (
     <VView
       style={{
@@ -437,7 +459,7 @@ const ViewProduct = props => {
                     activeOpacity={!productData?.productSizeUS?.includes(item) ? 1 : 0.8}
                     key={item.id}
                     onPress={() => {
-                      if(!productData?.productSizeUS?.includes(item)) return
+                      if (!productData?.productSizeUS?.includes(item)) return
                       setshowSizeModal(false);
                       setcurrentSize(item);
                     }}
@@ -448,14 +470,14 @@ const ViewProduct = props => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginBottom: 10,
-                      backgroundColor: item === currentSize ? 'black' : productData?.productSizeUS?.includes(item) ? 'white' :  Colors.grey1,
+                      backgroundColor: item === currentSize ? 'black' : productData?.productSizeUS?.includes(item) ? 'white' : Colors.grey1,
                       borderWidth: 1,
                       borderColor: Colors.greyBorder,
                     }}>
                     <Text style={{
                       fontSize: 15,
                       fontWeight: '400',
-                      color: item === currentSize ? 'white' : !productData?.productSizeUS?.includes(item)? Colors.greyText : 'black',
+                      color: item === currentSize ? 'white' : !productData?.productSizeUS?.includes(item) ? Colors.greyText : 'black',
                       textDecorationLine: productData?.productSizeUS?.includes(item) ? 'none' : 'line-through'
                     }}>
                       {'US' + item}
@@ -663,7 +685,7 @@ const ViewProduct = props => {
           <Buttons
             text="Buy Now"
             onPress={() => {
-              if (currentSize == '') {
+              if (currentSize == '' && productData?.productSizeUS?.length > 0) {
                 Toast.show('Please select size');
               } else {
                 dispatch(
