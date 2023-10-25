@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -13,7 +13,7 @@ import {
   Pressable,
   LayoutAnimation,
 } from 'react-native';
-import { Colors } from '../../colors';
+import {Colors} from '../../colors';
 import {
   VText,
   VView,
@@ -22,30 +22,35 @@ import {
   OverlayModal,
   Loader,
 } from '../../components';
-import { FONTS_SIZES } from '../../fonts';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import {FONTS_SIZES} from '../../fonts';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {
   addDataInCloset,
   deleteClosetData,
   getClosetData,
 } from '../../redux/actions/closetAction';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import Share from 'react-native-share';
-import { getProductDetailsApi } from '../../redux/actions/homeActions';
+import {getProductDetailsApi} from '../../redux/actions/homeActions';
 import {
   dislikeProductAction,
   recommendedAction,
 } from '../../redux/actions/stylistAction';
-import dynamicLinks, { firebase } from '@react-native-firebase/dynamic-links';
-import { NoAuthAPI } from '../../services';
-import { RenderClients } from '../CategoryScreen';
-import { cartUtil } from '../../hooks/cart';
-import { useCart } from '../../hooks/useCart';
-import { addToCart, decrement, increment, resetCart } from '../../redux/actions/cartAction';
-import { Images } from '../../assets';
-import { normalize, spV } from '../../utils/normalise';
+import dynamicLinks, {firebase} from '@react-native-firebase/dynamic-links';
+import {NoAuthAPI} from '../../services';
+import {RenderClients} from '../CategoryScreen';
+import {cartUtil} from '../../hooks/cart';
+import {useCart} from '../../hooks/useCart';
+import {
+  addToCart,
+  decrement,
+  increment,
+  resetCart,
+} from '../../redux/actions/cartAction';
+import {Images} from '../../assets';
+import {normalize, spV} from '../../utils/normalise';
 
 export const SLIDER_WIDTH = Dimensions.get('window').width;
 export const ITEM_WIDTH = SLIDER_WIDTH;
@@ -82,7 +87,7 @@ const sizeArrayShoes = [
   '11',
   '11.5',
   '12',
-]
+];
 
 const ViewProduct = props => {
   const [loader, setLoader] = useState(false);
@@ -127,7 +132,7 @@ const ViewProduct = props => {
     if (Object.keys(recommendedToClientsRes).length) {
       if (recommendedToClientsRes.statusCode === 200) {
         setSelectedClients([]);
-        dispatch({ type: 'RECOMMENDED_TO_CLIENTS', value: {} });
+        dispatch({type: 'RECOMMENDED_TO_CLIENTS', value: {}});
         Toast.show('Recommended to client');
       }
     }
@@ -136,7 +141,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(dislikeResp).length) {
       if (dislikeResp.statusCode === 200) {
-        dispatch({ type: 'DISLIKE_PRODUCTS', value: {} });
+        dispatch({type: 'DISLIKE_PRODUCTS', value: {}});
         dispatch(getProductDetailsApi(productData.productId));
         Toast.show('Not liked');
       }
@@ -152,7 +157,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(deleteClosetResponse).length) {
       if (deleteClosetResponse.statusCode === 200) {
-        dispatch({ type: 'DELETE_CLOSET', value: {} });
+        dispatch({type: 'DELETE_CLOSET', value: {}});
         Toast.show('Removed from closet');
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
@@ -163,7 +168,7 @@ const ViewProduct = props => {
   useEffect(() => {
     if (Object.keys(addClosetResponse).length) {
       if (addClosetResponse.statusCode == 200) {
-        dispatch({ type: 'ADD_TO_CLOSET', value: {} });
+        dispatch({type: 'ADD_TO_CLOSET', value: {}});
         dispatch(getProductDetailsApi(productData.productId));
         dispatch(getClosetData());
         Toast.show('Added to closet');
@@ -177,10 +182,10 @@ const ViewProduct = props => {
     }
   }, []);
 
-  const _renderItem = ({ item, index }) => {
+  const _renderItem = ({item, index}) => {
     return (
       <View style={styles.container} key={index}>
-        <Image source={{ uri: item }} style={styles.image} resizeMode="contain" />
+        <Image source={{uri: item}} style={styles.image} resizeMode="contain" />
       </View>
     );
   };
@@ -352,7 +357,12 @@ const ViewProduct = props => {
     return null;
   }
 
-  const sizeArray = productData?.categoryName === 'Clothing' ? sizeArrayClothing : productData?.categoryName === 'Shoes' ? sizeArrayShoes : []
+  const sizeArray =
+    productData?.categoryName === 'Clothing'
+      ? sizeArrayClothing
+      : productData?.categoryName === 'Shoes'
+      ? sizeArrayShoes
+      : [];
   return (
     <VView
       style={{
@@ -377,8 +387,8 @@ const ViewProduct = props => {
             productData.isDisliked
               ? require('../../assets/iDisliked.webp')
               : productData.isDisliked != undefined
-                ? require('../../assets/iDislike.webp')
-                : null
+              ? require('../../assets/iDislike.webp')
+              : null
           }
           showBack
           addToCloset={addToCloset}
@@ -421,7 +431,7 @@ const ViewProduct = props => {
             tappableDots={true}
           />
         </VView>
-        <VView style={{ padding: 16 }}>
+        <VView style={{padding: 16}}>
           <VView>
             <Text
               numberOfLines={1}
@@ -433,7 +443,7 @@ const ViewProduct = props => {
               {productData.brandName}
             </Text>
             <VText
-              style={{ fontSize: FONTS_SIZES.s4, fontWeight: '400' }}
+              style={{fontSize: FONTS_SIZES.s4, fontWeight: '400'}}
               text={productData?.productName}
             />
             <VText
@@ -451,40 +461,72 @@ const ViewProduct = props => {
               bounces={false}
               style={{}}
               fadingEdgeLength={100}
-              showsHorizontalScrollIndicator={false}
-            >
-              {productData?.productSizeUS?.length > 0 && sizeArray.map(item => {
-                return (
-                  <TouchableOpacity
-                    activeOpacity={!productData?.productSizeUS?.includes(item) ? 1 : 0.8}
-                    key={item.id}
-                    onPress={() => {
-                      if (!productData?.productSizeUS?.includes(item)) return
-                      setshowSizeModal(false);
-                      setcurrentSize(item);
-                    }}
-                    style={{
-                      height: spV(40),
-                      marginHorizontal: 4,
-                      minWidth: 80,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: 10,
-                      backgroundColor: item === currentSize ? 'black' : productData?.productSizeUS?.includes(item) ? 'white' : Colors.grey1,
-                      borderWidth: 1,
-                      borderColor: Colors.greyBorder,
-                    }}>
-                    <Text style={{
-                      fontSize: 15,
-                      fontWeight: '400',
-                      color: item === currentSize ? 'white' : !productData?.productSizeUS?.includes(item) ? Colors.greyText : 'black',
-                      textDecorationLine: productData?.productSizeUS?.includes(item) ? 'none' : 'line-through'
-                    }}>
-                      {'US' + item}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+              showsHorizontalScrollIndicator={false}>
+              <View>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: FONTS_SIZES.s4,
+                    fontWeight: '700',
+                    marginBottom: 12,
+                  }}>
+                  Select size (US)
+                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  {productData?.productSizeUS?.length > 0 &&
+                    sizeArray.map(item => {
+                      return (
+                        <TouchableOpacity
+                          activeOpacity={
+                            !productData?.productSizeUS?.includes(item)
+                              ? 1
+                              : 0.8
+                          }
+                          key={item.id}
+                          onPress={() => {
+                            if (!productData?.productSizeUS?.includes(item))
+                              return;
+                            setshowSizeModal(false);
+                            setcurrentSize(item);
+                          }}
+                          style={{
+                            height: spV(32),
+                            marginRight: 8,
+                            minWidth: 48,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: 16,
+                            backgroundColor:
+                              item === currentSize
+                                ? 'black'
+                                : productData?.productSizeUS?.includes(item)
+                                ? 'white'
+                                : Colors.grey1,
+                            borderWidth: 1,
+                            borderColor: Colors.greyBorder,
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              fontWeight: '400',
+                              color:
+                                item === currentSize
+                                  ? 'white'
+                                  : !productData?.productSizeUS?.includes(item)
+                                  ? Colors.greyText
+                                  : 'black',
+                              textDecorationLine:
+                                productData?.productSizeUS?.includes(item)
+                                  ? 'none'
+                                  : 'line-through',
+                            }}>
+                            {item}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                </View>
+              </View>
             </ScrollView>
             <Text style={styles.titleStyle}>Color</Text>
             <View
@@ -492,7 +534,7 @@ const ViewProduct = props => {
                 flexDirection: 'row',
                 alignItems: 'baseline',
               }}>
-              <Text style={[styles.subitleStyle, { marginRight: 8 }]}>
+              <Text style={[styles.subitleStyle, {marginRight: 8}]}>
                 {productData.productColor}
               </Text>
               <View
@@ -514,10 +556,10 @@ const ViewProduct = props => {
             {productData.seasons && productData.seasons.length > 0 && (
               <>
                 <Text style={styles.titleStyle}>Season</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   {productData.seasons.map(item => {
                     return (
-                      <Text style={[styles.subitleStyle, { marginRight: 4 }]}>
+                      <Text style={[styles.subitleStyle, {marginRight: 4}]}>
                         {item}
                       </Text>
                     );
@@ -527,12 +569,12 @@ const ViewProduct = props => {
             )}
 
             <Text style={styles.titleStyle}>Size</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {productData.productSizes.map((item, index) => {
                 return (
                   <Text
                     key={index}
-                    style={[styles.subitleStyle, { marginRight: 4 }]}>
+                    style={[styles.subitleStyle, {marginRight: 4}]}>
                     {item}
                   </Text>
                 );
@@ -540,7 +582,7 @@ const ViewProduct = props => {
             </View>
             <Text>Description</Text>
             <VText
-              style={{ color: Colors.black60, marginBottom: 16, marginTop: 8 }}
+              style={{color: Colors.black60, marginBottom: 16, marginTop: 8}}
               text={productData.productDescription}
             />
             {productData.note ? (
@@ -607,14 +649,14 @@ const ViewProduct = props => {
                   if (itemCount <= 1) {
                     setShowCheckoutButton(false);
                     setItemCount(0);
-                    dispatch(decrement({ productId: productData.productId }));
+                    dispatch(decrement({productId: productData.productId}));
                     return;
                   }
                   setItemCount(current => current - 1);
-                  dispatch(decrement({ productId: productData.productId }));
+                  dispatch(decrement({productId: productData.productId}));
                 }}>
                 <Text
-                  style={{ color: Colors.black, fontSize: 24, lineHeight: 24 }}>
+                  style={{color: Colors.black, fontSize: 24, lineHeight: 24}}>
                   -
                 </Text>
               </Pressable>
@@ -638,7 +680,7 @@ const ViewProduct = props => {
                   minWidth: 24,
                 }}
                 onPress={() => {
-                  dispatch(increment({ productId: productData.productId }));
+                  dispatch(increment({productId: productData.productId}));
                   setItemCount(current => current + 1);
                 }}>
                 <Text
@@ -692,7 +734,7 @@ const ViewProduct = props => {
                   addToCart({
                     product: productData,
                     productId: productData.productId,
-                    size: currentSize
+                    size: currentSize,
                   }),
                 );
                 setTimeout(() => {
@@ -746,7 +788,7 @@ const ViewProduct = props => {
                   alignItems: 'center',
                 }}>
                 <Image
-                  source={{ uri: productData.imageUrls[0] }}
+                  source={{uri: productData.imageUrls[0]}}
                   style={{
                     height: 50,
                     width: 50,
@@ -754,15 +796,15 @@ const ViewProduct = props => {
                   }}
                   resizeMode="contain"
                 />
-                <Text style={{ fontSize: 18 }}>Item added to bag </Text>
+                <Text style={{fontSize: 18}}>Item added to bag </Text>
               </View>
               <TouchableOpacity
                 onPress={() => setShowCartModal(false)}
-                style={{ flex: 0.2 }}>
+                style={{flex: 0.2}}>
                 <Image
                   resizeMode="contain"
                   source={require('../../assets/cross.webp')}
-                  style={{ width: 32, height: 32 }}
+                  style={{width: 32, height: 32}}
                 />
               </TouchableOpacity>
             </View>
@@ -827,10 +869,10 @@ const ViewProduct = props => {
                         }}>
                         {item?.name}
                       </Text>
-                      <Text style={{ fontSize: 14, marginBottom: 2 }}>
+                      <Text style={{fontSize: 14, marginBottom: 2}}>
                         {item?.description}
                       </Text>
-                      <Text style={{ fontSize: 14 }}>{item?.price}</Text>
+                      <Text style={{fontSize: 14}}>{item?.price}</Text>
                     </View>
                   </View>
                 );

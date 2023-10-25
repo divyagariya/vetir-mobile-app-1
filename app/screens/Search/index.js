@@ -35,6 +35,7 @@ import {debounce} from '../../utils/common';
 import {returnFilterParams} from '../CategoryScreen/common';
 import {ClientModelChat} from '../CategoryScreen/components/clientModelChat';
 import {recommendedAction} from '../../redux/actions/stylistAction';
+import {spV} from '../../utils/normalise';
 
 export const ClientList = ({
   item,
@@ -369,7 +370,7 @@ const Search = props => {
 
   const handleSorting = () => {
     setSortModal(false);
-    let data = filteredProducts?.productDetails;
+    let data = productList;
     data = data.sort((a, b) => {
       if (selectedSort.type === 'asc') {
         return a.productPrice > b.productPrice ? 1 : -1;
@@ -612,21 +613,22 @@ const Search = props => {
         <>
           <View
             style={{
-              marginVertical: 24,
+              marginTop: 16,
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-around',
-              paddingHorizontal: 16,
+              marginHorizontal: 16,
             }}>
-            <View style={{width: '75%'}}>
+            <View
+              style={{
+                flex: 1,
+              }}>
               <TextInput
                 style={{
+                  flexDirection: 'row',
                   backgroundColor: Colors.grey1,
-                  marginTop: 16,
-                  marginBottom: 8,
                   paddingVertical: 16,
                   paddingHorizontal: 16,
-                  flexDirection: 'row',
+                  marginRight: 16,
                   alignItems: 'center',
                   borderRadius: 8,
                 }}
@@ -643,22 +645,13 @@ const Search = props => {
           </View>
           <View
             style={{
-              flex: 0.5,
+              flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
               paddingHorizontal: 16,
             }}>
-            <Text style={{textAlign: 'center', color: Colors.black30}}>
-              "If you love something, wear it all the time... Find things that
-              suit you. That's how you look extraordinary."
-            </Text>
-            <Text
-              style={{
-                textAlign: 'center',
-                paddingTop: 32,
-                color: Colors.black30,
-              }}>
-              – Vivienne Westwood
+            <Text style={{textAlign: 'center', color: Colors.black60}}>
+              "To dress well takes intelligence"
             </Text>
           </View>
         </>

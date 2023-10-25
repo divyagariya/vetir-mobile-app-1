@@ -144,7 +144,7 @@ const ProfileSetup = props => {
               marginTop: 16,
               marginBottom: 16,
             }}>
-            What’s your name?
+            Please enter your name.
           </Text>
           <Input
             placeholder="Name"
@@ -153,7 +153,7 @@ const ProfileSetup = props => {
             value={state.name}
           />
           <Text style={{fontSize: 13}}>
-            You can change this later in your profile settings
+            You can change this later in your profile settings.
           </Text>
         </View>
         <View>
@@ -174,7 +174,7 @@ const ProfileSetup = props => {
               marginTop: 16,
               marginBottom: 16,
             }}>
-            What’s your gender?
+            Please select your gender preference.
           </Text>
           <View style={{flexDirection: 'row', marginBottom: 16}}>
             {state.genderData.map((item, index) => {
@@ -202,7 +202,7 @@ const ProfileSetup = props => {
           )}
           <Text style={{fontSize: 13, lineHeight: 20}}>
             Feeds will be prioritised based on your selected gender. You can
-            change this later in your profile settings
+            change this later in your profile settings.
           </Text>
         </View>
         <View>
