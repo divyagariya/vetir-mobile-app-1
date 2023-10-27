@@ -35,12 +35,12 @@ import CartItemsCard from '../../components/CartItemsCard';
 import {spV} from '../../utils/normalise';
 
 const storiesData = [
-  {
-    imageUrl: Images.story4,
-    description: 'Lela Rose Spring 2023',
-    webViewURL:
-      'https://because.world/event/6321014b4f70a785078e18b6?sid=fahzqe&cid=i5ELrsRAMOc2XT',
-  },
+  // {
+  //   imageUrl: Images.story4,
+  //   description: 'Lela Rose Spring 2023',
+  //   webViewURL:
+  //     'https://because.world/event/6321014b4f70a785078e18b6?sid=fahzqe&cid=i5ELrsRAMOc2XT',
+  // },
   {
     imageUrl: Images.story2,
     description: '45 New Arrivals to Shop Now -Fresh De...',
