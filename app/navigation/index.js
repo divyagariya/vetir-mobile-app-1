@@ -62,6 +62,9 @@ import AiChatScreen from '../screens/AiChatScreen';
 import StoriesView from '../screens/StoriesView';
 import PlaceOrder from '../screens/Checkout/PlaceOrder';
 import OrderSuccess from '../screens/Checkout/OrderSuccess';
+import AddAddress from '../screens/AddAddress';
+import AddressList from '../screens/AddressList';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -313,6 +316,9 @@ function AppNavigation() {
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="StoriesView" component={StoriesView} />
+          <Stack.Screen name="AddAddress" component={AddAddress} />
+          <Stack.Screen name="AddressList" component={AddressList} />
+
           <Stack.Screen
             name="OrderHistoryDetails"
             component={OrderHistoryDetails}

@@ -100,7 +100,9 @@ const Home = props => {
   const [videoLink, setVideoLink] = useState('');
 
   const cartData = useSelector(state => state.CartReducer) ?? {};
-  const cartItemsLength = Object.values(cartData).filter(item => item?.data?.productId).length
+  const cartItemsLength = Object.values(cartData).filter(
+    item => item?.data?.productId,
+  ).length;
 
   // console.warn('homeResponse', homeResponse);
 
@@ -221,13 +223,14 @@ const Home = props => {
           {!isStylistUser && (
             <TouchableOpacity
               onPress={() => {
-                props.navigation.navigate('ChatScreen', {
-                  receiverDetails: {
-                    emailId: emailId,
-                    name: name,
-                    userId: _id,
-                  },
-                });
+                props.navigation.navigate('AddressList');
+                // props.navigation.navigate('ChatScreen', {
+                //   receiverDetails: {
+                //     emailId: emailId,
+                //     name: name,
+                //     userId: _id,
+                //   },
+                // });
               }}>
               <Image
                 source={Images.chaticon}

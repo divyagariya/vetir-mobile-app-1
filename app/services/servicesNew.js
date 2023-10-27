@@ -32,12 +32,15 @@ let NoAuthAPI = (apiName, apiMethod, data, baseUrlParam = baseUrl) => {
     .then(response => response.json())
     .then(responseData => {
       console.log('response', JSON.stringify(responseData));
-      if (responseData.data.statusCode === 200) {
-        return responseData.data;
-      } else {
-        Toast.show(responseData?.data?.statusMessage);
-        return responseData.data;
+      if (responseData) {
+        return responseData;
       }
+      // if (responseData.data.statusCode === 200) {
+      //   return responseData.data;
+      // } else {
+      //   Toast.show(responseData?.data?.statusMessage);
+      //   return responseData.data;
+      // }
     })
     .catch(err => {
       console.warn('err', err);
