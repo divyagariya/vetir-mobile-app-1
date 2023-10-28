@@ -208,6 +208,7 @@ const AddressList = props => {
       return (
         <View style={{flex: 0.6}}>
           <FlatList
+            bounces={false}
             extraData={item => item.isSelected}
             showsVerticalScrollIndicator={false}
             data={addressList}

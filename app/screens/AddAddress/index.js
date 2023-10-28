@@ -18,18 +18,18 @@ const AddAddress = props => {
   const {params = {}} = route;
   const {addressData = {}} = params;
   console.warn('params', params);
-  const [name, setname] = useState(addressData?.name || 'vv');
-  const [phone, setphone] = useState(addressData?.mobileNumber || '234234234');
+  const [name, setname] = useState(addressData?.name || '');
+  const [phone, setphone] = useState(addressData?.mobileNumber || '');
   const [addressLine1, setaddressLine1] = useState(
-    addressData?.addressLine1 || 'tesss',
+    addressData?.addressLine1 || '',
   );
   const [addressLine2, setaddressLine2] = useState(
-    addressData?.addressLine2 || 'tessfff',
+    addressData?.addressLine2 || '',
   );
-  const [city, setcity] = useState(addressData?.city || 'gangoh');
-  const [state, setstate] = useState(addressData?.state || 'haryana');
+  const [city, setcity] = useState(addressData?.city || '');
+  const [state, setstate] = useState(addressData?.state || '');
   const [zipCode, setzipCode] = useState(
-    addressData?.pincode?.toString() || '4234243',
+    addressData?.pincode?.toString() || '',
   );
   const [country, setcountry] = useState(addressData?.country || 'USA');
   const [isDisabled, setIsDisabled] = useState(true);
