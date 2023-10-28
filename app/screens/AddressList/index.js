@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Dimensions,
   Easing,
@@ -32,6 +33,7 @@ const AddressList = props => {
     state => state.CartReducer.getAddressResponse,
   );
   const [addressList, setAddressList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [billingAddress, setBillingAddress] = useState({});
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [isBillingAddressFromList, setIsBillingAddressFromList] =
@@ -44,7 +46,8 @@ const AddressList = props => {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getAddressList());
+      setIsLoading(true);
+      dispatch(getAddressList(setIsLoading));
       if (refreshAddress) {
         SimpleToast.show('Address Added Successfully');
       }
@@ -54,6 +57,7 @@ const AddressList = props => {
   useEffect(() => {
     if (Object.keys(getAddressResponse).length) {
       setAddressList(getAddressResponse);
+      setIsLoading(false);
       dispatch({type: 'GET_ADDRESS', value: {}});
     }
   }, [getAddressResponse, dispatch]);
@@ -206,31 +210,70 @@ const AddressList = props => {
   const returnAddressViews = () => {
     if (addressList.length > 0) {
       return (
-        <View style={{flex: 0.6}}>
-          <FlatList
-            bounces={false}
-            extraData={item => item.isSelected}
-            showsVerticalScrollIndicator={false}
-            data={addressList}
-            renderItem={renderItem}
-            keyExtractor={item => item?.id.toString()}
-          />
-        </View>
+        <>
+          <View style={{flex: 0.6}}>
+            <FlatList
+              bounces={false}
+              extraData={item => item.isSelected}
+              showsVerticalScrollIndicator={false}
+              data={addressList}
+              renderItem={renderItem}
+              keyExtractor={item => item?.id.toString()}
+            />
+          </View>
+          {returnBillingView()}
+          <Animated.View
+            style={{
+              position: 'absolute',
+              zIndex: 99,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: animatedHeight,
+              backgroundColor: 'transparent',
+            }}>
+            <AddressListComponent
+              navigation={navigation}
+              onPressCross={onPressCrossBtn}
+              onPressUseThisAddress={onPressUseThisAddress}
+            />
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              zIndex: 99,
+              left: 0,
+              right: 0,
+              height: animatedHeightForDelView,
+              backgroundColor: 'transparent',
+            }}>
+            <DeliveryComponent
+              onClickProceed={deliveryType => onClickProceed(deliveryType)}
+              onPressCross={onPressCrossBtnDeliveryView}
+            />
+          </Animated.View>
+        </>
       );
     } else {
-      <View style={Styles.parentContainer}>
-        <Image
-          style={Styles.searchWebIcon}
-          source={require('../../assets/searchWeb.webp')}
-        />
-        <View style={Styles.emptyTextContainer}>
-          <Text style={Styles.emptyText}>{'No addresses added yet.'}</Text>
-          <Text style={Styles.emptyText}>{'Add new address to proceed.'}</Text>
-          <TouchableOpacity onPress={onPressAddAddress} style={Styles.btn}>
-            <Text style={Styles.btnText}>{'Add Address'}</Text>
-          </TouchableOpacity>
+      return (
+        <View style={Styles.parentContainer}>
+          <Image
+            style={Styles.searchWebIcon}
+            source={require('../../assets/searchWeb.webp')}
+          />
+          <View style={Styles.emptyTextContainer}>
+            <Text style={Styles.emptyText}>{'No addresses added yet.'}</Text>
+            <Text style={Styles.emptyText}>
+              {'Add new address to proceed.'}
+            </Text>
+            <TouchableOpacity onPress={onPressAddAddress} style={Styles.btn}>
+              <Text style={Styles.btnText}>{'Add Address'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>;
+      );
     }
   };
 
@@ -309,55 +352,29 @@ const AddressList = props => {
           headerText={'Select Delivery Address'}
         />
       </View>
-      {returnAddressViews()}
+      {!isLoading && (
+        <>
+          {returnAddressViews()}
 
-      {returnBillingView()}
-
-      {addressList.length > 0 && (
-        <View style={Styles.bottomView}>
-          <TouchableOpacity onPress={onPressAddAddress} style={Styles.whiteBtn}>
-            <Text style={[Styles.btnText, {color: Colors.black}]}>
-              {'Add New Address'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
-            <Text style={Styles.btnText}>{'Proceed'}</Text>
-          </TouchableOpacity>
-        </View>
+          {addressList.length > 0 && (
+            <>
+              <View style={Styles.bottomView}>
+                <TouchableOpacity
+                  onPress={onPressAddAddress}
+                  style={Styles.whiteBtn}>
+                  <Text style={[Styles.btnText, {color: Colors.black}]}>
+                    {'Add New Address'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
+                  <Text style={Styles.btnText}>{'Proceed'}</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </>
       )}
-
-      <Animated.View
-        style={{
-          position: 'absolute',
-          zIndex: 99,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: animatedHeight,
-          backgroundColor: 'transparent',
-        }}>
-        <AddressListComponent
-          navigation={navigation}
-          onPressCross={onPressCrossBtn}
-          onPressUseThisAddress={onPressUseThisAddress}
-        />
-      </Animated.View>
-
-      <Animated.View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          zIndex: 99,
-          left: 0,
-          right: 0,
-          height: animatedHeightForDelView,
-          backgroundColor: 'transparent',
-        }}>
-        <DeliveryComponent
-          onClickProceed={deliveryType => onClickProceed(deliveryType)}
-          onPressCross={onPressCrossBtnDeliveryView}
-        />
-      </Animated.View>
+      {isLoading && <ActivityIndicator size={'large'} />}
     </View>
   );
 };

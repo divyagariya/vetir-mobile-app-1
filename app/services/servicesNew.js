@@ -31,7 +31,6 @@ let NoAuthAPI = (apiName, apiMethod, data, baseUrlParam = baseUrl) => {
   return fetch(baseUrlParam + apiName, init)
     .then(response => response.json())
     .then(responseData => {
-      console.log('response', JSON.stringify(responseData));
       if (responseData) {
         return responseData;
       }

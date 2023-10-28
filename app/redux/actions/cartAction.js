@@ -53,7 +53,7 @@ export function addNewAddress(data) {
   };
 }
 
-export function getAddressList() {
+export function getAddressList(setIsLoading) {
   return async (dispatch, getState) => {
     let url = `user-profile/address?userId=${getState().AuthReducer.userId}`;
     const apiResponse = await NoAuthAPI(
@@ -65,6 +65,8 @@ export function getAddressList() {
     console.log('getAddressList', apiResponse);
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_ADDRESS', value: apiResponse});
+    } else {
+      setIsLoading(false);
     }
   };
 }
