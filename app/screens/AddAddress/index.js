@@ -62,7 +62,9 @@ const AddAddress = props => {
 
   useEffect(() => {
     if (Object.keys(addAddressResponse).length) {
-      props.navigation.navigate('AddressList', {refreshAddress: true});
+      props.navigation.navigate('AddressList', {
+        refreshAddress: true,
+      });
       dispatch({type: 'ADD_ADDRESS', value: {}});
     }
     // dispatch({type: 'ADD_ADDRESS', value: {}});
@@ -154,7 +156,15 @@ const AddAddress = props => {
   return (
     <View style={Styles.container}>
       <View style={Styles.headerContainer}>
-        <DashboardHeader navigation={props.navigation} headerText={'Address'} />
+        <DashboardHeader
+          onBack={() =>
+            props.navigation.navigate('AddressList', {
+              refreshAddress: false,
+            })
+          }
+          // navigation={props.navigation}
+          headerText={'Address'}
+        />
       </View>
       <Text style={Styles.headingText}>{'Enter Shipping Address Details'}</Text>
       <KeyboardAwareScrollView

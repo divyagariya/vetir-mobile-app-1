@@ -11,12 +11,12 @@ import {FONTS_SIZES} from '../../fonts';
 import {Colors} from '../../colors';
 
 const DashboardHeader = props => {
-  const {headerText, navigation, showRightBtn} = props;
+  const {headerText, navigation, showRightBtn, onBack} = props;
   return (
     <SafeAreaView style={Styles.headerContainer}>
       <TouchableOpacity
         style={Styles.backBtn}
-        onPress={() => navigation.goBack()}>
+        onPress={() => (onBack ? onBack() : navigation.goBack())}>
         <Image
           source={require('../../assets/iBack.webp')}
           style={Styles.backIcon}

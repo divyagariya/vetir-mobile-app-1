@@ -59,9 +59,12 @@ export const Styles = StyleSheet.create({
   },
   bottomView: {
     height: spV(50),
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spV(20),
+    position: 'absolute',
+    zIndex: 1,
+    bottom: spV(20),
     backgroundColor: Colors.white,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
@@ -73,5 +76,49 @@ export const Styles = StyleSheet.create({
     shadowOpacity: 0.5, // Shadow opacity
     shadowRadius: 5,
     // shadowColor: '#000000',
+  },
+  billingView: {
+    marginTop: spV(10),
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+  },
+  billingTextView: {
+    width: '75%',
+  },
+  billingText: {
+    fontWeight: '400',
+    fontSize: 15,
+    color: Colors.black60,
+    width: '55%',
+  },
+  addressText: {
+    width: '85%',
+    fontWeight: '400',
+    fontSize: 15,
+    color: Colors.black60,
+  },
+  selectBtn: {
+    width: wp(95),
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: hp(25),
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: Colors.black60,
+  },
+  changeBtn: {
+    width: wp(65),
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: hp(25),
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: Colors.black60,
+  },
+  billingTitle: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: Colors.black,
   },
 });

@@ -11,4 +11,5 @@ export const FONTS_SIZES = {
   s4: 14,
   s5: 12,
   s14: 14,
+  s13: 14,
 };
