@@ -63,6 +63,7 @@ export function getAddressList(setIsLoading) {
       'http://65.0.99.221:9090/user/v1/',
     );
     console.log('getAddressList', apiResponse);
+    if (!apiResponse) return;
     if (Object.keys(apiResponse).length) {
       dispatch({type: 'GET_ADDRESS', value: apiResponse});
     } else {

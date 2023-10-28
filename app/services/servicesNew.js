@@ -1,7 +1,7 @@
 import Toast from 'react-native-simple-toast';
 
 const baseUrl =
-  'https://se53mwfvog.execute-api.ap-south-1.amazonaws.com/dev/api/';
+  'http://65.0.99.221:9090/user/v1/';
 
 let NoAuthAPI = (apiName, apiMethod, data, baseUrlParam = baseUrl) => {
   let init =

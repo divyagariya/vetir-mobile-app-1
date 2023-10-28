@@ -352,29 +352,17 @@ const AddressList = props => {
           headerText={'Select Delivery Address'}
         />
       </View>
-      {!isLoading && (
-        <>
-          {returnAddressViews()}
-
-          {addressList.length > 0 && (
-            <>
-              <View style={Styles.bottomView}>
-                <TouchableOpacity
-                  onPress={onPressAddAddress}
-                  style={Styles.whiteBtn}>
-                  <Text style={[Styles.btnText, {color: Colors.black}]}>
-                    {'Add New Address'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
-                  <Text style={Styles.btnText}>{'Proceed'}</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </>
-      )}
-      {isLoading && <ActivityIndicator size={'large'} />}
+      {returnAddressViews()}
+      <View style={Styles.bottomView}>
+        <TouchableOpacity onPress={onPressAddAddress} style={Styles.whiteBtn}>
+          <Text style={[Styles.btnText, {color: Colors.black}]}>
+            {'Add New Address'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
+          <Text style={Styles.btnText}>{'Proceed'}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
