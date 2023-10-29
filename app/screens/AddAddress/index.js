@@ -18,7 +18,6 @@ const AddAddress = props => {
   const {route, navigation} = props;
   const {params = {}} = route;
   const {addressData = {}} = params;
-  console.warn('params', params);
   const [name, setname] = useState(addressData?.name || '');
   const [phone, setphone] = useState(addressData?.mobileNumber || '');
   const [addressLine1, setaddressLine1] = useState(
@@ -167,7 +166,11 @@ const AddAddress = props => {
           headerText={'Address'}
         />
       </View>
-      <Text style={Styles.headingText}>{'Enter Shipping Address Details'}</Text>
+      <Text style={Styles.headingText}>
+        {Object.keys(addressData).length > 0
+          ? 'Edit Shipping Address Details'
+          : 'Enter Shipping Address Details'}
+      </Text>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps={'handled'}
         style={Styles.inputContainer}>

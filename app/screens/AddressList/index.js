@@ -151,7 +151,6 @@ const AddressList = props => {
 
   const onPressSameBillingBtn = useMemo(
     () => () => {
-      console.warn('vv', deliveryAddress);
       setBillingAddress(deliveryAddress);
       setIsBillingAddressSame(!isBillingAddressSame);
     },
@@ -216,7 +215,7 @@ const AddressList = props => {
     if (addressList.length > 0) {
       return (
         <>
-          <View style={{flex: 0.6}}>
+          <View style={{flex: 0.8}}>
             <FlatList
               bounces={false}
               extraData={item => item.isSelected}
@@ -358,7 +357,6 @@ const AddressList = props => {
     setBillingAddress(address);
     onPressCrossBtn();
     setIsBillingAddressFromList(true);
-    console.warn('address', address);
   };
 
   return (
