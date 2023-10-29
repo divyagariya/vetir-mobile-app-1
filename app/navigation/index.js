@@ -62,6 +62,8 @@ import AiChatScreen from '../screens/AiChatScreen';
 import StoriesView from '../screens/StoriesView';
 import PlaceOrder from '../screens/Checkout/PlaceOrder';
 import OrderSuccess from '../screens/Checkout/OrderSuccess';
+import CartScreen from '../screens/CartScreen';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -283,6 +285,7 @@ function AppNavigation() {
         <Stack.Screen name="ProfileSetup" component={ProfileSetup} />
       ) : (
         <>
+          <Stack.Screen name="CartScreen" component={CartScreen} />
           <Stack.Screen name="TabData" component={TabData} />
           <Stack.Screen name="Menu" component={Menu} />
           <Stack.Screen name="TermConditions" component={TermConditions} />
@@ -313,6 +316,7 @@ function AppNavigation() {
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="StoriesView" component={StoriesView} />
+
           <Stack.Screen
             name="OrderHistoryDetails"
             component={OrderHistoryDetails}
