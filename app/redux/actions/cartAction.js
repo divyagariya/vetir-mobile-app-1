@@ -1,4 +1,5 @@
 import {NoAuthAPI} from '../../services';
+import {NoAuthAPI2} from '../../services/NoAuthAPI';
 
 export function addToCart({product, productId, size}) {
   return async dispatch => {
@@ -47,15 +48,29 @@ export function resetCart() {
 
 export function getCartData(id) {
   return async (dispatch, getState) => {
-    let apiPath = '';
+    let apiPath = 'http://65.0.99.221:9090/v1/cart/';
     if (id) {
-      apiPath = `getOutfitDetails?userId=${id}`;
+      apiPath += `${id}`;
     } else {
-      apiPath = `getOutfitDetails?userId=${getState().AuthReducer.userId}`;
+      apiPath += `${getState().AuthReducer.userId}`;
     }
-    const apiResponse = await NoAuthAPI(apiPath, 'GET');
+    const apiResponse = await NoAuthAPI2(apiPath, 'GET', {}, true);
     if (Object.keys(apiResponse).length) {
-      dispatch({type: 'GET_OUTFIT', value: apiResponse?.outfitList});
+      dispatch({type: 'GET_CART', value: apiResponse});
+    }
+  };
+}
+
+export function incrementCartProduct(productId, quantity) {
+  return async (dispatch, getState) => {
+    let apiPath = `http://65.0.99.221:9090/v1/cart/update?productId=${productId}&quantity=${quantity}&userId=${
+      getState().AuthReducer.userId
+    }`;
+    const apiResponse = await NoAuthAPI2(apiPath, 'PUT', {}, true);
+    if (apiResponse) {
+      getCartData();
+    } else {
+      console.log('ERROR', apiResponse);
     }
   };
 }

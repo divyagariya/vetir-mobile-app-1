@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
 import {
-  View,
+  Alert,
+  Image,
+  Linking,
   Text,
   TouchableOpacity,
-  Image,
-  Alert,
-  Linking,
+  View,
 } from 'react-native';
-import {Colors} from '../../colors';
 import {Buttons, Input} from '../../components';
-import ImagePicker from 'react-native-image-crop-picker';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
 import {
   getUserProfile,
   updateUserProfile,
 } from '../../redux/actions/profileAction';
-import Toast from 'react-native-simple-toast';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {Colors} from '../../colors';
 import {FONTS_SIZES} from '../../fonts';
+import ImagePicker from 'react-native-image-crop-picker';
+import Toast from 'react-native-simple-toast';
 
 const ProfileSetup = props => {
   const isStylistUser = useSelector(state => state.AuthReducer.isStylistUser);
@@ -177,7 +178,7 @@ const ProfileSetup = props => {
             Please select your gender preference.
           </Text>
           <View style={{flexDirection: 'row', marginBottom: 16}}>
-            {state.genderData.map((item, index) => {
+            {state?.genderData?.map((item, index) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -189,7 +190,7 @@ const ProfileSetup = props => {
                       item.type === state.genderSelected
                         ? Colors.grey2
                         : Colors.grey1,
-                    marginHorizontal: index == 1 && 8,
+                    marginHorizontal: index == 1 ? 8 : 0,
                   }}
                   onPress={() => selectGeneder(item, index)}>
                   <Text style={{textTransform: 'capitalize'}}>{item.type}</Text>
