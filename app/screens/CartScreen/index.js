@@ -207,6 +207,46 @@ const CartScreen = props => {
           marginTop: 20,
         }}
       />
+      <View
+        style={{
+          position: 'absolute',
+          bottom: '5%',
+          left: 0,
+          right: 0,
+          paddingVertical: 12,
+          paddingHorizontal: 16,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          <Text
+            style={{
+              fontSize: FONTS_SIZES.s3,
+              color: 'rgba(0,0,0,0.4)',
+            }}>
+            Total Amount
+          </Text>
+          <Text
+            style={{
+              fontSize: FONTS_SIZES.s3,
+              fontWeight: '700',
+            }}>
+            $1230
+          </Text>
+        </View>
+        <TouchableHighlight
+          style={{
+            paddingHorizontal: 16,
+            justifyContent: 'center',
+            backgroundColor: 'black',
+            borderRadius: 8,
+            paddingVertical: 10,
+          }}>
+          <Text style={{color: 'white', fontSize: FONTS_SIZES.s2}}>
+            Select Address
+          </Text>
+        </TouchableHighlight>
+      </View>
     </View>
   );
 };
