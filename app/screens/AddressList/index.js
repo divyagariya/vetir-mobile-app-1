@@ -46,13 +46,18 @@ const AddressList = props => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setIsLoading(true);
-      dispatch(getAddressList(setIsLoading));
       if (refreshAddress) {
+        setIsLoading(true);
+        dispatch(getAddressList(setIsLoading));
         SimpleToast.show('Address Added Successfully');
       }
     }, [dispatch, refreshAddress]),
   );
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(getAddressList(setIsLoading));
+  }, [dispatch]);
 
   useEffect(() => {
     if (Object.keys(getAddressResponse).length) {
@@ -72,9 +77,9 @@ const AddressList = props => {
     }
   }, [addressList, getAddressResponse]);
 
-  const onPressAddAddress = () => {
+  const onPressAddAddress = useCallback(() => {
     navigation.navigate('AddAddress');
-  };
+  }, [navigation]);
 
   //   const onPressProceed = () => {
   //     console.warn('delivery address', deliveryAddress);
@@ -222,6 +227,18 @@ const AddressList = props => {
             />
           </View>
           {returnBillingView()}
+          <View style={Styles.bottomView}>
+            <TouchableOpacity
+              onPress={onPressAddAddress}
+              style={Styles.whiteBtn}>
+              <Text style={[Styles.btnText, {color: Colors.black}]}>
+                {'Add New Address'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
+              <Text style={Styles.btnText}>{'Proceed'}</Text>
+            </TouchableOpacity>
+          </View>
           <Animated.View
             style={{
               position: 'absolute',
@@ -352,31 +369,10 @@ const AddressList = props => {
           headerText={'Select Delivery Address'}
         />
       </View>
-      {!isLoading && (
-        <>
-          {returnAddressViews()}
-
-          {addressList.length > 0 && (
-            <>
-              <View style={Styles.bottomView}>
-                <TouchableOpacity
-                  onPress={onPressAddAddress}
-                  style={Styles.whiteBtn}>
-                  <Text style={[Styles.btnText, {color: Colors.black}]}>
-                    {'Add New Address'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={onPressProceed} style={Styles.btn}>
-                  <Text style={Styles.btnText}>{'Proceed'}</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </>
-      )}
+      {!isLoading && <>{returnAddressViews()}</>}
       {isLoading && <ActivityIndicator size={'large'} />}
     </View>
   );
 };
 
-export default AddressList;
+export default React.memo(AddressList);

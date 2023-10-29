@@ -29,6 +29,7 @@ export const Styles = StyleSheet.create({
   },
   input: {
     padding: 16,
+    marginTop: spV(2),
     marginBottom: spV(15),
     borderRadius: 8,
     height: spV(40),

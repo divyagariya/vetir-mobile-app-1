@@ -21,12 +21,13 @@ const AddressListComponent = props => {
   const getAddressResponse = useSelector(
     state => state.CartReducer.getAddressResponse,
   );
+  const [isLoading, setIsLoading] = useState(false);
   const [addressList, setAddressList] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getAddressList());
+      dispatch(getAddressList(setIsLoading));
       //   if (refreshAddress) {
       //     SimpleToast.show('Address Added Successfully');
       //   }
@@ -34,14 +35,14 @@ const AddressListComponent = props => {
   );
 
   useEffect(() => {
-    if (Object.keys(getAddressResponse).length) {
+    if (addressList.length > 0) {
       addressList.forEach(item => {
         if (item.isSelected) {
           setSelectedAddress(item);
         }
       });
     }
-  }, [addressList, getAddressResponse]);
+  }, [addressList]);
 
   useEffect(() => {
     if (Object.keys(getAddressResponse).length) {
@@ -80,7 +81,8 @@ const AddressListComponent = props => {
     [addressList, setAddressList],
   );
 
-  const onPressUseAddress = selectedAddress => {
+  const onPressUseAddress = () => {
+    console.warn('selectedAddresss', selectedAddress);
     onPressUseThisAddress(selectedAddress);
   };
 
@@ -160,7 +162,7 @@ const AddressListComponent = props => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onPressUseAddress(selectedAddress)}
+            onPress={() => onPressUseAddress()}
             style={Styles.btn}>
             <Text style={Styles.btnText}>{'Use this Address'}</Text>
           </TouchableOpacity>

@@ -7,6 +7,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SimpleToast from 'react-native-simple-toast';
 import {useDispatch, useSelector} from 'react-redux';
 import {addNewAddress} from '../../redux/actions/cartAction';
+import {VText} from '../../components';
 
 const AddAddress = props => {
   const dispatch = useDispatch();
@@ -170,6 +171,7 @@ const AddAddress = props => {
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps={'handled'}
         style={Styles.inputContainer}>
+        <VText text="Name" />
         <TextInput
           ref={nameInputRef}
           placeholder={'Name'}
@@ -181,6 +183,7 @@ const AddAddress = props => {
           onSubmitEditing={() => phoneInputRef.current.focus()}
           returnKeyType="next"
         />
+        <VText text="Phone Number" />
         <TextInput
           ref={phoneInputRef}
           placeholder={'Phone Number'}
@@ -192,6 +195,7 @@ const AddAddress = props => {
           onChangeText={onChangePhone}
           autoCorrect={false}
         />
+        <VText text="Address Line 1" />
         <TextInput
           ref={addressLine1InputRef}
           placeholder={'Address Line 1'}
@@ -203,6 +207,7 @@ const AddAddress = props => {
           onSubmitEditing={() => addressLine2InputRef.current.focus()}
           returnKeyType="next"
         />
+        <VText text="Address Line 2" />
         <TextInput
           ref={addressLine2InputRef}
           placeholder={'Address Line 2'}
@@ -214,6 +219,7 @@ const AddAddress = props => {
           onSubmitEditing={() => cityInputRef.current.focus()}
           returnKeyType="next"
         />
+        <VText text="City" />
         <TextInput
           ref={cityInputRef}
           placeholder={'City'}
@@ -225,6 +231,7 @@ const AddAddress = props => {
           onSubmitEditing={() => stateInputRef.current.focus()}
           returnKeyType="next"
         />
+        <VText text="State" />
         <TextInput
           ref={stateInputRef}
           placeholder={'State'}
@@ -234,6 +241,7 @@ const AddAddress = props => {
           onChangeText={onChangeState}
           autoCorrect={false}
         />
+        <VText text="Zip Code" />
         <TextInput
           placeholder={'Zip Code'}
           style={Styles.input}
@@ -244,6 +252,7 @@ const AddAddress = props => {
           onSubmitEditing={() => countryInputRef.current.focus()}
           returnKeyType="next"
         />
+        <VText text="Country" />
         <TextInput
           ref={countryInputRef}
           placeholder={'Country'}
@@ -257,6 +266,7 @@ const AddAddress = props => {
       </KeyboardAwareScrollView>
       <TouchableOpacity
         onPress={OnPressBtn}
+        disabled={isDisabled}
         style={[
           Styles.btn,
           {backgroundColor: isDisabled ? Colors.black30 : Colors.black},
